@@ -20,6 +20,7 @@ import com.trabalho.api.dto.ResponseDTO;
 public class HandleException {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ResponseDTO<?>> handleValidationErrors(MethodArgumentNotValidException ex) {
+        showStackTrace(ex);
         List<String> errors = ex.getBindingResult()
                                 .getFieldErrors()
                                 .stream()
@@ -34,25 +35,33 @@ public class HandleException {
 
     @ExceptionHandler(RuntimeException.class)
     public final ResponseEntity<Map<String, List<String>>> handleRuntimeExceptions(RuntimeException ex) {
+        showStackTrace(ex);
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(Map.of("errors", errors), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(DataNotFoundException.class)
     public final ResponseEntity<Map<String, List<String>>> DataNotFoundException(DataNotFoundException ex) {
+        showStackTrace(ex);
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(Map.of("errors", errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<Map<String, List<String>>> handleGeneralExceptions(Exception ex) {
+        showStackTrace(ex);
         List<String> errors = Collections.singletonList(ex.getLocalizedMessage());
         return new ResponseEntity<>(Map.of("errors", errors), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public final ResponseEntity<Map<String,String>> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        showStackTrace(ex);
         String erro = "campo " + ex.getName() + " deve ser do tipo " + ex.getRequiredType().getSimpleName();
         return new ResponseEntity<>(Map.of("errors",erro), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    private void showStackTrace(Exception e){
+        e.printStackTrace();
     }
 }

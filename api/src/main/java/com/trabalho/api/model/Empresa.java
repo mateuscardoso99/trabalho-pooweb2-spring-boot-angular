@@ -2,8 +2,6 @@ package com.trabalho.api.model;
 
 import java.util.Collection;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,7 +33,7 @@ public class Empresa {
     private Endereco endereco;
 
     @OneToMany(mappedBy = "empresa",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference //serializada normalmente.
+    //@JsonManagedReference //serializada normalmente.
     private Collection<Estabelecimento> estabelecimentos;
 
     public Empresa(){}

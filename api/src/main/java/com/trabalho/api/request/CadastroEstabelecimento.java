@@ -1,7 +1,5 @@
 package com.trabalho.api.request;
 
-import java.time.LocalTime;
-
 import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.validation.Valid;
@@ -23,7 +21,7 @@ public class CadastroEstabelecimento {
 
     @NotNull(message = "horário de funcionamento inválido")
     @DateTimeFormat(pattern = "HH:mm")
-    private LocalTime horarioFuncionamento;
+    private String horarioFuncionamento;
 
     @NotNull(message = "informe a empresa")
     @Positive(message = "empresa inválida")

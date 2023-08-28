@@ -1,6 +1,5 @@
 package com.trabalho.api.dto;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -13,7 +12,7 @@ public class EstabelecimentoDTO {
     private Long id;
     private String nome;
     private String razaoSocial;
-    private LocalTime horarioFuncionamento;
+    private String horarioFuncionamento;
     private EnderecoDTO endereco;
     private EmpresaDTO empresa;
 
@@ -22,6 +21,7 @@ public class EstabelecimentoDTO {
         estabelecimentoDTO.setId(estabelecimento.getId());
         estabelecimentoDTO.setNome(estabelecimentoDTO.getNome());
         estabelecimentoDTO.setRazaoSocial(estabelecimentoDTO.getRazaoSocial());
+        estabelecimentoDTO.setHorarioFuncionamento(estabelecimento.getHorarioFuncionamento());
         estabelecimentoDTO.setEndereco(EnderecoDTO.convert(estabelecimento.getEndereco()));
         estabelecimentoDTO.setEmpresa(EmpresaDTO.convert(estabelecimento.getEmpresa()));
         return estabelecimentoDTO;

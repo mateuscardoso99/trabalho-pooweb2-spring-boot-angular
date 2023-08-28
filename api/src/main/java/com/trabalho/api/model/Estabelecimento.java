@@ -1,10 +1,6 @@
 package com.trabalho.api.model;
 
-import java.time.LocalTime;
 import java.util.Collection;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -34,7 +30,7 @@ public class Estabelecimento {
     private String razaoSocial;
 
     @Column
-    private LocalTime horarioFuncionamento;
+    private String horarioFuncionamento;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
@@ -42,17 +38,16 @@ public class Estabelecimento {
 
     @ManyToOne
     @JoinColumn(name = "empresa_id")
-    @JsonBackReference // será omitido da serialização pra evitar loop infinito
+    //@JsonBackReference // será omitido da serialização pra evitar loop infinito
     private Empresa empresa;
 
     @OneToMany(mappedBy = "estabelecimento",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
     private Collection<Pedido> pedidos;
 
     public Estabelecimento() {}
 
     @Builder
-    public Estabelecimento(Long id, String nome, String razaoSocial, LocalTime horarioFuncionamento, Endereco endereco,
+    public Estabelecimento(Long id, String nome, String razaoSocial, String horarioFuncionamento, Endereco endereco,
         Empresa empresa, Collection<Pedido> pedidos) {
         this.id = id;
         this.nome = nome;
