@@ -20,6 +20,9 @@ import com.trabalho.api.dto.AdminEstabelecimentoDTO;
 import com.trabalho.api.dto.ClienteDTO;
 import com.trabalho.api.dto.TokenDTO;
 import com.trabalho.api.dto.UsuarioDTO;
+import com.trabalho.api.model.AdminEmpresa;
+import com.trabalho.api.model.AdminEstabelecimento;
+import com.trabalho.api.model.Cliente;
 import com.trabalho.api.model.Permissoes;
 import com.trabalho.api.request.LoginRequest;
 import com.trabalho.api.security.JwtUtils;
@@ -56,23 +59,23 @@ public class LoginController {
             String token = jwtUtils.generateTokenFromUser(userDetails);
 
             if(userDetails.getAuthorities().contains(new SimpleGrantedAuthority(Permissoes.CLIENTE.name()))){
-                ClienteDTO clienteDTO = clienteService.findById(userDetails.getId());
+                Cliente cliente = clienteService.findById(userDetails.getId());
                 TokenDTO<ClienteDTO> tokenDTO = new TokenDTO<>();
-                tokenDTO.setUsuario(clienteDTO);
+                tokenDTO.setUsuario(ClienteDTO.convert(cliente));
                 tokenDTO.setToken(token);
                 return new ResponseEntity<>(tokenDTO,new HttpHeaders(),HttpStatus.OK);
             }
             else if(userDetails.getAuthorities().contains(new SimpleGrantedAuthority(Permissoes.ADMIN_ESTABELECIMENTO.name()))){
-                AdminEstabelecimentoDTO adminEstabDTO = adminEstabelecimentoService.findById(userDetails.getId());
+                AdminEstabelecimento adminEstab = adminEstabelecimentoService.findById(userDetails.getId());
                 TokenDTO<AdminEstabelecimentoDTO> tokenDTO = new TokenDTO<>();
-                tokenDTO.setUsuario(adminEstabDTO);
+                tokenDTO.setUsuario(AdminEstabelecimentoDTO.convert(adminEstab));
                 tokenDTO.setToken(token);
                 return new ResponseEntity<>(tokenDTO,new HttpHeaders(),HttpStatus.OK);
             }
             else if(userDetails.getAuthorities().contains(new SimpleGrantedAuthority(Permissoes.ADMIN_EMPRESA.name()))){
-                AdminEmpresaDTO adminEmpresaDTO = adminEmpresaService.findById(userDetails.getId());
+                AdminEmpresa adminEmpresa = adminEmpresaService.findById(userDetails.getId());
                 TokenDTO<AdminEmpresaDTO> tokenDTO = new TokenDTO<>();
-                tokenDTO.setUsuario(adminEmpresaDTO);
+                tokenDTO.setUsuario(AdminEmpresaDTO.convert(adminEmpresa));
                 tokenDTO.setToken(token);
                 return new ResponseEntity<>(tokenDTO,new HttpHeaders(),HttpStatus.OK);
             }

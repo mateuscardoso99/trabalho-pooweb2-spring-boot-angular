@@ -5,7 +5,6 @@ import java.util.Collection;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.trabalho.api.dto.EstabelecimentoDTO;
 import com.trabalho.api.exception.DataNotFoundException;
 import com.trabalho.api.model.Empresa;
 import com.trabalho.api.model.Endereco;
@@ -24,18 +23,17 @@ public class EstabelecimentoService {
         this.empresaRepository = empresaRepository;
     }
 
-    public Collection<EstabelecimentoDTO> findAll(){
+    public Collection<Estabelecimento> findAll(){
         Collection<Estabelecimento> estabs = estabelecimentoRepository.findAll();
-        return EstabelecimentoDTO.convert(estabs);
+        return estabs;
     }
 
-    public EstabelecimentoDTO findById(Long id) throws Exception{
-        Estabelecimento est = estabelecimentoRepository.findById(id).orElseThrow(() -> new DataNotFoundException("estab não encontrado"));
-        return EstabelecimentoDTO.convert(est);
+    public Estabelecimento findById(Long id) throws Exception{
+        return estabelecimentoRepository.findById(id).orElseThrow(() -> new DataNotFoundException("estab não encontrado"));
     }
 
     @Transactional
-    public EstabelecimentoDTO salvar(CadastroEstabelecimento dados) throws Exception{
+    public Estabelecimento salvar(CadastroEstabelecimento dados) throws Exception{
         Empresa empresa = this.empresaRepository.findById(dados.getIdEmpresa()).orElseThrow(() -> new DataNotFoundException("empresa não encontrada"));
         Endereco endereco = dados.getEndereco().toEndereco();
 
@@ -47,12 +45,11 @@ public class EstabelecimentoService {
                             .empresa(empresa)
                             .build();
         
-        estabelecimento = this.estabelecimentoRepository.save(estabelecimento);
-        return EstabelecimentoDTO.convert(estabelecimento);
+        return this.estabelecimentoRepository.save(estabelecimento);
     }
 
     @Transactional
-    public EstabelecimentoDTO atualizar(CadastroEstabelecimento dados, Long id) throws Exception{
+    public Estabelecimento atualizar(CadastroEstabelecimento dados, Long id) throws Exception{
         Empresa empresa = this.empresaRepository.findById(dados.getIdEmpresa()).orElseThrow(() -> new DataNotFoundException("Empresa não encontrada"));
         Estabelecimento estabelecimento = this.estabelecimentoRepository.findById(id).orElseThrow(() -> new DataNotFoundException("estabelecimento não encontrado"));
         Endereco e = empresa.getEndereco();
@@ -71,8 +68,7 @@ public class EstabelecimentoService {
         estabelecimento.setEndereco(e);
         estabelecimento.setEmpresa(empresa);
 
-        estabelecimento = this.estabelecimentoRepository.save(estabelecimento);
-        return EstabelecimentoDTO.convert(estabelecimento);
+        return this.estabelecimentoRepository.save(estabelecimento);
     }
 
     @Transactional

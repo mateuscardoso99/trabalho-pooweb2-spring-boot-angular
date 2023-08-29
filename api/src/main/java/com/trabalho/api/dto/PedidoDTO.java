@@ -1,5 +1,6 @@
 package com.trabalho.api.dto;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -13,6 +14,7 @@ public class PedidoDTO {
     private Long id;
     private String descricao;
     private StatusPedido statusPedido;
+    private LocalDateTime dataHora;
     private String estabelecimento;
     private String nomeCliente;
     private String emailCliente;
@@ -22,6 +24,7 @@ public class PedidoDTO {
         pedidoDTO.setId(pedido.getId());
         pedidoDTO.setDescricao(pedido.getDescricao());
         pedidoDTO.setStatusPedido(pedido.getStatusPedido());
+        pedidoDTO.setDataHora(pedido.getDataHora());
         pedidoDTO.setEstabelecimento(pedido.getEstabelecimento().getNome());
         pedidoDTO.setNomeCliente(pedido.getCliente().getNome());
         pedidoDTO.setEmailCliente(pedido.getCliente().getEmail());

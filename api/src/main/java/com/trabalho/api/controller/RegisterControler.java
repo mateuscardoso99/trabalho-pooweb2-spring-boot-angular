@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.trabalho.api.dto.ClienteDTO;
 import com.trabalho.api.dto.ResponseDTO;
+import com.trabalho.api.model.Cliente;
 import com.trabalho.api.request.CadastroCliente;
 import com.trabalho.api.service.ClienteService;
 
@@ -25,9 +26,9 @@ public class RegisterControler {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<ClienteDTO>> cadastrar(@RequestBody @Valid CadastroCliente cliente){
-        ClienteDTO clienteDTO = this.clienteService.save(cliente);
-        ResponseDTO<ClienteDTO> responseDTO = ResponseDTO.build(clienteDTO, true, "cliente cadastrado com sucesso", null);
+    public ResponseEntity<ResponseDTO<ClienteDTO>> cadastrar(@RequestBody @Valid CadastroCliente dados){
+        Cliente cliente = this.clienteService.save(dados);
+        ResponseDTO<ClienteDTO> responseDTO = ResponseDTO.build(ClienteDTO.convert(cliente), true, "cliente cadastrado com sucesso", null);
         return new ResponseEntity<ResponseDTO<ClienteDTO>>(responseDTO, new HttpHeaders(), HttpStatus.CREATED);
     }
 }

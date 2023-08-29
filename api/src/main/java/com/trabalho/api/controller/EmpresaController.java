@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.trabalho.api.dto.EmpresaDTO;
 import com.trabalho.api.dto.ResponseDTO;
+import com.trabalho.api.model.Empresa;
 import com.trabalho.api.request.CadastroEmpresa;
 import com.trabalho.api.service.EmpresaService;
 
@@ -35,32 +36,32 @@ public class EmpresaController {
     @GetMapping
     @ResponseBody
     public ResponseEntity<ResponseDTO<Collection<EmpresaDTO>>> findAll(){
-        Collection<EmpresaDTO> empresas = empresaService.findAll();
-        ResponseDTO<Collection<EmpresaDTO>> responseDTO = ResponseDTO.build(empresas, true, null, null);
+        Collection<Empresa> empresas = empresaService.findAll();
+        ResponseDTO<Collection<EmpresaDTO>> responseDTO = ResponseDTO.build(EmpresaDTO.convert(empresas), true, null, null);
         return new ResponseEntity<ResponseDTO<Collection<EmpresaDTO>>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
     @ResponseBody
     public ResponseEntity<ResponseDTO<EmpresaDTO>> findById(@PathVariable Long id) throws Exception{
-        EmpresaDTO empresa = empresaService.findById(id);
-        ResponseDTO<EmpresaDTO> responseDTO = ResponseDTO.build(empresa, true, null, null);
+        Empresa empresa = empresaService.findById(id);
+        ResponseDTO<EmpresaDTO> responseDTO = ResponseDTO.build(EmpresaDTO.convert(empresa), true, null, null);
         return new ResponseEntity<ResponseDTO<EmpresaDTO>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping
     @ResponseBody
     public ResponseEntity<ResponseDTO<EmpresaDTO>> cadastrar(@RequestBody @Valid CadastroEmpresa dados) {
-        EmpresaDTO empresa = empresaService.salvar(dados);
-        ResponseDTO<EmpresaDTO> responseDTO = ResponseDTO.build(empresa, true, "empresa salva com sucesso", null);
+        Empresa empresa = empresaService.salvar(dados);
+        ResponseDTO<EmpresaDTO> responseDTO = ResponseDTO.build(EmpresaDTO.convert(empresa), true, "empresa salva com sucesso", null);
         return new ResponseEntity<ResponseDTO<EmpresaDTO>>(responseDTO, new HttpHeaders(), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}")
     @ResponseBody
     public ResponseEntity<ResponseDTO<EmpresaDTO>> update(@RequestBody @Valid CadastroEmpresa dados, @PathVariable Long id) throws Exception{
-        EmpresaDTO empresa = empresaService.atualizar(dados, id);
-        ResponseDTO<EmpresaDTO> responseDTO = ResponseDTO.build(empresa, true, "empresa salva com sucesso", null);
+        Empresa empresa = empresaService.atualizar(dados, id);
+        ResponseDTO<EmpresaDTO> responseDTO = ResponseDTO.build(EmpresaDTO.convert(empresa), true, "empresa salva com sucesso", null);
         return new ResponseEntity<ResponseDTO<EmpresaDTO>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 

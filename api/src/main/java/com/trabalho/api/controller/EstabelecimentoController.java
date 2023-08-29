@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.trabalho.api.dto.EstabelecimentoDTO;
 import com.trabalho.api.dto.ResponseDTO;
+import com.trabalho.api.model.Estabelecimento;
 import com.trabalho.api.request.CadastroEstabelecimento;
 import com.trabalho.api.service.EstabelecimentoService;
 
@@ -34,32 +35,32 @@ public class EstabelecimentoController {
     @GetMapping
     @ResponseBody
     public ResponseEntity<ResponseDTO<Collection<EstabelecimentoDTO>>> findAll(){
-        Collection<EstabelecimentoDTO> estabelecimentos = estabelecimentoService.findAll();
-        ResponseDTO<Collection<EstabelecimentoDTO>> responseDTO = ResponseDTO.build(estabelecimentos, true, null, null);
+        Collection<Estabelecimento> estabelecimentos = estabelecimentoService.findAll();
+        ResponseDTO<Collection<EstabelecimentoDTO>> responseDTO = ResponseDTO.build(EstabelecimentoDTO.convert(estabelecimentos), true, null, null);
         return new ResponseEntity<ResponseDTO<Collection<EstabelecimentoDTO>>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
     @ResponseBody
     public ResponseEntity<ResponseDTO<EstabelecimentoDTO>> findById(@PathVariable Long id) throws Exception{
-        EstabelecimentoDTO estabelecimento = estabelecimentoService.findById(id);
-        ResponseDTO<EstabelecimentoDTO> responseDTO = ResponseDTO.build(estabelecimento, true, null, null);
+        Estabelecimento estabelecimento = estabelecimentoService.findById(id);
+        ResponseDTO<EstabelecimentoDTO> responseDTO = ResponseDTO.build(EstabelecimentoDTO.convert(estabelecimento), true, null, null);
         return new ResponseEntity<ResponseDTO<EstabelecimentoDTO>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping
     @ResponseBody
     public ResponseEntity<ResponseDTO<EstabelecimentoDTO>> cadastrar(@RequestBody @Valid CadastroEstabelecimento dados) throws Exception{
-        EstabelecimentoDTO estabelecimento = estabelecimentoService.salvar(dados);
-        ResponseDTO<EstabelecimentoDTO> responseDTO = ResponseDTO.build(estabelecimento, true, "estabelecimento salvo com sucesso", null);
+        Estabelecimento estabelecimento = estabelecimentoService.salvar(dados);
+        ResponseDTO<EstabelecimentoDTO> responseDTO = ResponseDTO.build(EstabelecimentoDTO.convert(estabelecimento), true, "estabelecimento salvo com sucesso", null);
         return new ResponseEntity<ResponseDTO<EstabelecimentoDTO>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{id}")
     @ResponseBody
     public ResponseEntity<ResponseDTO<EstabelecimentoDTO>> update(@RequestBody @Valid CadastroEstabelecimento dados, @PathVariable Long id) throws Exception{
-        EstabelecimentoDTO estabelecimento = estabelecimentoService.atualizar(dados, id);
-        ResponseDTO<EstabelecimentoDTO> responseDTO = ResponseDTO.build(estabelecimento, true, "estabelecimento salvo com sucesso", null);
+        Estabelecimento estabelecimento = estabelecimentoService.atualizar(dados, id);
+        ResponseDTO<EstabelecimentoDTO> responseDTO = ResponseDTO.build(EstabelecimentoDTO.convert(estabelecimento), true, "estabelecimento salvo com sucesso", null);
         return new ResponseEntity<ResponseDTO<EstabelecimentoDTO>>(responseDTO, new HttpHeaders(), HttpStatus.CREATED);
     }
 
@@ -67,7 +68,7 @@ public class EstabelecimentoController {
     @ResponseBody
     public ResponseEntity<?> apagar(@PathVariable Long id) throws Exception{
         this.estabelecimentoService.apagar(id);
-        ResponseDTO<?> responseDTO = ResponseDTO.build(null, true, "apagado com sucesso", null);
-        return new ResponseEntity<>(responseDTO, new HttpHeaders(), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDTO<>(null, true, "estabelecimento removido com sucesso", null), new HttpHeaders(), HttpStatus.CREATED);
+
     }
 }

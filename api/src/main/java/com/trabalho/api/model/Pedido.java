@@ -1,5 +1,7 @@
 package com.trabalho.api.model;
 
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
@@ -22,6 +24,9 @@ public class Pedido {
 
     @Column
     private String descricao;
+
+    @Column(columnDefinition = "TIMESTAMP", name = "data_hora")
+    private LocalDateTime dataHora;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status_pedido")

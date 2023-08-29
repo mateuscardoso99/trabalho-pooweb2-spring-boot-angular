@@ -6,7 +6,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.trabalho.api.dto.ClienteDTO;
 import com.trabalho.api.exception.DataNotFoundException;
 import com.trabalho.api.model.Cliente;
 import com.trabalho.api.model.Permissoes;
@@ -23,30 +22,28 @@ public class ClienteService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public ClienteDTO findById(Long id) throws Exception{
+    public Cliente findById(Long id) throws Exception{
         Cliente cliente = this.clienteRepository.findById(id).orElseThrow(() -> new DataNotFoundException("cliente não encontrado"));
-        return ClienteDTO.convert(cliente);
+        return cliente;
     }
 
     @Transactional
-    public ClienteDTO save(CadastroCliente cliente){
+    public Cliente save(CadastroCliente cliente){
         Cliente c = new Cliente();
         c.setNome(cliente.getNome());
         c.setEmail(cliente.getEmail());
         c.setSenha(passwordEncoder.encode(cliente.getSenha()));
         c.setPermissoes(Arrays.asList(Permissoes.CLIENTE));
-        clienteRepository.save(c);
-        return ClienteDTO.convert(c);
+        return clienteRepository.save(c);
     }
 
     @Transactional
-    public ClienteDTO atualizar(CadastroCliente cadastroCliente, Long id) throws Exception{
+    public Cliente atualizar(CadastroCliente cadastroCliente, Long id) throws Exception{
         Cliente cliente = this.clienteRepository.findById(id).orElseThrow(() -> new DataNotFoundException("cliente não encontrado"));
         cliente.setEmail(cadastroCliente.getEmail());
         cliente.setNome(cadastroCliente.getNome());
         cliente.setSenha(passwordEncoder.encode(cadastroCliente.getSenha()));
-        this.clienteRepository.save(cliente);
-        return ClienteDTO.convert(cliente);
+        return this.clienteRepository.save(cliente);
     }
 
     @Transactional
