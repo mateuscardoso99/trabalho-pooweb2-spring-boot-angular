@@ -51,6 +51,16 @@ public class AdminEstabelecimentoService {
     }
 
     @Transactional
+    public AdminEstabelecimento update(CadastroUsuario dados, Long idEstabelecimento, Long idUsuario) throws Exception{
+        Estabelecimento estabelecimento = this.estabelecimentoService.findById(idEstabelecimento);
+        AdminEstabelecimento user = this.findUsuarioEstabelecimento(estabelecimento.getId(),idUsuario);
+        user.setEmail(dados.getEmail());
+        user.setNome(dados.getNome());
+        user.setSenha(passwordEncoder.encode(dados.getSenha()));
+        return this.adminEstabelecimentoRepository.save(user);
+    }
+
+    @Transactional
     public void handleAtivacao(Long idUsuario, Long idEstabelecimento, boolean ativar) throws Exception{
         AdminEstabelecimento adminEstabelecimento = this.findUsuarioEstabelecimento(idEstabelecimento,idUsuario);
         adminEstabelecimento.setAtivo(ativar ? true : false);

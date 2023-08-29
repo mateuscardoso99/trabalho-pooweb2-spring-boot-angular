@@ -31,7 +31,7 @@ public class ClienteDTO extends UsuarioDTO{
         clienteDTO.setNome(cliente.getNome());
         clienteDTO.setPermissoes(cliente.getPermissoes());
         clienteDTO.setPedidos(PedidoDTO.convert(cliente.getPedidos()));
-        clienteDTO.setEndereco(EnderecoDTO.convert(cliente.getEndereco()));
+        clienteDTO.setEndereco(cliente.getEndereco() != null ? EnderecoDTO.convert(cliente.getEndereco()) : null);
         return clienteDTO;
     }
 }

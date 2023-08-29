@@ -47,6 +47,6 @@ public class Pedido {
     public enum StatusPedido{
         PENDENTE,
         CANCELADO,
-        ENTREGUE
+        FINALIZADO
     }
 }

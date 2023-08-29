@@ -1,5 +1,6 @@
 package com.trabalho.api.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,6 +35,7 @@ public class ClienteService {
         c.setEmail(cliente.getEmail());
         c.setSenha(passwordEncoder.encode(cliente.getSenha()));
         c.setPermissoes(Arrays.asList(Permissoes.CLIENTE));
+        c.setPedidos(new ArrayList<>());
         return clienteRepository.save(c);
     }
 

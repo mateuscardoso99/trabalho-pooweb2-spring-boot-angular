@@ -82,7 +82,7 @@ public class PedidoService {
     public void handleAtivacao(Long idPedido, boolean ativar) throws Exception{
         Pedido p = this.findByIdAndClienteId(idPedido);
         p.setAtivo(ativar ? true : false);
-        p.setStatusPedido(StatusPedido.CANCELADO);
+        p.setStatusPedido(ativar ? StatusPedido.PENDENTE : StatusPedido.CANCELADO);
         this.pedidoRepository.save(p);
     }
 

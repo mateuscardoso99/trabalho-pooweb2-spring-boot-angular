@@ -18,4 +18,6 @@ public class CadastroUsuario {
     @NotBlank(message = "informe a senha")
     @Size(min = 4, max = 255, message = "senha minimo 4 caracteres e maximo 255 caracteres")
     private String senha;
+
+    private CadastroEndereco endereco;
 }
