@@ -106,6 +106,12 @@ public class EstabelecimentoController {
         return new ResponseEntity<ResponseDTO<AdminEstabelecimentoDTO>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
+    @PutMapping(value = "/{idEstabelecimento}/update-usuario/{idUsuario}")
+    public ResponseEntity<ResponseDTO<AdminEstabelecimentoDTO>> updateUsuarioEstabelecimento(@Valid @RequestBody CadastroUsuario dados, @PathVariable Long idEstabelecimento, @PathVariable Long idUsuario) throws Exception{
+        AdminEstabelecimento usuario = this.adminEstabelecimentoService.update(dados,idUsuario,idEstabelecimento);
+        return new ResponseEntity<ResponseDTO<AdminEstabelecimentoDTO>>(new ResponseDTO<AdminEstabelecimentoDTO>(AdminEstabelecimentoDTO.convert(usuario), true, "usuario salvo com sucesso", null), new HttpHeaders(), HttpStatus.OK);
+    }
+
     @PutMapping(value = "/{idEstabelecimento}/desativar-usuario/{idUsuario}")
     public ResponseEntity<ResponseDTO<?>> desativarUsuarioEmpresa(@PathVariable Long idEstabelecimento, @PathVariable Long idUsuario) throws Exception{
         this.adminEstabelecimentoService.handleAtivacao(idUsuario,idEstabelecimento,false);
