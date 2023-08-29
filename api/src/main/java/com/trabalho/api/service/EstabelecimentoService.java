@@ -72,8 +72,9 @@ public class EstabelecimentoService {
     }
 
     @Transactional
-    public void apagar(Long id) throws Exception{
-        Estabelecimento estabelecimento = this.estabelecimentoRepository.findById(id).orElseThrow(() -> new DataNotFoundException("estabelecimento não encontrado"));
-        estabelecimentoRepository.deleteById(estabelecimento.getId());
+    public void handleAtivacao(Long id, boolean ativar) throws Exception{
+        Estabelecimento estabelecimento = this.findById(id);
+        estabelecimento.setAtivo(ativar ? true : false);
+        estabelecimentoRepository.save(estabelecimento);
     }
 }

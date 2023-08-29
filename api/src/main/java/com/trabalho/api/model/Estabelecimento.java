@@ -32,6 +32,9 @@ public class Estabelecimento {
     @Column
     private String horarioFuncionamento;
 
+    @Column
+    private boolean ativo;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     private Endereco endereco;

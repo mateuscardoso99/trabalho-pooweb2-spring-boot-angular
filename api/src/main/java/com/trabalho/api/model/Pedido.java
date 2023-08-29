@@ -32,6 +32,9 @@ public class Pedido {
     @Column(name = "status_pedido")
     private StatusPedido statusPedido;
 
+    @Column
+    private boolean ativo;
+
     @ManyToOne
     @JoinColumn(name = "estabelecimento_id", nullable = false) 
     @JsonBackReference

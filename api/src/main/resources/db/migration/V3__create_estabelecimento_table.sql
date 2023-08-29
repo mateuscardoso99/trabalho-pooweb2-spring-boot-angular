@@ -3,6 +3,7 @@ create table estabelecimento(
     nome varchar(255) not null,
     razaosocial varchar(255) not null,
     horario_funcionamento varchar(50) not null,
+    ativo boolean default true,
     endereco_id bigint,
     empresa_id bigint not null,
     foreign key (empresa_id) references empresa(id),

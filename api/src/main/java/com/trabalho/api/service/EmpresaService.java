@@ -60,8 +60,9 @@ public class EmpresaService {
     }
 
     @Transactional
-    public void apagar(Long id) throws Exception{
-        Empresa empresa = empresaRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Empresa não encontrada"));
-        empresaRepository.deleteById(empresa.getId());
+    public void handleAtivacao(Long id, boolean ativar) throws Exception{
+        Empresa empresa = this.findById(id);
+        empresa.setAtivo(ativar ? true : false);
+        empresaRepository.save(empresa);
     }
 }

@@ -1,7 +1,9 @@
 package com.trabalho.api.dto;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import com.trabalho.api.model.AdminEstabelecimento;
-import com.trabalho.api.model.Estabelecimento;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,16 +13,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class AdminEstabelecimentoDTO extends UsuarioDTO{
-    private EstabelecimentoDTO estabelecimento;
-
-    public AdminEstabelecimentoDTO(UsuarioDTO usuarioDTO, Estabelecimento estab){
-        this.id = usuarioDTO.id;
-        this.email = usuarioDTO.email;
-        this.endereco = usuarioDTO.endereco;
-        this.nome = usuarioDTO.nome;
-        this.permissoes = usuarioDTO.permissoes;
-        this.estabelecimento = EstabelecimentoDTO.convert(estab);
-    }
+    private Long idEstabelecimento;
+    private String estabelecimento;
 
     public static AdminEstabelecimentoDTO convert(AdminEstabelecimento adminEstab){
         AdminEstabelecimentoDTO adminDTO = new AdminEstabelecimentoDTO();
@@ -29,7 +23,16 @@ public class AdminEstabelecimentoDTO extends UsuarioDTO{
         adminDTO.setNome(adminEstab.getNome());
         adminDTO.setPermissoes(adminEstab.getPermissoes());
         adminDTO.setEndereco(EnderecoDTO.convert(adminEstab.getEndereco()));
-        adminDTO.setEstabelecimento(EstabelecimentoDTO.convert(adminEstab.getEstabelecimento()));
+        adminDTO.setIdEstabelecimento(adminEstab.getEstabelecimento().getId());
+        adminDTO.setEstabelecimento(adminEstab.getEstabelecimento().getNome());
         return adminDTO;
+    }
+
+    public static Collection<AdminEstabelecimentoDTO> convert(Collection<AdminEstabelecimento> usuarios){
+        Collection<AdminEstabelecimentoDTO> admins = new ArrayList<>();
+        usuarios.forEach(e -> {
+            admins.add(convert(e));
+        });
+        return admins;
     }
 }

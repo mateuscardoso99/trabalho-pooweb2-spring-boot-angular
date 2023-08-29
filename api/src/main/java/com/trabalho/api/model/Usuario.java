@@ -34,6 +34,9 @@ public class Usuario {
     @Column
     private String senha;
 
+    @Column
+    private boolean ativo;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     private Endereco endereco;

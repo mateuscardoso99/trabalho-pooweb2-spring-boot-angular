@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,7 +40,7 @@ public class PedidoController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<ResponseDTO<PedidoDTO>> findById(Long id) throws Exception{
-        Pedido pedido = this.pedidoService.findByIdCliente(id);
+        Pedido pedido = this.pedidoService.findByIdAndClienteId(id);
         ResponseDTO<PedidoDTO> response = ResponseDTO.build(PedidoDTO.convert(pedido), null, null, null);
         return new ResponseEntity<ResponseDTO<PedidoDTO>>(response, new HttpHeaders(), HttpStatus.OK);
     }
@@ -51,9 +52,15 @@ public class PedidoController {
         return new ResponseEntity<ResponseDTO<PedidoDTO>>(responseDTO, new HttpHeaders(), HttpStatus.CREATED);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<ResponseDTO<?>> salvar(@PathVariable Long id) throws Exception{
-        this.pedidoService.apagar(id);
-        return new ResponseEntity<ResponseDTO<?>>(new ResponseDTO<>(null, true, "pedido removido com sucesso", null), new HttpHeaders(), HttpStatus.CREATED);
+    @DeleteMapping(value = "/desativar/{id}")
+    public ResponseEntity<ResponseDTO<?>> desativar(@PathVariable Long id) throws Exception{
+        this.pedidoService.handleAtivacao(id, false);
+        return new ResponseEntity<ResponseDTO<?>>(new ResponseDTO<>(null, true, "pedido desativado com sucesso", null), new HttpHeaders(), HttpStatus.CREATED);
+    }
+
+    @PutMapping(value = "/ativar/{id}")
+    public ResponseEntity<ResponseDTO<?>> ativar(@PathVariable Long id) throws Exception{
+        this.pedidoService.handleAtivacao(id, true);
+        return new ResponseEntity<ResponseDTO<?>>(new ResponseDTO<>(null, true, "pedido ativado com sucesso", null), new HttpHeaders(), HttpStatus.CREATED);
     }
 }

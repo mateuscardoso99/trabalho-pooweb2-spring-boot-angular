@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.trabalho.api.dto.ClienteDTO;
 import com.trabalho.api.dto.ResponseDTO;
 import com.trabalho.api.model.Cliente;
-import com.trabalho.api.request.CadastroCliente;
+import com.trabalho.api.request.CadastroUsuario;
 import com.trabalho.api.service.ClienteService;
 
 import jakarta.validation.Valid;
@@ -26,7 +26,7 @@ public class RegisterControler {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDTO<ClienteDTO>> cadastrar(@RequestBody @Valid CadastroCliente dados){
+    public ResponseEntity<ResponseDTO<ClienteDTO>> cadastrar(@RequestBody @Valid CadastroUsuario dados){
         Cliente cliente = this.clienteService.save(dados);
         ResponseDTO<ClienteDTO> responseDTO = ResponseDTO.build(ClienteDTO.convert(cliente), true, "cliente cadastrado com sucesso", null);
         return new ResponseEntity<ResponseDTO<ClienteDTO>>(responseDTO, new HttpHeaders(), HttpStatus.CREATED);

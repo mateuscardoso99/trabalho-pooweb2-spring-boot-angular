@@ -44,12 +44,12 @@ public class PedidoService {
         return this.pedidoRepository.findAllByEstabelecimento(idEstab);
     }
 
-    public Pedido findByIdCliente(Long idPedido) throws Exception{
+    public Pedido findByIdAndClienteId(Long idPedido) throws Exception{
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         return this.pedidoRepository.findByIdCliente(userDetails.getId(), idPedido).orElseThrow(() -> new DataNotFoundException("pedido não encontrado"));
     }
 
-    public Pedido findByIdEstabelecimento(Long idEstab, Long idPedido) throws Exception{
+    public Pedido findByIdEstabelecimentoId(Long idEstab, Long idPedido) throws Exception{
         return this.pedidoRepository.findByIdEstabelecimento(idEstab, idPedido).orElseThrow(() -> new DataNotFoundException("pedido não encontrado"));
     }
 
@@ -79,8 +79,17 @@ public class PedidoService {
     }
 
     @Transactional
-    public void apagar(Long idPedido) throws Exception{
-        Pedido p = this.findByIdCliente(idPedido);
-        this.pedidoRepository.deleteById(p.getId());
+    public void handleAtivacao(Long idPedido, boolean ativar) throws Exception{
+        Pedido p = this.findByIdAndClienteId(idPedido);
+        p.setAtivo(ativar ? true : false);
+        p.setStatusPedido(StatusPedido.CANCELADO);
+        this.pedidoRepository.save(p);
+    }
+
+    @Transactional
+    public Pedido mudarStatus(Long idPedido, StatusPedido statusPedido) throws Exception{
+        Pedido pedido = this.pedidoRepository.findById(idPedido).orElseThrow(()->new DataNotFoundException("pedido não encontrado"));
+        pedido.setStatusPedido(statusPedido);
+        return pedidoRepository.save(pedido);
     }
 }

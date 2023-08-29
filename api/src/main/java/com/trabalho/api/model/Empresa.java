@@ -28,6 +28,9 @@ public class Empresa {
     @Column(name = "razaosocial")
     private String razaoSocial;
 
+    @Column
+    private boolean ativo;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     private Endereco endereco;

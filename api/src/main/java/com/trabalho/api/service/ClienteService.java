@@ -10,12 +10,12 @@ import com.trabalho.api.exception.DataNotFoundException;
 import com.trabalho.api.model.Cliente;
 import com.trabalho.api.model.Permissoes;
 import com.trabalho.api.repository.ClienteRepository;
-import com.trabalho.api.request.CadastroCliente;
+import com.trabalho.api.request.CadastroUsuario;
 
 @Service
 public class ClienteService {
     private final PasswordEncoder passwordEncoder;
-    private ClienteRepository clienteRepository;
+    private final ClienteRepository clienteRepository;
 
     public ClienteService(ClienteRepository clienteRepository, PasswordEncoder passwordEncoder){
         this.clienteRepository = clienteRepository;
@@ -28,7 +28,7 @@ public class ClienteService {
     }
 
     @Transactional
-    public Cliente save(CadastroCliente cliente){
+    public Cliente save(CadastroUsuario cliente){
         Cliente c = new Cliente();
         c.setNome(cliente.getNome());
         c.setEmail(cliente.getEmail());
@@ -38,7 +38,7 @@ public class ClienteService {
     }
 
     @Transactional
-    public Cliente atualizar(CadastroCliente cadastroCliente, Long id) throws Exception{
+    public Cliente atualizar(CadastroUsuario cadastroCliente, Long id) throws Exception{
         Cliente cliente = this.clienteRepository.findById(id).orElseThrow(() -> new DataNotFoundException("cliente não encontrado"));
         cliente.setEmail(cadastroCliente.getEmail());
         cliente.setNome(cadastroCliente.getNome());
@@ -47,8 +47,9 @@ public class ClienteService {
     }
 
     @Transactional
-    public void apagar(Long id) throws Exception{
-        Cliente cliente = this.clienteRepository.findById(id).orElseThrow(() -> new DataNotFoundException("cliente não encontrado"));
-        this.clienteRepository.delete(cliente);
+    public void handleAtivacao(Long id, boolean ativar) throws Exception{
+        Cliente c = this.findById(id);
+        c.setAtivo(ativar ? true : false);
+        clienteRepository.save(c);
     }
 }
