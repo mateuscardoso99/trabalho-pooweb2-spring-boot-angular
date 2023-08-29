@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "adm_estabelecimento")
-public class AdminEstab extends Usuario {
+public class AdminEstabelecimento extends Usuario {
     @ManyToOne
     @JoinColumn(name = "estabelecimento_id") 
     private Estabelecimento estabelecimento;

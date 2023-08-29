@@ -6,14 +6,14 @@ import com.trabalho.api.model.Cliente;
 import com.trabalho.api.model.Pedido;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class ClienteDTO extends UsuarioDTO{
-    private Collection<Pedido> pedidos;
-
-    public ClienteDTO(){}
+    private Collection<PedidoDTO> pedidos;
 
     public ClienteDTO(UsuarioDTO usuarioDTO, Collection<Pedido> pedidos){
         this.id = usuarioDTO.id;
@@ -21,7 +21,7 @@ public class ClienteDTO extends UsuarioDTO{
         this.endereco = usuarioDTO.endereco;
         this.nome = usuarioDTO.nome;
         this.permissoes = usuarioDTO.permissoes;
-        this.pedidos = pedidos;
+        this.pedidos = PedidoDTO.convert(pedidos);
     }
 
     public static ClienteDTO convert(Cliente cliente){
@@ -30,7 +30,7 @@ public class ClienteDTO extends UsuarioDTO{
         clienteDTO.setEmail(cliente.getEmail());
         clienteDTO.setNome(cliente.getNome());
         clienteDTO.setPermissoes(cliente.getPermissoes());
-        clienteDTO.setPedidos(cliente.getPedidos());
+        clienteDTO.setPedidos(PedidoDTO.convert(cliente.getPedidos()));
         clienteDTO.setEndereco(EnderecoDTO.convert(cliente.getEndereco()));
         return clienteDTO;
     }

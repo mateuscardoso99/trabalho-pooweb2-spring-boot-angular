@@ -1,20 +1,17 @@
 package com.trabalho.api.dto;
 
-import java.util.Collection;
-
 import com.trabalho.api.model.AdminEmpresa;
 import com.trabalho.api.model.Empresa;
-import com.trabalho.api.model.Pedido;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class AdminEmpresaDTO extends UsuarioDTO{
     private EmpresaDTO empresa;
-
-    public AdminEmpresaDTO(){}
 
     public AdminEmpresaDTO(UsuarioDTO usuarioDTO, Empresa empresa){
         this.id = usuarioDTO.id;
@@ -32,7 +29,7 @@ public class AdminEmpresaDTO extends UsuarioDTO{
         adminDTO.setNome(adminEmpresa.getNome());
         adminDTO.setPermissoes(adminEmpresa.getPermissoes());
         adminDTO.setEndereco(EnderecoDTO.convert(adminEmpresa.getEndereco()));
-        //adminDTO.setEmpresa(EmpresaDTO.convert(adminEmpresa.getEmpresa()));
+        adminDTO.setEmpresa(EmpresaDTO.convert(adminEmpresa.getEmpresa()));
         return adminDTO;
     }
 }

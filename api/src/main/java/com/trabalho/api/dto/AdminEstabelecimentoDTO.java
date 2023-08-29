@@ -1,36 +1,35 @@
 package com.trabalho.api.dto;
 
-import com.trabalho.api.model.AdminEstab;
-import com.trabalho.api.model.Empresa;
+import com.trabalho.api.model.AdminEstabelecimento;
 import com.trabalho.api.model.Estabelecimento;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class AdminEstabDTO extends UsuarioDTO{
+@NoArgsConstructor
+public class AdminEstabelecimentoDTO extends UsuarioDTO{
     private EstabelecimentoDTO estabelecimento;
 
-    public AdminEstabDTO(){}
-
-    public AdminEstabDTO(UsuarioDTO usuarioDTO, Estabelecimento estab){
+    public AdminEstabelecimentoDTO(UsuarioDTO usuarioDTO, Estabelecimento estab){
         this.id = usuarioDTO.id;
         this.email = usuarioDTO.email;
         this.endereco = usuarioDTO.endereco;
         this.nome = usuarioDTO.nome;
         this.permissoes = usuarioDTO.permissoes;
-        this.estabelecimento = null;
+        this.estabelecimento = EstabelecimentoDTO.convert(estab);
     }
 
-    public static AdminEstabDTO convert(AdminEstab adminEstab){
-        AdminEstabDTO adminDTO = new AdminEstabDTO();
+    public static AdminEstabelecimentoDTO convert(AdminEstabelecimento adminEstab){
+        AdminEstabelecimentoDTO adminDTO = new AdminEstabelecimentoDTO();
         adminDTO.setId(adminEstab.getId());
         adminDTO.setEmail(adminEstab.getEmail());
         adminDTO.setNome(adminEstab.getNome());
         adminDTO.setPermissoes(adminEstab.getPermissoes());
         adminDTO.setEndereco(EnderecoDTO.convert(adminEstab.getEndereco()));
-        //adminDTO.setEstabelecimento(EstabelecimentoDTO.convert(adminEstab.getEstabelecimento()));
+        adminDTO.setEstabelecimento(EstabelecimentoDTO.convert(adminEstab.getEstabelecimento()));
         return adminDTO;
     }
 }
