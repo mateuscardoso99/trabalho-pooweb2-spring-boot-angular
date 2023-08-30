@@ -3,7 +3,7 @@ package com.trabalho.api.dto;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.trabalho.api.model.AdminEmpresa;
+import com.trabalho.api.model.UsuarioAdminEmpresa;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,11 +14,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AdminEmpresaDTO extends UsuarioDTO{
+public class UsuarioAdminEmpresaDTO extends UsuarioDTO{
     private Empresa empresa;
 
-    public static AdminEmpresaDTO convert(AdminEmpresa adminEmpresa){
-        AdminEmpresaDTO adminDTO = new AdminEmpresaDTO();
+    public static UsuarioAdminEmpresaDTO convert(UsuarioAdminEmpresa adminEmpresa){
+        UsuarioAdminEmpresaDTO adminDTO = new UsuarioAdminEmpresaDTO();
         adminDTO.setId(adminEmpresa.getId());
         adminDTO.setEmail(adminEmpresa.getEmail());
         adminDTO.setNome(adminEmpresa.getNome());
@@ -29,8 +29,8 @@ public class AdminEmpresaDTO extends UsuarioDTO{
         return adminDTO;
     }
 
-    public static Collection<AdminEmpresaDTO> convert(Collection<AdminEmpresa> usuarios){
-        Collection<AdminEmpresaDTO> uAdminEmpresaDTOs = new ArrayList<>();
+    public static Collection<UsuarioAdminEmpresaDTO> convert(Collection<UsuarioAdminEmpresa> usuarios){
+        Collection<UsuarioAdminEmpresaDTO> uAdminEmpresaDTOs = new ArrayList<>();
         usuarios.forEach(e -> {
             uAdminEmpresaDTOs.add(convert(e));
         });

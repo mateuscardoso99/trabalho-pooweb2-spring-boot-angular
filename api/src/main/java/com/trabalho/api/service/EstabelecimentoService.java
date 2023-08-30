@@ -12,15 +12,20 @@ import com.trabalho.api.model.Estabelecimento;
 import com.trabalho.api.repository.EmpresaRepository;
 import com.trabalho.api.repository.EstabelecimentoRepository;
 import com.trabalho.api.request.CadastroEstabelecimento;
+import com.trabalho.api.security.JwtUtils;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class EstabelecimentoService {
     private final EstabelecimentoRepository estabelecimentoRepository;
     private final EmpresaRepository empresaRepository;
+    private final JwtUtils jwtUtils;
 
-    public EstabelecimentoService(EstabelecimentoRepository estabelecimentoRepository, EmpresaRepository empresaRepository){
+    public EstabelecimentoService(EstabelecimentoRepository estabelecimentoRepository, EmpresaRepository empresaRepository, JwtUtils jwtUtils){
         this.estabelecimentoRepository = estabelecimentoRepository;
         this.empresaRepository = empresaRepository;
+        this.jwtUtils = jwtUtils;
     }
 
     public Collection<Estabelecimento> findAll(){
@@ -32,13 +37,17 @@ public class EstabelecimentoService {
         return estabelecimentoRepository.findById(id).orElseThrow(() -> new DataNotFoundException("estab não encontrado"));
     }
 
-    public Estabelecimento findByIdAndEmpresaId(Long idEstab, Long idEmpresa) throws Exception{
-        Estabelecimento estabelecimento = this.estabelecimentoRepository.findByIdAndEmpresaId(idEstab, idEmpresa).orElseThrow(()->new DataNotFoundException("estab não encontrado"));
+    public Estabelecimento findByIdAndEmpresaId(HttpServletRequest request, Long idEstab) throws Exception{
+        String token = jwtUtils.getTokenFromRequest(request);
+        String idEmpresa = jwtUtils.getClaimsFromJwtToken(token).get("empresa_id").toString();
+        Estabelecimento estabelecimento = this.estabelecimentoRepository.findByIdAndEmpresaId(idEstab, Long.parseLong(idEmpresa)).orElseThrow(()->new DataNotFoundException("estab não encontrado"));
         return estabelecimento;
     }
 
-    public Collection<Estabelecimento> findAllByEmpresa(Long idEmpresa){
-        return estabelecimentoRepository.findAllByEmpresa(idEmpresa);
+    public Collection<Estabelecimento> findAllByEmpresa(HttpServletRequest request){
+        String token = jwtUtils.getTokenFromRequest(request);
+        String idEmpresa = jwtUtils.getClaimsFromJwtToken(token).get("empresa_id").toString();
+        return estabelecimentoRepository.findAllByEmpresa(Long.parseLong(idEmpresa));
     }
 
     @Transactional

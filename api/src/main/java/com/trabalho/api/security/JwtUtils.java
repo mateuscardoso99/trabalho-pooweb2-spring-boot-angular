@@ -5,9 +5,9 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -54,22 +54,20 @@ public class JwtUtils {
     private static final Long EXPIRE_DURATION = 8 * 60 * 60 * 1000l; // 8 hour
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
     
-    public String generateTokenFromUser(UserDetailsImpl userDetails) {   
-        String[] permissoes = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList().stream().toArray(String[]::new);
-
+    public String generateTokenFromUser(UserDetailsImpl userDetails, Map<String,Object> claims) {   
         String token = Jwts.builder()
             .setSubject(userDetails.getEmail())
             .setIssuer(userDetails.getEmail())
             .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_DURATION))
             .setIssuedAt(new Date())
-            .addClaims(Map.of("permissoes", permissoes,"nome",userDetails.getUsername(),"user_id",userDetails.getId()))//alem dos claims iss, sub, exp... pode definir claims personalizados
+            .addClaims(claims)//alem dos claims iss, sub, exp... pode definir claims personalizados
             .signWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET)),SignatureAlgorithm.HS512)
             .compact();
         return token;
     }
 
-    public String getUserNameFromJwtToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET))).build().parseClaimsJws(token).getBody().getSubject();
+    public Claims getClaimsFromJwtToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET))).build().parseClaimsJws(token).getBody();
     }
 
     //valida o token, fazendo um parse

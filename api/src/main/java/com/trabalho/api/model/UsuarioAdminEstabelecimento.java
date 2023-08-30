@@ -7,12 +7,12 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @Entity
-@Table(name = "adm_empresa")
-public class AdminEmpresa extends Usuario{
+@Table(name = "adm_estabelecimento")
+public class UsuarioAdminEstabelecimento extends Usuario {
     @ManyToOne
-    @JoinColumn(name = "empresa_id") 
-    private Empresa empresa;
+    @JoinColumn(name = "estabelecimento_id") 
+    private Estabelecimento estabelecimento;
 }
