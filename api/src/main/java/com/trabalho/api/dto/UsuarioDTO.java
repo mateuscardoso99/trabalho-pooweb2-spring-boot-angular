@@ -13,6 +13,7 @@ public class UsuarioDTO {
     protected Long id;
     protected String nome;
     protected String email;
+    protected boolean ativo;
     protected EnderecoDTO endereco;
     protected List<Permissoes> permissoes;
 }

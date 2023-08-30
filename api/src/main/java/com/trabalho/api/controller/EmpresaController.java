@@ -6,13 +6,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.trabalho.api.dto.AdminEmpresaDTO;
 import com.trabalho.api.dto.EmpresaDTO;
+import com.trabalho.api.dto.EstabelecimentoDTO;
 import com.trabalho.api.dto.ResponseDTO;
 import com.trabalho.api.model.AdminEmpresa;
 import com.trabalho.api.model.Empresa;
+import com.trabalho.api.model.Estabelecimento;
 import com.trabalho.api.request.CadastroEmpresa;
 import com.trabalho.api.request.CadastroUsuario;
 import com.trabalho.api.service.AdminEmpresaService;
 import com.trabalho.api.service.EmpresaService;
+import com.trabalho.api.service.EstabelecimentoService;
 
 import jakarta.validation.Valid;
 
@@ -21,6 +24,7 @@ import java.util.Collection;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,10 +36,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class EmpresaController {
     private final EmpresaService empresaService;
     private final AdminEmpresaService adminEmpresaService;
+    private final EstabelecimentoService estabelecimentoService;
 
-    public EmpresaController(EmpresaService empresaService, AdminEmpresaService adminEmpresaService){
+    public EmpresaController(EmpresaService empresaService, AdminEmpresaService adminEmpresaService, EstabelecimentoService estabelecimentoService){
         this.empresaService = empresaService;
         this.adminEmpresaService = adminEmpresaService;
+        this.estabelecimentoService = estabelecimentoService;
     }
 
     @GetMapping
@@ -110,11 +116,11 @@ public class EmpresaController {
 
     @PutMapping(value = "/{idEmpresa}/update-usuario/{idUsuario}")
     public ResponseEntity<ResponseDTO<AdminEmpresaDTO>> updateUsuarioEmpresa(@Valid @RequestBody CadastroUsuario dados, @PathVariable Long idEmpresa, @PathVariable Long idUsuario) throws Exception{
-        AdminEmpresa usuario = this.adminEmpresaService.update(dados,idUsuario,idEmpresa);
+        AdminEmpresa usuario = this.adminEmpresaService.update(dados,idEmpresa,idUsuario);
         return new ResponseEntity<ResponseDTO<AdminEmpresaDTO>>(new ResponseDTO<AdminEmpresaDTO>(AdminEmpresaDTO.convert(usuario), true, "usuario salvo com sucesso", null), new HttpHeaders(), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{idEmpresa}/desativar-usuario/{idUsuario}")
+    @DeleteMapping(value = "/{idEmpresa}/desativar-usuario/{idUsuario}")
     public ResponseEntity<ResponseDTO<?>> desativarUsuarioEmpresa(@PathVariable Long idEmpresa, @PathVariable Long idUsuario) throws Exception{
         this.adminEmpresaService.handleAtivacao(idUsuario,idEmpresa,false);
         return new ResponseEntity<>(new ResponseDTO<>(null, true, "usuario desativado com sucesso", null), new HttpHeaders(), HttpStatus.OK);
@@ -124,5 +130,20 @@ public class EmpresaController {
     public ResponseEntity<ResponseDTO<AdminEmpresaDTO>> ativarUsuarioEmpresa(@PathVariable Long idEmpresa, @PathVariable Long idUsuario) throws Exception{
         this.adminEmpresaService.handleAtivacao(idUsuario,idEmpresa,true);
         return new ResponseEntity<>(new ResponseDTO<>(null, true, "usuario ativado com sucesso", null), new HttpHeaders(), HttpStatus.OK);
+    }
+
+    //estabelecimentos
+    @GetMapping(value = "/{idEmpresa}/estabelecimentos")
+    public ResponseEntity<ResponseDTO<Collection<EstabelecimentoDTO>>> findAllEstabelecimentosByEmpresa(@PathVariable Long idEmpresa){
+        Collection<Estabelecimento> estabelecimentos = estabelecimentoService.findAllByEmpresa(idEmpresa);
+        ResponseDTO<Collection<EstabelecimentoDTO>> responseDTO = ResponseDTO.build(EstabelecimentoDTO.convert(estabelecimentos), true, null, null);
+        return new ResponseEntity<ResponseDTO<Collection<EstabelecimentoDTO>>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{idEmpresa}/estabelecimentos/{idEstab}")
+    public ResponseEntity<ResponseDTO<EstabelecimentoDTO>> findEstabelecimentosByIdAndEmpresaId(@PathVariable Long idEmpresa, @PathVariable Long idEstab) throws Exception{
+        Estabelecimento estabelecimento = estabelecimentoService.findByIdAndEmpresaId(idEstab, idEmpresa);
+        ResponseDTO<EstabelecimentoDTO> responseDTO = ResponseDTO.build(EstabelecimentoDTO.convert(estabelecimento), true, null, null);
+        return new ResponseEntity<ResponseDTO<EstabelecimentoDTO>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 }

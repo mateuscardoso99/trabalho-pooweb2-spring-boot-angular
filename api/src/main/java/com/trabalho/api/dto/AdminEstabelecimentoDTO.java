@@ -21,8 +21,9 @@ public class AdminEstabelecimentoDTO extends UsuarioDTO{
         adminDTO.setId(adminEstab.getId());
         adminDTO.setEmail(adminEstab.getEmail());
         adminDTO.setNome(adminEstab.getNome());
+        adminDTO.setAtivo(adminEstab.isAtivo());
         adminDTO.setPermissoes(adminEstab.getPermissoes());
-        adminDTO.setEndereco(EnderecoDTO.convert(adminEstab.getEndereco()));
+        adminDTO.setEndereco(adminEstab.getEndereco() != null ? EnderecoDTO.convert(adminEstab.getEndereco()) : null);
         adminDTO.setIdEstabelecimento(adminEstab.getEstabelecimento().getId());
         adminDTO.setEstabelecimento(adminEstab.getEstabelecimento().getNome());
         return adminDTO;

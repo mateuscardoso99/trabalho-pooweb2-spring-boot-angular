@@ -20,6 +20,7 @@ public class ClienteDTO extends UsuarioDTO{
         this.email = usuarioDTO.email;
         this.endereco = usuarioDTO.endereco;
         this.nome = usuarioDTO.nome;
+        this.ativo = usuarioDTO.ativo;
         this.permissoes = usuarioDTO.permissoes;
         this.pedidos = PedidoDTO.convert(pedidos);
     }
@@ -29,6 +30,7 @@ public class ClienteDTO extends UsuarioDTO{
         clienteDTO.setId(cliente.getId());
         clienteDTO.setEmail(cliente.getEmail());
         clienteDTO.setNome(cliente.getNome());
+        clienteDTO.setAtivo(cliente.isAtivo());
         clienteDTO.setPermissoes(cliente.getPermissoes());
         clienteDTO.setPedidos(PedidoDTO.convert(cliente.getPedidos()));
         clienteDTO.setEndereco(cliente.getEndereco() != null ? EnderecoDTO.convert(cliente.getEndereco()) : null);

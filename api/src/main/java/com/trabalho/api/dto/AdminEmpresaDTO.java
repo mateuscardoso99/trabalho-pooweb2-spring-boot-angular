@@ -22,8 +22,9 @@ public class AdminEmpresaDTO extends UsuarioDTO{
         adminDTO.setId(adminEmpresa.getId());
         adminDTO.setEmail(adminEmpresa.getEmail());
         adminDTO.setNome(adminEmpresa.getNome());
+        adminDTO.setAtivo(adminEmpresa.isAtivo());
         adminDTO.setPermissoes(adminEmpresa.getPermissoes());
-        adminDTO.setEndereco(EnderecoDTO.convert(adminEmpresa.getEndereco()));
+        adminDTO.setEndereco(adminEmpresa.getEndereco() != null ? EnderecoDTO.convert(adminEmpresa.getEndereco()) : null);
         adminDTO.setEmpresa(new Empresa(adminEmpresa.getEmpresa().getId(), adminEmpresa.getEmpresa().getNome()));
         return adminDTO;
     }

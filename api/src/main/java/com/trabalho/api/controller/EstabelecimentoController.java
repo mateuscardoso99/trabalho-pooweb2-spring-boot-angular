@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,13 +18,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.trabalho.api.dto.AdminEmpresaDTO;
 import com.trabalho.api.dto.AdminEstabelecimentoDTO;
 import com.trabalho.api.dto.EstabelecimentoDTO;
+import com.trabalho.api.dto.PedidoDTO;
 import com.trabalho.api.dto.ResponseDTO;
 import com.trabalho.api.model.AdminEstabelecimento;
 import com.trabalho.api.model.Estabelecimento;
+import com.trabalho.api.model.Pedido;
 import com.trabalho.api.request.CadastroEstabelecimento;
 import com.trabalho.api.request.CadastroUsuario;
 import com.trabalho.api.service.AdminEstabelecimentoService;
 import com.trabalho.api.service.EstabelecimentoService;
+import com.trabalho.api.service.PedidoService;
 
 import jakarta.validation.Valid;
 
@@ -32,10 +36,12 @@ import jakarta.validation.Valid;
 public class EstabelecimentoController {
     private final EstabelecimentoService estabelecimentoService;
     private final AdminEstabelecimentoService adminEstabelecimentoService;
+    private final PedidoService pedidoService;
 
-    public EstabelecimentoController(EstabelecimentoService estabelecimentoService, AdminEstabelecimentoService adminEstabelecimentoService){
+    public EstabelecimentoController(EstabelecimentoService estabelecimentoService, AdminEstabelecimentoService adminEstabelecimentoService,PedidoService pedidoService){
         this.estabelecimentoService = estabelecimentoService;
         this.adminEstabelecimentoService = adminEstabelecimentoService;
+        this.pedidoService = pedidoService;
     }
 
     @GetMapping
@@ -70,7 +76,7 @@ public class EstabelecimentoController {
         return new ResponseEntity<ResponseDTO<EstabelecimentoDTO>>(responseDTO, new HttpHeaders(), HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "/desativar/{id}")
+    @DeleteMapping(value = "/desativar/{id}")
     @ResponseBody
     public ResponseEntity<?> desativar(@PathVariable Long id) throws Exception{
         this.estabelecimentoService.handleAtivacao(id, false);
@@ -108,11 +114,11 @@ public class EstabelecimentoController {
 
     @PutMapping(value = "/{idEstabelecimento}/update-usuario/{idUsuario}")
     public ResponseEntity<ResponseDTO<AdminEstabelecimentoDTO>> updateUsuarioEstabelecimento(@Valid @RequestBody CadastroUsuario dados, @PathVariable Long idEstabelecimento, @PathVariable Long idUsuario) throws Exception{
-        AdminEstabelecimento usuario = this.adminEstabelecimentoService.update(dados,idUsuario,idEstabelecimento);
+        AdminEstabelecimento usuario = this.adminEstabelecimentoService.update(dados,idEstabelecimento, idUsuario);
         return new ResponseEntity<ResponseDTO<AdminEstabelecimentoDTO>>(new ResponseDTO<AdminEstabelecimentoDTO>(AdminEstabelecimentoDTO.convert(usuario), true, "usuario salvo com sucesso", null), new HttpHeaders(), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{idEstabelecimento}/desativar-usuario/{idUsuario}")
+    @DeleteMapping(value = "/{idEstabelecimento}/desativar-usuario/{idUsuario}")
     public ResponseEntity<ResponseDTO<?>> desativarUsuarioEmpresa(@PathVariable Long idEstabelecimento, @PathVariable Long idUsuario) throws Exception{
         this.adminEstabelecimentoService.handleAtivacao(idUsuario,idEstabelecimento,false);
         return new ResponseEntity<>(new ResponseDTO<>(null, true, "usuario desativado com sucesso", null), new HttpHeaders(), HttpStatus.OK);
@@ -122,5 +128,20 @@ public class EstabelecimentoController {
     public ResponseEntity<ResponseDTO<AdminEmpresaDTO>> ativarUsuarioEmpresa(@PathVariable Long idEstabelecimento, @PathVariable Long idUsuario) throws Exception{
         this.adminEstabelecimentoService.handleAtivacao(idUsuario,idEstabelecimento,true);
         return new ResponseEntity<>(new ResponseDTO<>(null, true, "usuario ativado com sucesso", null), new HttpHeaders(), HttpStatus.OK);
+    }
+
+    //pedidos
+    @GetMapping(value = "/{idEstab}/pedidos")
+    public ResponseEntity<ResponseDTO<Collection<PedidoDTO>>> findAllByEstabelecimento(@PathVariable Long idEstab){
+        Collection<Pedido> pedidos = this.pedidoService.findAllByEstabelecimento(idEstab);
+        ResponseDTO<Collection<PedidoDTO>> responseDTO = ResponseDTO.build(PedidoDTO.convert(pedidos), null, null, null);
+        return new ResponseEntity<ResponseDTO<Collection<PedidoDTO>>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{idEstab}/pedidos/{idPedido}")
+    public ResponseEntity<ResponseDTO<PedidoDTO>> findByIdAndEstabelecimentoId(@PathVariable Long idEstab, @PathVariable(name = "idPedido") Long id) throws Exception{
+        Pedido pedido = this.pedidoService.findByIdAndEstabelecimentoId(idEstab, id);
+        ResponseDTO<PedidoDTO> response = ResponseDTO.build(PedidoDTO.convert(pedido), null, null, null);
+        return new ResponseEntity<ResponseDTO<PedidoDTO>>(response, new HttpHeaders(), HttpStatus.OK);
     }
 }

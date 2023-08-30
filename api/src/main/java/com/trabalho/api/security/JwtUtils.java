@@ -51,7 +51,7 @@ import jakarta.servlet.http.HttpServletRequest;
 @Component
 public class JwtUtils {
     private static final String SECRET = "PD46W0FdSDNaQ3tAeENQPUhyTWNQMG94USNwWTtoU1hIMFd43JkWktyWWcpdEpSOChkRTVZdzNNNwLVVoYqNZbj0uaHVAen1QKjByS0k7";
-    private static final Long EXPIRE_DURATION = 24 * 60 * 60 * 1000l; // 24 hour
+    private static final Long EXPIRE_DURATION = 8 * 60 * 60 * 1000l; // 8 hour
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
     
     public String generateTokenFromUser(UserDetailsImpl userDetails) {   
@@ -92,7 +92,10 @@ public class JwtUtils {
 
     public String getTokenFromRequest(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
-        String token = header.split(" ")[1].trim();
+        String token = null;
+        if(header != null){
+            token = header.split(" ")[1].trim();
+        }
         return token;
     }
 }

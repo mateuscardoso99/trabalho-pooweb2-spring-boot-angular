@@ -32,6 +32,15 @@ public class EstabelecimentoService {
         return estabelecimentoRepository.findById(id).orElseThrow(() -> new DataNotFoundException("estab não encontrado"));
     }
 
+    public Estabelecimento findByIdAndEmpresaId(Long idEstab, Long idEmpresa) throws Exception{
+        Estabelecimento estabelecimento = this.estabelecimentoRepository.findByIdAndEmpresaId(idEstab, idEmpresa).orElseThrow(()->new DataNotFoundException("estab não encontrado"));
+        return estabelecimento;
+    }
+
+    public Collection<Estabelecimento> findAllByEmpresa(Long idEmpresa){
+        return estabelecimentoRepository.findAllByEmpresa(idEmpresa);
+    }
+
     @Transactional
     public Estabelecimento salvar(CadastroEstabelecimento dados) throws Exception{
         Empresa empresa = this.empresaRepository.findById(dados.getIdEmpresa()).orElseThrow(() -> new DataNotFoundException("empresa não encontrada"));

@@ -31,7 +31,7 @@ public class AdminEstabelecimentoService {
     }
 
     public AdminEstabelecimento findUsuarioEstabelecimento(Long idEstabelecimento, Long idUsuario) throws Exception{
-        return this.adminEstabelecimentoRepository.findUsuarioEstabelecimento(idEstabelecimento,idUsuario).orElseThrow(() -> new DataNotFoundException("Admin empresa não encontrado"));
+        return this.adminEstabelecimentoRepository.findUsuarioEstabelecimento(idEstabelecimento,idUsuario).orElseThrow(() -> new DataNotFoundException("Admin Estabelecimento não encontrado"));
     }
 
     public Collection<AdminEstabelecimento> findAllByEstabelecimento(Long id){

@@ -50,12 +50,13 @@ public class Estabelecimento {
     public Estabelecimento() {}
 
     @Builder
-    public Estabelecimento(Long id, String nome, String razaoSocial, String horarioFuncionamento, Endereco endereco,
+    public Estabelecimento(Long id, String nome, String razaoSocial, String horarioFuncionamento, boolean ativo, Endereco endereco,
         Empresa empresa, Collection<Pedido> pedidos) {
         this.id = id;
         this.nome = nome;
         this.razaoSocial = razaoSocial;
         this.horarioFuncionamento = horarioFuncionamento;
+        this.ativo = ativo;
         this.endereco = endereco;
         this.empresa = empresa;
         this.pedidos = pedidos;

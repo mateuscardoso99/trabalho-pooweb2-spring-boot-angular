@@ -13,15 +13,17 @@ public class EstabelecimentoDTO {
     private String nome;
     private String razaoSocial;
     private String horarioFuncionamento;
+    private boolean ativo;
     private EnderecoDTO endereco;
     private EmpresaDTO empresa;
 
     public static EstabelecimentoDTO convert(Estabelecimento estabelecimento){
         EstabelecimentoDTO estabelecimentoDTO = new EstabelecimentoDTO();
         estabelecimentoDTO.setId(estabelecimento.getId());
-        estabelecimentoDTO.setNome(estabelecimentoDTO.getNome());
-        estabelecimentoDTO.setRazaoSocial(estabelecimentoDTO.getRazaoSocial());
+        estabelecimentoDTO.setNome(estabelecimento.getNome());
+        estabelecimentoDTO.setRazaoSocial(estabelecimento.getRazaoSocial());
         estabelecimentoDTO.setHorarioFuncionamento(estabelecimento.getHorarioFuncionamento());
+        estabelecimentoDTO.setAtivo(estabelecimento.isAtivo());
         estabelecimentoDTO.setEndereco(EnderecoDTO.convert(estabelecimento.getEndereco()));
         estabelecimentoDTO.setEmpresa(EmpresaDTO.convert(estabelecimento.getEmpresa()));
         return estabelecimentoDTO;
