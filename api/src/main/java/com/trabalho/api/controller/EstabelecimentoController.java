@@ -131,16 +131,16 @@ public class EstabelecimentoController {
     }
 
     //pedidos
-    @GetMapping(value = "/{idEstab}/pedidos")
-    public ResponseEntity<ResponseDTO<Collection<PedidoDTO>>> findAllByEstabelecimento(@PathVariable Long idEstab){
-        Collection<Pedido> pedidos = this.pedidoService.findAllByEstabelecimento(idEstab);
+    @GetMapping(value = "/{idEstabelecimento}/pedidos")
+    public ResponseEntity<ResponseDTO<Collection<PedidoDTO>>> findAllByEstabelecimento(@PathVariable Long idEstabelecimento){
+        Collection<Pedido> pedidos = this.pedidoService.findAllByEstabelecimento(idEstabelecimento);
         ResponseDTO<Collection<PedidoDTO>> responseDTO = ResponseDTO.build(PedidoDTO.convert(pedidos), null, null, null);
         return new ResponseEntity<ResponseDTO<Collection<PedidoDTO>>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{idEstab}/pedidos/{idPedido}")
-    public ResponseEntity<ResponseDTO<PedidoDTO>> findByIdAndEstabelecimentoId(@PathVariable Long idEstab, @PathVariable(name = "idPedido") Long id) throws Exception{
-        Pedido pedido = this.pedidoService.findByIdAndEstabelecimentoId(idEstab, id);
+    @GetMapping(value = "/{idEstabelecimento}/pedidos/{idPedido}")
+    public ResponseEntity<ResponseDTO<PedidoDTO>> findByIdAndEstabelecimentoId(@PathVariable Long idEstabelecimento, @PathVariable(name = "idPedido") Long id) throws Exception{
+        Pedido pedido = this.pedidoService.findByIdAndEstabelecimentoId(idEstabelecimento, id);
         ResponseDTO<PedidoDTO> response = ResponseDTO.build(PedidoDTO.convert(pedido), null, null, null);
         return new ResponseEntity<ResponseDTO<PedidoDTO>>(response, new HttpHeaders(), HttpStatus.OK);
     }
