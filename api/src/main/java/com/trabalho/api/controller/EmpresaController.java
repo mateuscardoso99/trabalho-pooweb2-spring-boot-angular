@@ -13,7 +13,6 @@ import com.trabalho.api.model.Empresa;
 import com.trabalho.api.model.Estabelecimento;
 import com.trabalho.api.request.CadastroEmpresa;
 import com.trabalho.api.request.CadastroUsuario;
-import com.trabalho.api.service.UsuarioAdminEmpresaService;
 import com.trabalho.api.service.EmpresaService;
 import com.trabalho.api.service.EstabelecimentoService;
 
@@ -36,12 +35,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping(value = "/empresa")
 public class EmpresaController {
     private final EmpresaService empresaService;
-    private final UsuarioAdminEmpresaService adminEmpresaService;
     private final EstabelecimentoService estabelecimentoService;
 
-    public EmpresaController(EmpresaService empresaService, UsuarioAdminEmpresaService adminEmpresaService, EstabelecimentoService estabelecimentoService){
+    public EmpresaController(EmpresaService empresaService, EstabelecimentoService estabelecimentoService){
         this.empresaService = empresaService;
-        this.adminEmpresaService = adminEmpresaService;
         this.estabelecimentoService = estabelecimentoService;
     }
 
@@ -96,40 +93,40 @@ public class EmpresaController {
     //usuários
     @GetMapping(value = "/usuarios")
     public ResponseEntity<ResponseDTO<Collection<UsuarioAdminEmpresaDTO>>> findAllUsuariosEmpresa(HttpServletRequest request){
-        Collection<UsuarioAdminEmpresa> usuarios = this.adminEmpresaService.findAllByEmpresa(request);
+        Collection<UsuarioAdminEmpresa> usuarios = this.empresaService.findAllUsuariosByEmpresa(request);
         ResponseDTO<Collection<UsuarioAdminEmpresaDTO>> responseDTO = ResponseDTO.build(UsuarioAdminEmpresaDTO.convert(usuarios), true, null, null);
         return new ResponseEntity<ResponseDTO<Collection<UsuarioAdminEmpresaDTO>>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/buscar-usuario/{idUsuario}")
     public ResponseEntity<ResponseDTO<UsuarioAdminEmpresaDTO>> findUsuarioEmpresa(HttpServletRequest request, @PathVariable Long idUsuario) throws Exception{
-        UsuarioAdminEmpresa usuario = this.adminEmpresaService.findUsuarioEmpresa(request,idUsuario);
+        UsuarioAdminEmpresa usuario = this.empresaService.findUsuarioEmpresaByIdUsuario(request,idUsuario);
         ResponseDTO<UsuarioAdminEmpresaDTO> responseDTO = ResponseDTO.build(UsuarioAdminEmpresaDTO.convert(usuario), true, null, null);
         return new ResponseEntity<ResponseDTO<UsuarioAdminEmpresaDTO>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/usuario")
     public ResponseEntity<ResponseDTO<UsuarioAdminEmpresaDTO>> criarUsuarioEmpresa(HttpServletRequest request, @Valid @RequestBody CadastroUsuario dados) throws Exception{
-        UsuarioAdminEmpresa usuario = this.adminEmpresaService.salvar(request,dados);
+        UsuarioAdminEmpresa usuario = this.empresaService.salvarUsuarioEmpresa(request,dados);
         ResponseDTO<UsuarioAdminEmpresaDTO> responseDTO = ResponseDTO.build(UsuarioAdminEmpresaDTO.convert(usuario), true, "usuario cadastrado com sucesso", null);
         return new ResponseEntity<ResponseDTO<UsuarioAdminEmpresaDTO>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PutMapping(value = "/update-usuario/{idUsuario}")
     public ResponseEntity<ResponseDTO<UsuarioAdminEmpresaDTO>> updateUsuarioEmpresa(HttpServletRequest request, @Valid @RequestBody CadastroUsuario dados, @PathVariable Long idUsuario) throws Exception{
-        UsuarioAdminEmpresa usuario = this.adminEmpresaService.update(request,dados,idUsuario);
+        UsuarioAdminEmpresa usuario = this.empresaService.updateUsuarioEmpresa(request,dados,idUsuario);
         return new ResponseEntity<ResponseDTO<UsuarioAdminEmpresaDTO>>(new ResponseDTO<UsuarioAdminEmpresaDTO>(UsuarioAdminEmpresaDTO.convert(usuario), true, "usuario salvo com sucesso", null), new HttpHeaders(), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/desativar-usuario/{idUsuario}")
     public ResponseEntity<ResponseDTO<?>> desativarUsuarioEmpresa(HttpServletRequest request, @PathVariable Long idUsuario) throws Exception{
-        this.adminEmpresaService.handleAtivacao(request,idUsuario,false);
+        this.empresaService.handleAtivacaoUsuarioEmpresa(request,idUsuario,false);
         return new ResponseEntity<>(new ResponseDTO<>(null, true, "usuario desativado com sucesso", null), new HttpHeaders(), HttpStatus.OK);
     }
 
     @PutMapping(value = "/ativar-usuario/{idUsuario}")
     public ResponseEntity<ResponseDTO<UsuarioAdminEmpresaDTO>> ativarUsuarioEmpresa(HttpServletRequest request, @PathVariable Long idUsuario) throws Exception{
-        this.adminEmpresaService.handleAtivacao(request, idUsuario,true);
+        this.empresaService.handleAtivacaoUsuarioEmpresa(request, idUsuario,true);
         return new ResponseEntity<>(new ResponseDTO<>(null, true, "usuario ativado com sucesso", null), new HttpHeaders(), HttpStatus.OK);
     }
 

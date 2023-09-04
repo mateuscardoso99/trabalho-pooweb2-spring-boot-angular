@@ -31,9 +31,9 @@ import com.trabalho.api.model.Permissoes;
 import com.trabalho.api.request.LoginRequest;
 import com.trabalho.api.security.JwtUtils;
 import com.trabalho.api.security.UserDetailsImpl;
-import com.trabalho.api.service.UsuarioAdminEmpresaService;
-import com.trabalho.api.service.UsuarioAdminEstabelecimentoService;
 import com.trabalho.api.service.ClienteService;
+import com.trabalho.api.service.EmpresaService;
+import com.trabalho.api.service.EstabelecimentoService;
 
 import jakarta.validation.Valid;
 
@@ -42,16 +42,16 @@ import jakarta.validation.Valid;
 public class LoginController {
     private AuthenticationManager authenticationManager;
     private ClienteService clienteService;
-    private UsuarioAdminEmpresaService adminEmpresaService;
-    private UsuarioAdminEstabelecimentoService adminEstabelecimentoService;
+    private EmpresaService empresaService;
+    private EstabelecimentoService estabelecimentoService;
     private JwtUtils jwtUtils;
 
-    public LoginController(AuthenticationManager authenticationManager, JwtUtils jwtUtils, ClienteService clienteService, UsuarioAdminEmpresaService adminEmpresaService, UsuarioAdminEstabelecimentoService adminEstabelecimentoService){
+    public LoginController(AuthenticationManager authenticationManager, JwtUtils jwtUtils, ClienteService clienteService, EmpresaService empresaService, EstabelecimentoService estabelecimentoService){
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
         this.clienteService = clienteService;
-        this.adminEmpresaService = adminEmpresaService;
-        this.adminEstabelecimentoService = adminEstabelecimentoService;
+        this.empresaService = empresaService;
+        this.estabelecimentoService = estabelecimentoService;
     }
 
     @PostMapping
@@ -73,12 +73,12 @@ public class LoginController {
                 tokenDTO.setUsuario(ClienteDTO.convert(cliente));
             }
             else if(userDetails.getAuthorities().contains(new SimpleGrantedAuthority(Permissoes.ADMIN_ESTABELECIMENTO.name()))){
-                UsuarioAdminEstabelecimento adminEstab = adminEstabelecimentoService.findById(userDetails.getId());
+                UsuarioAdminEstabelecimento adminEstab = estabelecimentoService.findUsuarioEstabelecimentoByIdUsuario(userDetails.getId());
                 claimsJwt.put("estabelecimento_id", adminEstab.getEstabelecimento().getId());
                 tokenDTO.setUsuario(UsuarioAdminEstabelecimentoDTO.convert(adminEstab));
             }
             else if(userDetails.getAuthorities().contains(new SimpleGrantedAuthority(Permissoes.ADMIN_EMPRESA.name()))){
-                UsuarioAdminEmpresa adminEmpresa = adminEmpresaService.findById(userDetails.getId());
+                UsuarioAdminEmpresa adminEmpresa = empresaService.findUsuarioEmpresaByIdUsuario(userDetails.getId());
                 claimsJwt.put("empresa_id", adminEmpresa.getEmpresa().getId());
                 tokenDTO.setUsuario(UsuarioAdminEmpresaDTO.convert(adminEmpresa));
             }

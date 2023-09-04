@@ -1,7 +1,9 @@
 package com.trabalho.api.service;
 
+import java.util.Arrays;
 import java.util.Collection;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,9 +11,13 @@ import com.trabalho.api.exception.DataNotFoundException;
 import com.trabalho.api.model.Empresa;
 import com.trabalho.api.model.Endereco;
 import com.trabalho.api.model.Estabelecimento;
+import com.trabalho.api.model.Permissoes;
+import com.trabalho.api.model.UsuarioAdminEstabelecimento;
 import com.trabalho.api.repository.EmpresaRepository;
 import com.trabalho.api.repository.EstabelecimentoRepository;
+import com.trabalho.api.repository.UsuarioAdminEstabelecimentoRepository;
 import com.trabalho.api.request.CadastroEstabelecimento;
+import com.trabalho.api.request.CadastroUsuario;
 import com.trabalho.api.security.JwtUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,11 +27,21 @@ public class EstabelecimentoService {
     private final EstabelecimentoRepository estabelecimentoRepository;
     private final EmpresaRepository empresaRepository;
     private final JwtUtils jwtUtils;
+    private final UsuarioAdminEstabelecimentoRepository adminEstabelecimentoRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public EstabelecimentoService(EstabelecimentoRepository estabelecimentoRepository, EmpresaRepository empresaRepository, JwtUtils jwtUtils){
+    public EstabelecimentoService(
+        EstabelecimentoRepository estabelecimentoRepository, 
+        EmpresaRepository empresaRepository, 
+        JwtUtils jwtUtils,
+        UsuarioAdminEstabelecimentoRepository adminEstabelecimentoRepository, 
+        PasswordEncoder passwordEncoder
+    ){
         this.estabelecimentoRepository = estabelecimentoRepository;
         this.empresaRepository = empresaRepository;
         this.jwtUtils = jwtUtils;
+        this.adminEstabelecimentoRepository = adminEstabelecimentoRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Collection<Estabelecimento> findAll(){
@@ -94,5 +110,49 @@ public class EstabelecimentoService {
         Estabelecimento estabelecimento = this.findById(id);
         estabelecimento.setAtivo(ativar ? true : false);
         estabelecimentoRepository.save(estabelecimento);
+    }
+    
+
+
+    //USUARIOS
+    public UsuarioAdminEstabelecimento findUsuarioEstabelecimentoByIdUsuario(Long id) throws Exception{
+        return this.adminEstabelecimentoRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Admin Estabelecimento não encontrado"));
+    }
+
+    public UsuarioAdminEstabelecimento findUsuarioEstabelecimentoByIdEstabelecimentoAndIdUsuario(Long idEstabelecimento, Long idUsuario) throws Exception{
+        return this.adminEstabelecimentoRepository.findUsuarioEstabelecimento(idEstabelecimento,idUsuario).orElseThrow(() -> new DataNotFoundException("Admin Estabelecimento não encontrado"));
+    }
+
+    public Collection<UsuarioAdminEstabelecimento> findAllUsuariosByEstabelecimento(Long id){
+        return this.adminEstabelecimentoRepository.findAllByEstabelecimento(id);
+    }
+
+    @Transactional
+    public UsuarioAdminEstabelecimento salvarUsuarioEstabelecimento(CadastroUsuario dados, Long idEstab) throws Exception{
+        Estabelecimento e = this.findById(idEstab);
+        UsuarioAdminEstabelecimento user = new UsuarioAdminEstabelecimento();
+        user.setEmail(dados.getEmail());
+        user.setEstabelecimento(e);
+        user.setNome(dados.getNome());
+        user.setPermissoes(Arrays.asList(Permissoes.ADMIN_ESTABELECIMENTO));
+        user.setSenha(passwordEncoder.encode(dados.getSenha()));
+        return this.adminEstabelecimentoRepository.save(user);
+    }
+
+    @Transactional
+    public UsuarioAdminEstabelecimento updateUsuarioEstabelecimento(CadastroUsuario dados, Long idEstabelecimento, Long idUsuario) throws Exception{
+        Estabelecimento estabelecimento = this.findById(idEstabelecimento);
+        UsuarioAdminEstabelecimento user = this.findUsuarioEstabelecimentoByIdEstabelecimentoAndIdUsuario(estabelecimento.getId(),idUsuario);
+        user.setEmail(dados.getEmail());
+        user.setNome(dados.getNome());
+        user.setSenha(passwordEncoder.encode(dados.getSenha()));
+        return this.adminEstabelecimentoRepository.save(user);
+    }
+
+    @Transactional
+    public void handleAtivacaoUsuarioEstabelecimento(Long idUsuario, Long idEstabelecimento, boolean ativar) throws Exception{
+        UsuarioAdminEstabelecimento adminEstabelecimento = this.findUsuarioEstabelecimentoByIdEstabelecimentoAndIdUsuario(idEstabelecimento,idUsuario);
+        adminEstabelecimento.setAtivo(ativar ? true : false);
+        adminEstabelecimentoRepository.save(adminEstabelecimento);
     }
 }
