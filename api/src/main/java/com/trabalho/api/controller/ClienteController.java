@@ -32,7 +32,9 @@ public class ClienteController {
     private final ClienteService clienteService;
     private final PedidoService pedidoService;
 
-    //parametros são injetados automaticamente pelo spring pois todos são componentes spring
+    //parametros são injetados automaticamente pelo spring pois ClienteController, ClienteService e PedidoService são componentes spring
+    //se o construtor fosse assim: public ClienteController(ClienteService clienteService, PedidoService pedidoService, String g){} não funcionaria pois variavel g não é componente spring
+
     public ClienteController(ClienteService clienteService, PedidoService pedidoService){
         this.clienteService = clienteService;
         this.pedidoService = pedidoService;
