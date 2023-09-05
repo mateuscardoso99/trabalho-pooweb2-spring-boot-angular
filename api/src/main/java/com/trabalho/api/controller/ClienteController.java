@@ -19,8 +19,8 @@ import com.trabalho.api.dto.PedidoDTO;
 import com.trabalho.api.dto.ResponseDTO;
 import com.trabalho.api.model.Cliente;
 import com.trabalho.api.model.Pedido;
+import com.trabalho.api.request.CadastroCliente;
 import com.trabalho.api.request.CadastroPedido;
-import com.trabalho.api.request.CadastroUsuario;
 import com.trabalho.api.service.ClienteService;
 import com.trabalho.api.service.PedidoService;
 
@@ -48,7 +48,7 @@ public class ClienteController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<ResponseDTO<ClienteDTO>> update(@RequestBody @Valid CadastroUsuario cadastroCliente, @PathVariable Long id) throws Exception{
+    public ResponseEntity<ResponseDTO<ClienteDTO>> update(@RequestBody @Valid CadastroCliente cadastroCliente, @PathVariable Long id) throws Exception{
         Cliente cliente = this.clienteService.atualizar(cadastroCliente, id);
         ResponseDTO<ClienteDTO> responseDTO = ResponseDTO.build(ClienteDTO.convert(cliente), true, null, null);
         return new ResponseEntity<ResponseDTO<ClienteDTO>>(responseDTO, new HttpHeaders(), HttpStatus.OK);

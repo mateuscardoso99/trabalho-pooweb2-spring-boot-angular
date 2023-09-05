@@ -15,7 +15,7 @@ import com.trabalho.api.model.UsuarioAdminEmpresa;
 import com.trabalho.api.repository.EmpresaRepository;
 import com.trabalho.api.repository.UsuarioAdminEmpresaRepository;
 import com.trabalho.api.request.CadastroEmpresa;
-import com.trabalho.api.request.CadastroUsuario;
+import com.trabalho.api.request.CadastroUsuarioAdmin;
 import com.trabalho.api.security.JwtUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -104,7 +104,7 @@ public class EmpresaService {
     }
 
     @Transactional
-    public UsuarioAdminEmpresa salvarUsuarioEmpresa(HttpServletRequest request, CadastroUsuario dados) throws Exception{
+    public UsuarioAdminEmpresa salvarUsuarioEmpresa(HttpServletRequest request, CadastroUsuarioAdmin dados) throws Exception{
         String token = jwtUtils.getTokenFromRequest(request);
         String idEmpresa = jwtUtils.getClaimsFromJwtToken(token).get("empresa_id").toString();
 
@@ -119,7 +119,7 @@ public class EmpresaService {
     }
 
     @Transactional
-    public UsuarioAdminEmpresa updateUsuarioEmpresa(HttpServletRequest request, CadastroUsuario dados, Long idUsuario) throws Exception{
+    public UsuarioAdminEmpresa updateUsuarioEmpresa(HttpServletRequest request, CadastroUsuarioAdmin dados, Long idUsuario) throws Exception{
         String token = jwtUtils.getTokenFromRequest(request);
         String idEmpresa = jwtUtils.getClaimsFromJwtToken(token).get("empresa_id").toString();
 

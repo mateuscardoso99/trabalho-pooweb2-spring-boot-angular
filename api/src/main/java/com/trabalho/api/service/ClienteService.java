@@ -11,7 +11,7 @@ import com.trabalho.api.exception.DataNotFoundException;
 import com.trabalho.api.model.Cliente;
 import com.trabalho.api.model.Permissoes;
 import com.trabalho.api.repository.ClienteRepository;
-import com.trabalho.api.request.CadastroUsuario;
+import com.trabalho.api.request.CadastroCliente;
 
 @Service
 public class ClienteService {
@@ -29,7 +29,7 @@ public class ClienteService {
     }
 
     @Transactional
-    public Cliente save(CadastroUsuario cliente){
+    public Cliente save(CadastroCliente cliente){
         Cliente c = new Cliente();
         c.setNome(cliente.getNome());
         c.setEmail(cliente.getEmail());
@@ -40,7 +40,7 @@ public class ClienteService {
     }
 
     @Transactional
-    public Cliente atualizar(CadastroUsuario cadastroCliente, Long id) throws Exception{
+    public Cliente atualizar(CadastroCliente cadastroCliente, Long id) throws Exception{
         Cliente cliente = this.clienteRepository.findById(id).orElseThrow(() -> new DataNotFoundException("cliente não encontrado"));
         cliente.setEmail(cadastroCliente.getEmail());
         cliente.setNome(cadastroCliente.getNome());

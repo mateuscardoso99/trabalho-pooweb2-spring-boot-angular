@@ -1,12 +1,13 @@
 package com.trabalho.api.request;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class CadastroUsuario {
+public class CadastroCliente {
     @NotBlank(message = "nome inválido")
     @Size(min = 4, max = 255, message = "nome entre 4 caracteres e 255 caracteres")
     private String nome;
@@ -19,5 +20,6 @@ public class CadastroUsuario {
     @Size(min = 4, max = 255, message = "senha minimo 4 caracteres e maximo 255 caracteres")
     private String senha;
 
+    @Valid //valida se existe
     private CadastroEndereco endereco;
 }

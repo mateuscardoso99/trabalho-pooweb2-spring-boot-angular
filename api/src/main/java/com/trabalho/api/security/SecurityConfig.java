@@ -57,6 +57,7 @@ public class SecurityConfig{
             .authorizeHttpRequests((request) -> {
                     request.requestMatchers("/login").permitAll()
                             .requestMatchers("/register").permitAll()
+                            .requestMatchers("/show-estabelecimentos").permitAll()
                             .requestMatchers("/empresa/**").hasAuthority("ADMIN_EMPRESA")
                             .requestMatchers("/estabelecimento/**").hasAuthority("ADMIN_ESTABELECIMENTO")
                             .requestMatchers("/cliente/**").hasAuthority("CLIENTE") //pra hasRole funcionar teria que ter prefixo 'ROLE_' na frente, mas ambos tem o mesmo efeito

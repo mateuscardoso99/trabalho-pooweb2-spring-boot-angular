@@ -1,5 +1,6 @@
 package com.trabalho.api.exception;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +37,7 @@ public class HandleException {
     @ExceptionHandler(RuntimeException.class)
     public final ResponseEntity<Map<String, List<String>>> handleRuntimeExceptions(RuntimeException ex) {
         showStackTrace(ex);
-        List<String> errors = Collections.singletonList(ex.getMessage());
-        return new ResponseEntity<>(Map.of("errors", errors), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(Map.of("errors", List.of("erro ao processar solicitação")), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(DataNotFoundException.class)
@@ -50,8 +50,7 @@ public class HandleException {
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<Map<String, List<String>>> handleGeneralExceptions(Exception ex) {
         showStackTrace(ex);
-        List<String> errors = Collections.singletonList(ex.getLocalizedMessage());
-        return new ResponseEntity<>(Map.of("errors", errors), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(Map.of("errors", Arrays.asList("erro ao processar solicitação")), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -59,6 +58,13 @@ public class HandleException {
         showStackTrace(ex);
         String erro = "campo " + ex.getName() + " deve ser do tipo " + ex.getRequiredType().getSimpleName();
         return new ResponseEntity<>(Map.of("errors",erro), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public final ResponseEntity<ResponseDTO<?>> handleBadRequest(BadRequestException ex){
+        ResponseDTO<?> responseDTO = ResponseDTO.build(null, false, null, Map.of("errors",Arrays.asList(ex.getMessage())));
+        showStackTrace(ex);
+        return new ResponseEntity<ResponseDTO<?>>(responseDTO,new HttpHeaders(),HttpStatus.BAD_REQUEST);
     }
 
     private void showStackTrace(Exception e){

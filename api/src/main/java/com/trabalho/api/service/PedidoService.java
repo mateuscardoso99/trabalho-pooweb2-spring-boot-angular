@@ -79,8 +79,8 @@ public class PedidoService {
     }
 
     @Transactional
-    public Pedido mudarStatus(Long idPedido, StatusPedido statusPedido) throws Exception{
-        Pedido pedido = this.pedidoRepository.findById(idPedido).orElseThrow(()->new DataNotFoundException("pedido não encontrado"));
+    public Pedido mudarStatus(Long idEstab, Long idPedido, StatusPedido statusPedido) throws Exception{
+        Pedido pedido = this.findByIdAndEstabelecimentoId(idEstab, idPedido);
         pedido.setStatusPedido(statusPedido);
         return pedidoRepository.save(pedido);
     }

@@ -17,7 +17,7 @@ import com.trabalho.api.repository.EmpresaRepository;
 import com.trabalho.api.repository.EstabelecimentoRepository;
 import com.trabalho.api.repository.UsuarioAdminEstabelecimentoRepository;
 import com.trabalho.api.request.CadastroEstabelecimento;
-import com.trabalho.api.request.CadastroUsuario;
+import com.trabalho.api.request.CadastroUsuarioAdmin;
 import com.trabalho.api.security.JwtUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -128,7 +128,7 @@ public class EstabelecimentoService {
     }
 
     @Transactional
-    public UsuarioAdminEstabelecimento salvarUsuarioEstabelecimento(CadastroUsuario dados, Long idEstab) throws Exception{
+    public UsuarioAdminEstabelecimento salvarUsuarioEstabelecimento(CadastroUsuarioAdmin dados, Long idEstab) throws Exception{
         Estabelecimento e = this.findById(idEstab);
         UsuarioAdminEstabelecimento user = new UsuarioAdminEstabelecimento();
         user.setEmail(dados.getEmail());
@@ -140,7 +140,7 @@ public class EstabelecimentoService {
     }
 
     @Transactional
-    public UsuarioAdminEstabelecimento updateUsuarioEstabelecimento(CadastroUsuario dados, Long idEstabelecimento, Long idUsuario) throws Exception{
+    public UsuarioAdminEstabelecimento updateUsuarioEstabelecimento(CadastroUsuarioAdmin dados, Long idEstabelecimento, Long idUsuario) throws Exception{
         Estabelecimento estabelecimento = this.findById(idEstabelecimento);
         UsuarioAdminEstabelecimento user = this.findUsuarioEstabelecimentoByIdEstabelecimentoAndIdUsuario(estabelecimento.getId(),idUsuario);
         user.setEmail(dados.getEmail());

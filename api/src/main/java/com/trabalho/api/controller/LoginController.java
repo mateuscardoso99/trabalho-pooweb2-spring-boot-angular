@@ -24,6 +24,7 @@ import com.trabalho.api.dto.UsuarioAdminEstabelecimentoDTO;
 import com.trabalho.api.dto.ClienteDTO;
 import com.trabalho.api.dto.TokenDTO;
 import com.trabalho.api.dto.UsuarioDTO;
+import com.trabalho.api.exception.BadRequestException;
 import com.trabalho.api.model.UsuarioAdminEmpresa;
 import com.trabalho.api.model.UsuarioAdminEstabelecimento;
 import com.trabalho.api.model.Cliente;
@@ -83,7 +84,7 @@ public class LoginController {
                 tokenDTO.setUsuario(UsuarioAdminEmpresaDTO.convert(adminEmpresa));
             }
             else{
-                throw new Exception("Usuário não possui permissões");
+                throw new BadRequestException("Usuário não possui permissões");
             }
 
             String token = jwtUtils.generateTokenFromUser(userDetails,claimsJwt);
@@ -91,9 +92,9 @@ public class LoginController {
 
             return new ResponseEntity<>(tokenDTO,new HttpHeaders(),HttpStatus.OK);
         }catch(DisabledException e){
-            throw new Exception("Usuário desabilitado",e);
+            throw new BadRequestException("Usuário desabilitado");
         }catch(BadCredentialsException e){
-            throw new Exception("Email ou senha incorretos", e);
+            throw new BadRequestException("Email ou senha incorretos");
         }
     }
 }

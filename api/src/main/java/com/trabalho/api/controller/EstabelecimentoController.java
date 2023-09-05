@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,10 +22,11 @@ import com.trabalho.api.dto.EstabelecimentoDTO;
 import com.trabalho.api.dto.PedidoDTO;
 import com.trabalho.api.dto.ResponseDTO;
 import com.trabalho.api.model.UsuarioAdminEstabelecimento;
+import com.trabalho.api.model.Pedido.StatusPedido;
 import com.trabalho.api.model.Estabelecimento;
 import com.trabalho.api.model.Pedido;
 import com.trabalho.api.request.CadastroEstabelecimento;
-import com.trabalho.api.request.CadastroUsuario;
+import com.trabalho.api.request.CadastroUsuarioAdmin;
 import com.trabalho.api.service.EstabelecimentoService;
 import com.trabalho.api.service.PedidoService;
 
@@ -103,14 +105,14 @@ public class EstabelecimentoController {
     }
 
     @PostMapping(value = "/{idEstabelecimento}/usuario")
-    public ResponseEntity<ResponseDTO<UsuarioAdminEstabelecimentoDTO>> criarUsuarioEmpresa(@Valid @RequestBody CadastroUsuario dados, @PathVariable Long idEstabelecimento) throws Exception{
+    public ResponseEntity<ResponseDTO<UsuarioAdminEstabelecimentoDTO>> criarUsuarioEmpresa(@Valid @RequestBody CadastroUsuarioAdmin dados, @PathVariable Long idEstabelecimento) throws Exception{
         UsuarioAdminEstabelecimento usuario = this.estabelecimentoService.salvarUsuarioEstabelecimento(dados, idEstabelecimento);
         ResponseDTO<UsuarioAdminEstabelecimentoDTO> responseDTO = ResponseDTO.build(UsuarioAdminEstabelecimentoDTO.convert(usuario), true, "usuario cadastrado com sucesso", null);
         return new ResponseEntity<ResponseDTO<UsuarioAdminEstabelecimentoDTO>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{idEstabelecimento}/update-usuario/{idUsuario}")
-    public ResponseEntity<ResponseDTO<UsuarioAdminEstabelecimentoDTO>> updateUsuarioEstabelecimento(@Valid @RequestBody CadastroUsuario dados, @PathVariable Long idEstabelecimento, @PathVariable Long idUsuario) throws Exception{
+    public ResponseEntity<ResponseDTO<UsuarioAdminEstabelecimentoDTO>> updateUsuarioEstabelecimento(@Valid @RequestBody CadastroUsuarioAdmin dados, @PathVariable Long idEstabelecimento, @PathVariable Long idUsuario) throws Exception{
         UsuarioAdminEstabelecimento usuario = this.estabelecimentoService.updateUsuarioEstabelecimento(dados,idEstabelecimento, idUsuario);
         return new ResponseEntity<ResponseDTO<UsuarioAdminEstabelecimentoDTO>>(new ResponseDTO<UsuarioAdminEstabelecimentoDTO>(UsuarioAdminEstabelecimentoDTO.convert(usuario), true, "usuario salvo com sucesso", null), new HttpHeaders(), HttpStatus.OK);
     }
@@ -139,6 +141,13 @@ public class EstabelecimentoController {
     public ResponseEntity<ResponseDTO<PedidoDTO>> findByIdAndEstabelecimentoId(@PathVariable Long idEstabelecimento, @PathVariable(name = "idPedido") Long id) throws Exception{
         Pedido pedido = this.pedidoService.findByIdAndEstabelecimentoId(idEstabelecimento, id);
         ResponseDTO<PedidoDTO> response = ResponseDTO.build(PedidoDTO.convert(pedido), null, null, null);
+        return new ResponseEntity<ResponseDTO<PedidoDTO>>(response, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/{idEstabelecimento}/pedidos/{idPedido}")
+    public ResponseEntity<ResponseDTO<PedidoDTO>> mudarStatusPedido(@PathVariable Long idEstabelecimento, @PathVariable(name = "idPedido") Long idPedido, @RequestParam(name = "status") StatusPedido statusPedido) throws Exception{
+        Pedido pedido = this.pedidoService.mudarStatus(idEstabelecimento, idPedido, statusPedido);
+        ResponseDTO<PedidoDTO> response = ResponseDTO.build(PedidoDTO.convert(pedido), true, null, null);
         return new ResponseEntity<ResponseDTO<PedidoDTO>>(response, new HttpHeaders(), HttpStatus.OK);
     }
 }

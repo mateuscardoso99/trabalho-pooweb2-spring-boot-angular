@@ -12,7 +12,7 @@ import com.trabalho.api.model.UsuarioAdminEmpresa;
 import com.trabalho.api.model.Empresa;
 import com.trabalho.api.model.Estabelecimento;
 import com.trabalho.api.request.CadastroEmpresa;
-import com.trabalho.api.request.CadastroUsuario;
+import com.trabalho.api.request.CadastroUsuarioAdmin;
 import com.trabalho.api.service.EmpresaService;
 import com.trabalho.api.service.EstabelecimentoService;
 
@@ -106,14 +106,14 @@ public class EmpresaController {
     }
 
     @PostMapping(value = "/usuario")
-    public ResponseEntity<ResponseDTO<UsuarioAdminEmpresaDTO>> criarUsuarioEmpresa(HttpServletRequest request, @Valid @RequestBody CadastroUsuario dados) throws Exception{
+    public ResponseEntity<ResponseDTO<UsuarioAdminEmpresaDTO>> criarUsuarioEmpresa(HttpServletRequest request, @Valid @RequestBody CadastroUsuarioAdmin dados) throws Exception{
         UsuarioAdminEmpresa usuario = this.empresaService.salvarUsuarioEmpresa(request,dados);
         ResponseDTO<UsuarioAdminEmpresaDTO> responseDTO = ResponseDTO.build(UsuarioAdminEmpresaDTO.convert(usuario), true, "usuario cadastrado com sucesso", null);
         return new ResponseEntity<ResponseDTO<UsuarioAdminEmpresaDTO>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PutMapping(value = "/update-usuario/{idUsuario}")
-    public ResponseEntity<ResponseDTO<UsuarioAdminEmpresaDTO>> updateUsuarioEmpresa(HttpServletRequest request, @Valid @RequestBody CadastroUsuario dados, @PathVariable Long idUsuario) throws Exception{
+    public ResponseEntity<ResponseDTO<UsuarioAdminEmpresaDTO>> updateUsuarioEmpresa(HttpServletRequest request, @Valid @RequestBody CadastroUsuarioAdmin dados, @PathVariable Long idUsuario) throws Exception{
         UsuarioAdminEmpresa usuario = this.empresaService.updateUsuarioEmpresa(request,dados,idUsuario);
         return new ResponseEntity<ResponseDTO<UsuarioAdminEmpresaDTO>>(new ResponseDTO<UsuarioAdminEmpresaDTO>(UsuarioAdminEmpresaDTO.convert(usuario), true, "usuario salvo com sucesso", null), new HttpHeaders(), HttpStatus.OK);
     }
