@@ -56,7 +56,7 @@ public class JwtUtils {
     
     public String generateTokenFromUser(UserDetailsImpl userDetails, Map<String,Object> claims) {   
         String token = Jwts.builder()
-            .setSubject(userDetails.getEmail())
+            .setSubject(String.valueOf(userDetails.getId()))
             .setIssuer(userDetails.getEmail())
             .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_DURATION))
             .setIssuedAt(new Date())

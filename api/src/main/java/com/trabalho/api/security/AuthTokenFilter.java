@@ -11,6 +11,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.trabalho.api.exception.DataNotFoundException;
+import com.trabalho.api.model.Usuario;
+import com.trabalho.api.repository.UsuarioRepository;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +22,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class AuthTokenFilter extends OncePerRequestFilter{
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private UsuarioRepository usuarioRepository;
     @Autowired
     private JwtUtils jwtUtils;
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
@@ -31,9 +35,10 @@ public class AuthTokenFilter extends OncePerRequestFilter{
         try {
             String jwt = jwtUtils.getTokenFromRequest(request);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                String email = jwtUtils.getClaimsFromJwtToken(jwt).getSubject();
+                String user_id = jwtUtils.getClaimsFromJwtToken(jwt).getSubject();
 
-                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+                Usuario usuario = usuarioRepository.findById(Long.parseLong(user_id)).orElseThrow(()->new DataNotFoundException("usuario não encontrado no token"));
+                UserDetails userDetails = UserDetailsImpl.build(usuario);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails,userDetails.getPassword(),userDetails.getAuthorities());
                 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -44,7 +49,5 @@ public class AuthTokenFilter extends OncePerRequestFilter{
         }
 
         filterChain.doFilter(request, response);
-    }
-
-    
+    }    
 }
