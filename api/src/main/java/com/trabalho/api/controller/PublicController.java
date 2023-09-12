@@ -15,7 +15,7 @@ import com.trabalho.api.model.Estabelecimento;
 import com.trabalho.api.service.EstabelecimentoService;
 
 @RestController
-@RequestMapping(value = "/show-estabelecimentos")
+@RequestMapping(value = "/public")
 public class PublicController {
     private final EstabelecimentoService estabelecimentoService;
 
@@ -23,7 +23,7 @@ public class PublicController {
         this.estabelecimentoService = estabelecimentoService;
     }
 
-    @GetMapping
+    @GetMapping("/estabelecimentos")
     public ResponseEntity<ResponseDTO<Collection<EstabelecimentoDTO>>> show(){
         Collection<Estabelecimento> estabelecimentos = estabelecimentoService.findAll();
         ResponseDTO<Collection<EstabelecimentoDTO>> responseDTO = ResponseDTO.build(EstabelecimentoDTO.convert(estabelecimentos), true, null, null);

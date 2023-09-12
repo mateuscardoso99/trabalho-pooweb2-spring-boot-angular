@@ -18,6 +18,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.trabalho.api.model.Permissoes;
+
 import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
@@ -57,10 +60,12 @@ public class SecurityConfig{
             .authorizeHttpRequests((request) -> {
                     request.requestMatchers("/login").permitAll()
                             .requestMatchers("/register").permitAll()
-                            .requestMatchers("/show-estabelecimentos").permitAll()
-                            .requestMatchers("/empresa/**").hasAuthority("ADMIN_EMPRESA")
-                            .requestMatchers("/estabelecimento/**").hasAuthority("ADMIN_ESTABELECIMENTO")
-                            .requestMatchers("/cliente/**").hasAuthority("CLIENTE") //pra hasRole funcionar teria que ter prefixo 'ROLE_' na frente, mas ambos tem o mesmo efeito
+                            .requestMatchers("/public/**").permitAll()
+                            .requestMatchers("/adm/**").hasAuthority(Permissoes.ADMIN_SISTEMA.name())
+                            .requestMatchers("/cadastros/**").hasAnyAuthority(Permissoes.ADMIN_SISTEMA.name(),Permissoes.ADMIN_EMPRESA.name())
+                            .requestMatchers("/empresa/**").hasAuthority(Permissoes.ADMIN_EMPRESA.name())
+                            .requestMatchers("/estabelecimento/**").hasAuthority(Permissoes.ADMIN_ESTABELECIMENTO.name())
+                            .requestMatchers("/cliente/**").hasAuthority(Permissoes.CLIENTE.name()) //pra hasRole funcionar teria que ter prefixo 'ROLE_' na frente, mas ambos tem o mesmo efeito
                             .anyRequest().authenticated();
                 }
             )

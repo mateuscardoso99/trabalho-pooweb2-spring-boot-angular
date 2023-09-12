@@ -75,13 +75,12 @@ public class PedidoService {
         Pedido p = this.findByIdAndClienteId(idPedido);
         p.setAtivo(ativar ? true : false);
         p.setStatusPedido(ativar ? StatusPedido.PENDENTE : StatusPedido.CANCELADO);
-        this.pedidoRepository.save(p);
     }
 
     @Transactional
     public Pedido mudarStatus(Long idEstab, Long idPedido, StatusPedido statusPedido) throws Exception{
         Pedido pedido = this.findByIdAndEstabelecimentoId(idEstab, idPedido);
         pedido.setStatusPedido(statusPedido);
-        return pedidoRepository.save(pedido);
+        return pedido;
     }
 }

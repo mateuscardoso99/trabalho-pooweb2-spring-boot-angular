@@ -3,6 +3,7 @@ package com.trabalho.api.interceptor;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
@@ -31,7 +32,7 @@ public class EstabelecimentoInterceptor implements HandlerInterceptor{
             String token = jwtUtils.getTokenFromRequest(request);
             String idEstabelecimentoToken = jwtUtils.getClaimsFromJwtToken(token).get("estabelecimento_id").toString();
             if(!idEstabelecimentoToken.equals(pathVariables.get("idEstabelecimento"))){
-                throw new RuntimeException("erro interno");
+                throw new AccessDeniedException("parametro diferente do que está no jwt");
             }
         }
 

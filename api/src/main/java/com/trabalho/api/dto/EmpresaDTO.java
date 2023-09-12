@@ -12,6 +12,7 @@ public class EmpresaDTO {
     private Long id;
     private String nome;
     private String razaoSocial;
+    private boolean ativo;
     private EnderecoDTO endereco;
 
     public static EmpresaDTO convert(Empresa empresa){
@@ -19,6 +20,7 @@ public class EmpresaDTO {
         empresaDTO.setId(empresa.getId());
         empresaDTO.setNome(empresa.getNome());
         empresaDTO.setRazaoSocial(empresa.getRazaoSocial());
+        empresaDTO.setAtivo(empresa.isAtivo());
         empresaDTO.setEndereco(EnderecoDTO.convert(empresa.getEndereco()));
         return empresaDTO;
     }

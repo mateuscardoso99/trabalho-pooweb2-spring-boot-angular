@@ -42,6 +42,12 @@ public class EmpresaService {
         return empresaRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Empresa não encontrada"));
     }
 
+    public Empresa findById(HttpServletRequest request) throws Exception{
+        String token = jwtUtils.getTokenFromRequest(request);
+        String idEmpresa = jwtUtils.getClaimsFromJwtToken(token).get("empresa_id").toString();
+        return empresaRepository.findById(Long.parseLong(idEmpresa)).orElseThrow(() -> new DataNotFoundException("Empresa não encontrada"));
+    }
+
     @Transactional
     public Empresa salvar(CadastroEmpresa dados){
         Endereco endereco = dados.getEndereco().toEndereco();
@@ -54,8 +60,10 @@ public class EmpresaService {
     }
 
     @Transactional
-    public Empresa atualizar(CadastroEmpresa dados, Long id) throws Exception{
-        Empresa empresa = empresaRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Empresa não encontrada"));
+    public Empresa atualizar(CadastroEmpresa dados, HttpServletRequest request) throws Exception{
+        String token = jwtUtils.getTokenFromRequest(request);
+        String idEmpresa = jwtUtils.getClaimsFromJwtToken(token).get("empresa_id").toString();
+        Empresa empresa = empresaRepository.findById(Long.parseLong(idEmpresa)).orElseThrow(() -> new DataNotFoundException("Empresa não encontrada"));
 
         Endereco e = empresa.getEndereco();
         e.setBairro(dados.getEndereco().getBairro());
@@ -71,14 +79,13 @@ public class EmpresaService {
         empresa.setRazaoSocial(dados.getRazaoSocial());
         empresa.setEndereco(e);
 
-        return this.empresaRepository.save(empresa);
+        return empresa;
     }
 
     @Transactional
     public void handleAtivacao(Long id, boolean ativar) throws Exception{
         Empresa empresa = this.findById(id);
         empresa.setAtivo(ativar ? true : false);
-        empresaRepository.save(empresa);
     }
 
 
@@ -128,7 +135,7 @@ public class EmpresaService {
         user.setEmail(dados.getEmail());
         user.setNome(dados.getNome());
         user.setSenha(passwordEncoder.encode(dados.getSenha()));
-        return this.adminEmpresaRepository.save(user);
+        return user;
     }
 
     @Transactional

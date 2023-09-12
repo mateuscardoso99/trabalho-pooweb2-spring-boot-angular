@@ -83,6 +83,14 @@ public class LoginController {
                 claimsJwt.put("empresa_id", adminEmpresa.getEmpresa().getId());
                 tokenDTO.setUsuario(UsuarioAdminEmpresaDTO.convert(adminEmpresa));
             }
+            else if(userDetails.getAuthorities().contains(new SimpleGrantedAuthority(Permissoes.ADMIN_SISTEMA.name()))){
+                UsuarioDTO usuarioDTO = new UsuarioDTO();
+                usuarioDTO.setId(userDetails.getId());
+                usuarioDTO.setEmail(userDetails.getEmail());
+                usuarioDTO.setNome(userDetails.getUsername());
+                usuarioDTO.setPermissoes(userDetails.getAuthorities().stream().map(p -> Permissoes.valueOf(p.getAuthority())).toList());
+                tokenDTO.setUsuario(usuarioDTO);
+            }
             else{
                 throw new BadRequestException("Usuário não possui permissões");
             }

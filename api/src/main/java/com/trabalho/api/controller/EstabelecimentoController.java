@@ -43,50 +43,20 @@ public class EstabelecimentoController {
         this.pedidoService = pedidoService;
     }
 
-    @GetMapping
+    @GetMapping(value = "/{idEstabelecimento}")
     @ResponseBody
-    public ResponseEntity<ResponseDTO<Collection<EstabelecimentoDTO>>> findAll(){
-        Collection<Estabelecimento> estabelecimentos = estabelecimentoService.findAll();
-        ResponseDTO<Collection<EstabelecimentoDTO>> responseDTO = ResponseDTO.build(EstabelecimentoDTO.convert(estabelecimentos), true, null, null);
-        return new ResponseEntity<ResponseDTO<Collection<EstabelecimentoDTO>>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/{id}")
-    @ResponseBody
-    public ResponseEntity<ResponseDTO<EstabelecimentoDTO>> findById(@PathVariable Long id) throws Exception{
-        Estabelecimento estabelecimento = estabelecimentoService.findById(id);
+    public ResponseEntity<ResponseDTO<EstabelecimentoDTO>> findById(@PathVariable Long idEstabelecimento) throws Exception{
+        Estabelecimento estabelecimento = estabelecimentoService.findById(idEstabelecimento);
         ResponseDTO<EstabelecimentoDTO> responseDTO = ResponseDTO.build(EstabelecimentoDTO.convert(estabelecimento), true, null, null);
         return new ResponseEntity<ResponseDTO<EstabelecimentoDTO>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PutMapping(value = "/{idEstabelecimento}")
     @ResponseBody
-    public ResponseEntity<ResponseDTO<EstabelecimentoDTO>> cadastrar(@RequestBody @Valid CadastroEstabelecimento dados) throws Exception{
-        Estabelecimento estabelecimento = estabelecimentoService.salvar(dados);
-        ResponseDTO<EstabelecimentoDTO> responseDTO = ResponseDTO.build(EstabelecimentoDTO.convert(estabelecimento), true, "estabelecimento salvo com sucesso", null);
-        return new ResponseEntity<ResponseDTO<EstabelecimentoDTO>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
-    }
-
-    @PutMapping(value = "/{id}")
-    @ResponseBody
-    public ResponseEntity<ResponseDTO<EstabelecimentoDTO>> update(@RequestBody @Valid CadastroEstabelecimento dados, @PathVariable Long id) throws Exception{
-        Estabelecimento estabelecimento = estabelecimentoService.atualizar(dados, id);
+    public ResponseEntity<ResponseDTO<EstabelecimentoDTO>> update(@RequestBody @Valid CadastroEstabelecimento dados, @PathVariable Long idEstabelecimento) throws Exception{
+        Estabelecimento estabelecimento = estabelecimentoService.atualizar(dados, idEstabelecimento);
         ResponseDTO<EstabelecimentoDTO> responseDTO = ResponseDTO.build(EstabelecimentoDTO.convert(estabelecimento), true, "estabelecimento salvo com sucesso", null);
         return new ResponseEntity<ResponseDTO<EstabelecimentoDTO>>(responseDTO, new HttpHeaders(), HttpStatus.CREATED);
-    }
-
-    @DeleteMapping(value = "/desativar/{id}")
-    @ResponseBody
-    public ResponseEntity<?> desativar(@PathVariable Long id) throws Exception{
-        this.estabelecimentoService.handleAtivacao(id, false);
-        return new ResponseEntity<>(new ResponseDTO<>(null, true, "desativado com sucesso", null), new HttpHeaders(), HttpStatus.CREATED);
-    }
-
-    @PutMapping(value = "/ativar/{id}")
-    @ResponseBody
-    public ResponseEntity<?> ativar(@PathVariable Long id) throws Exception{
-        this.estabelecimentoService.handleAtivacao(id, true);
-        return new ResponseEntity<>(new ResponseDTO<>(null, true, "ativado com sucesso", null), new HttpHeaders(), HttpStatus.CREATED);
     }
 
     //usuários

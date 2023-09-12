@@ -44,50 +44,18 @@ public class EmpresaController {
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity<ResponseDTO<Collection<EmpresaDTO>>> findAll(){
-        Collection<Empresa> empresas = empresaService.findAll();
-        ResponseDTO<Collection<EmpresaDTO>> responseDTO = ResponseDTO.build(EmpresaDTO.convert(empresas), true, null, null);
-        return new ResponseEntity<ResponseDTO<Collection<EmpresaDTO>>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/{id}")
-    @ResponseBody
-    public ResponseEntity<ResponseDTO<EmpresaDTO>> findById(@PathVariable Long id) throws Exception{
-        Empresa empresa = empresaService.findById(id);
+    public ResponseEntity<ResponseDTO<EmpresaDTO>> findById(HttpServletRequest request) throws Exception{
+        Empresa empresa = empresaService.findById(request);
         ResponseDTO<EmpresaDTO> responseDTO = ResponseDTO.build(EmpresaDTO.convert(empresa), true, null, null);
         return new ResponseEntity<ResponseDTO<EmpresaDTO>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PutMapping("atualizar")
     @ResponseBody
-    public ResponseEntity<ResponseDTO<EmpresaDTO>> cadastrar(@RequestBody @Valid CadastroEmpresa dados) {
-        Empresa empresa = empresaService.salvar(dados);
-        ResponseDTO<EmpresaDTO> responseDTO = ResponseDTO.build(EmpresaDTO.convert(empresa), true, "empresa salva com sucesso", null);
-        return new ResponseEntity<ResponseDTO<EmpresaDTO>>(responseDTO, new HttpHeaders(), HttpStatus.CREATED);
-    }
-
-    @PutMapping(value = "/{id}")
-    @ResponseBody
-    public ResponseEntity<ResponseDTO<EmpresaDTO>> update(@RequestBody @Valid CadastroEmpresa dados, @PathVariable Long id) throws Exception{
-        Empresa empresa = empresaService.atualizar(dados, id);
+    public ResponseEntity<ResponseDTO<EmpresaDTO>> update(@RequestBody @Valid CadastroEmpresa dados, HttpServletRequest request) throws Exception{
+        Empresa empresa = empresaService.atualizar(dados, request);
         ResponseDTO<EmpresaDTO> responseDTO = ResponseDTO.build(EmpresaDTO.convert(empresa), true, "empresa salva com sucesso", null);
         return new ResponseEntity<ResponseDTO<EmpresaDTO>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
-    }
-
-    @PutMapping(value = "/desativar/{id}")
-    @ResponseBody
-    public ResponseEntity<?> desativar(@PathVariable Long id) throws Exception{
-        this.empresaService.handleAtivacao(id, false);
-        ResponseDTO<?> responseDTO = ResponseDTO.build(null, true, "desativado com sucesso", null);
-        return new ResponseEntity<>(responseDTO, new HttpHeaders(), HttpStatus.OK);
-    }
-
-    @PutMapping(value = "/ativar/{id}")
-    @ResponseBody
-    public ResponseEntity<?> ativar(@PathVariable Long id) throws Exception{
-        this.empresaService.handleAtivacao(id, true);
-        ResponseDTO<?> responseDTO = ResponseDTO.build(null, true, "ativado com sucesso", null);
-        return new ResponseEntity<>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
     //usuários
@@ -143,5 +111,19 @@ public class EmpresaController {
         Estabelecimento estabelecimento = estabelecimentoService.findByIdAndEmpresaId(request, idEstab);
         ResponseDTO<EstabelecimentoDTO> responseDTO = ResponseDTO.build(EstabelecimentoDTO.convert(estabelecimento), true, null, null);
         return new ResponseEntity<ResponseDTO<EstabelecimentoDTO>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/estabelecimento/desativar/{idEstabelecimento}")
+    @ResponseBody
+    public ResponseEntity<?> desativarEstab(@PathVariable Long idEstabelecimento, HttpServletRequest request) throws Exception{
+        this.estabelecimentoService.handleAtivacao(idEstabelecimento, false, request);
+        return new ResponseEntity<>(new ResponseDTO<>(null, true, "desativado com sucesso", null), new HttpHeaders(), HttpStatus.CREATED);
+    }
+
+    @PutMapping(value = "/estabelecimento/ativar/{idEstabelecimento}")
+    @ResponseBody
+    public ResponseEntity<?> ativarEstab(@PathVariable(name = "idEstabelecimento") Long id, HttpServletRequest request) throws Exception{
+        this.estabelecimentoService.handleAtivacao(id, true, request);
+        return new ResponseEntity<>(new ResponseDTO<>(null, true, "ativado com sucesso", null), new HttpHeaders(), HttpStatus.CREATED);
     }
 }

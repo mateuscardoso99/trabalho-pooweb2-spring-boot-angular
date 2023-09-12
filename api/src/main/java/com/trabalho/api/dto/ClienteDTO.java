@@ -1,5 +1,6 @@
 package com.trabalho.api.dto;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import com.trabalho.api.model.Cliente;
@@ -35,5 +36,13 @@ public class ClienteDTO extends UsuarioDTO{
         clienteDTO.setPedidos(PedidoDTO.convert(cliente.getPedidos()));
         clienteDTO.setEndereco(cliente.getEndereco() != null ? EnderecoDTO.convert(cliente.getEndereco()) : null);
         return clienteDTO;
+    }
+
+    public static Collection<ClienteDTO> convert(Collection<Cliente> clientes){
+        Collection<ClienteDTO> clienteDTOs = new ArrayList<>();
+        clientes.forEach(c -> {
+            clienteDTOs.add(convert(c));
+        });
+        return clienteDTOs;
     }
 }

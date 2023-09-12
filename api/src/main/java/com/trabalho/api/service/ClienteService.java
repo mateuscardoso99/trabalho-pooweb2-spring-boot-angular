@@ -2,6 +2,7 @@ package com.trabalho.api.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,10 @@ public class ClienteService {
     public ClienteService(ClienteRepository clienteRepository, PasswordEncoder passwordEncoder){
         this.clienteRepository = clienteRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    public Collection<Cliente> findAll(){
+        return this.clienteRepository.findAll();
     }
 
     public Cliente findById(Long id) throws Exception{
@@ -45,7 +50,7 @@ public class ClienteService {
         cliente.setEmail(cadastroCliente.getEmail());
         cliente.setNome(cadastroCliente.getNome());
         cliente.setSenha(passwordEncoder.encode(cadastroCliente.getSenha()));
-        return this.clienteRepository.save(cliente);
+        return cliente;
     }
 
     @Transactional

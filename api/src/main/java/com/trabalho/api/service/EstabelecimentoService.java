@@ -102,12 +102,19 @@ public class EstabelecimentoService {
         estabelecimento.setEndereco(e);
         estabelecimento.setEmpresa(empresa);
 
-        return this.estabelecimentoRepository.save(estabelecimento);
+        return estabelecimento;
     }
 
+    //metodo chamado pelo empresaController e admController, se for chamado pelo empresaController precisa validar se o estab pertence a empresa
     @Transactional
-    public void handleAtivacao(Long id, boolean ativar) throws Exception{
-        Estabelecimento estabelecimento = this.findById(id);
+    public void handleAtivacao(Long idEstab, boolean ativar, HttpServletRequest request) throws Exception{
+        Estabelecimento estabelecimento;
+        if(request == null){
+            estabelecimento = this.findById(idEstab);
+        }
+        else{
+            estabelecimento = this.findByIdAndEmpresaId(request, idEstab);
+        }
         estabelecimento.setAtivo(ativar ? true : false);
         estabelecimentoRepository.save(estabelecimento);
     }
@@ -146,7 +153,7 @@ public class EstabelecimentoService {
         user.setEmail(dados.getEmail());
         user.setNome(dados.getNome());
         user.setSenha(passwordEncoder.encode(dados.getSenha()));
-        return this.adminEstabelecimentoRepository.save(user);
+        return user;
     }
 
     @Transactional
