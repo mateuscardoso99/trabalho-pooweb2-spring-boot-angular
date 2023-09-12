@@ -40,29 +40,29 @@ public class ClienteController {
         this.pedidoService = pedidoService;
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<ResponseDTO<ClienteDTO>> findById(@PathVariable Long id) throws Exception{
-        Cliente cliente = this.clienteService.findById(id);
+    @GetMapping
+    public ResponseEntity<ResponseDTO<ClienteDTO>> find() throws Exception{
+        Cliente cliente = this.clienteService.findClienteByUsuarioLogado();
         ResponseDTO<ClienteDTO> responseDTO = ResponseDTO.build(ClienteDTO.convert(cliente), true, null, null);
         return new ResponseEntity<ResponseDTO<ClienteDTO>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<ResponseDTO<ClienteDTO>> update(@RequestBody @Valid CadastroCliente cadastroCliente, @PathVariable Long id) throws Exception{
-        Cliente cliente = this.clienteService.atualizar(cadastroCliente, id);
+    @PutMapping
+    public ResponseEntity<ResponseDTO<ClienteDTO>> update(@RequestBody @Valid CadastroCliente cadastroCliente) throws Exception{
+        Cliente cliente = this.clienteService.atualizar(cadastroCliente);
         ResponseDTO<ClienteDTO> responseDTO = ResponseDTO.build(ClienteDTO.convert(cliente), true, null, null);
         return new ResponseEntity<ResponseDTO<ClienteDTO>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/desativar/{id}")
-    public ResponseEntity<?> desativarCliente(@PathVariable Long id) throws Exception{
-        this.clienteService.handleAtivacao(id, false);
+    @DeleteMapping(value = "/desativar")
+    public ResponseEntity<?> desativarCliente() throws Exception{
+        this.clienteService.handleAtivacao(false);
         return new ResponseEntity<>(new ResponseDTO<>(null, null, "cliente desativado com sucesso", null), new HttpHeaders(), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/ativar/{id}")
-    public ResponseEntity<?> ativarCliente(@PathVariable Long id) throws Exception{
-        this.clienteService.handleAtivacao(id, true);
+    @PutMapping(value = "/ativar")
+    public ResponseEntity<?> ativarCliente() throws Exception{
+        this.clienteService.handleAtivacao(true);
         return new ResponseEntity<>(new ResponseDTO<>(null, null, "cliente ativado com sucesso", null), new HttpHeaders(), HttpStatus.OK);
     }
 

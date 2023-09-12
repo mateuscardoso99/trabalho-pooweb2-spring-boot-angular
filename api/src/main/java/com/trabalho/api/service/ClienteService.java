@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import com.trabalho.api.model.Cliente;
 import com.trabalho.api.model.Permissoes;
 import com.trabalho.api.repository.ClienteRepository;
 import com.trabalho.api.request.CadastroCliente;
+import com.trabalho.api.security.UserDetailsImpl;
 
 @Service
 public class ClienteService {
@@ -33,6 +35,12 @@ public class ClienteService {
         return cliente;
     }
 
+    public Cliente findClienteByUsuarioLogado() throws Exception{
+        UserDetailsImpl userDetailsImpl = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Cliente cliente = this.clienteRepository.findById(userDetailsImpl.getId()).orElseThrow(() -> new DataNotFoundException("cliente não encontrado"));
+        return cliente;
+    }
+
     @Transactional
     public Cliente save(CadastroCliente cliente){
         Cliente c = new Cliente();
@@ -45,8 +53,8 @@ public class ClienteService {
     }
 
     @Transactional
-    public Cliente atualizar(CadastroCliente cadastroCliente, Long id) throws Exception{
-        Cliente cliente = this.clienteRepository.findById(id).orElseThrow(() -> new DataNotFoundException("cliente não encontrado"));
+    public Cliente atualizar(CadastroCliente cadastroCliente) throws Exception{
+        Cliente cliente = this.findClienteByUsuarioLogado();
         cliente.setEmail(cadastroCliente.getEmail());
         cliente.setNome(cadastroCliente.getNome());
         cliente.setSenha(passwordEncoder.encode(cadastroCliente.getSenha()));
@@ -54,8 +62,9 @@ public class ClienteService {
     }
 
     @Transactional
-    public void handleAtivacao(Long id, boolean ativar) throws Exception{
-        Cliente c = this.findById(id);
+    public void handleAtivacao(boolean ativar) throws Exception{
+        UserDetailsImpl userDetailsImpl = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Cliente c = this.findById(userDetailsImpl.getId());
         c.setAtivo(ativar ? true : false);
         clienteRepository.save(c);
     }

@@ -62,7 +62,7 @@ public class SecurityConfig{
                             .requestMatchers("/register").permitAll()
                             .requestMatchers("/public/**").permitAll()
                             .requestMatchers("/adm/**").hasAuthority(Permissoes.ADMIN_SISTEMA.name())
-                            .requestMatchers("/cadastros/**").hasAnyAuthority(Permissoes.ADMIN_SISTEMA.name(),Permissoes.ADMIN_EMPRESA.name())
+                            .requestMatchers("/adm-sistema-e-adm-empresa/**").hasAnyAuthority(Permissoes.ADMIN_SISTEMA.name(),Permissoes.ADMIN_EMPRESA.name())
                             .requestMatchers("/empresa/**").hasAuthority(Permissoes.ADMIN_EMPRESA.name())
                             .requestMatchers("/estabelecimento/**").hasAuthority(Permissoes.ADMIN_ESTABELECIMENTO.name())
                             .requestMatchers("/cliente/**").hasAuthority(Permissoes.CLIENTE.name()) //pra hasRole funcionar teria que ter prefixo 'ROLE_' na frente, mas ambos tem o mesmo efeito
