@@ -44,9 +44,9 @@ public class ClienteService {
     @Transactional
     public Cliente save(CadastroCliente cliente){
         Cliente c = new Cliente();
-        c.setNome(cliente.getNome());
-        c.setEmail(cliente.getEmail());
-        c.setSenha(passwordEncoder.encode(cliente.getSenha()));
+        c.setNome(cliente.nome());
+        c.setEmail(cliente.email());
+        c.setSenha(passwordEncoder.encode(cliente.senha()));
         c.setPermissoes(Arrays.asList(Permissoes.CLIENTE));
         c.setPedidos(new ArrayList<>());
         return clienteRepository.save(c);
@@ -55,9 +55,9 @@ public class ClienteService {
     @Transactional
     public Cliente atualizar(CadastroCliente cadastroCliente) throws Exception{
         Cliente cliente = this.findClienteByUsuarioLogado();
-        cliente.setEmail(cadastroCliente.getEmail());
-        cliente.setNome(cadastroCliente.getNome());
-        cliente.setSenha(passwordEncoder.encode(cadastroCliente.getSenha()));
+        cliente.setEmail(cadastroCliente.email());
+        cliente.setNome(cadastroCliente.nome());
+        cliente.setSenha(passwordEncoder.encode(cadastroCliente.senha()));
         return cliente;
     }
 

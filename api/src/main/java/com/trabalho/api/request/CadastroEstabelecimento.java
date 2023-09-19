@@ -7,26 +7,24 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
 
-@Data
-public class CadastroEstabelecimento {
+public record CadastroEstabelecimento (
     @NotBlank(message = "nome inválido")
     @Size(max = 255)
-    private String nome;
+    String nome,
 
     @NotBlank(message = "razao social inválida")
     @Size(max = 255)
-    private String razaoSocial;
+    String razaoSocial,
 
     @NotNull(message = "horário de funcionamento inválido")
     @DateTimeFormat(pattern = "HH:mm")
-    private String horarioFuncionamento;
+    String horarioFuncionamento,
 
     @NotNull(message = "informe a empresa")
     @Positive(message = "empresa inválida")
-    private Long idEmpresa;
+    Long idEmpresa,
 
     @Valid
-    private CadastroEndereco endereco;
-}
+    CadastroEndereco endereco
+){}

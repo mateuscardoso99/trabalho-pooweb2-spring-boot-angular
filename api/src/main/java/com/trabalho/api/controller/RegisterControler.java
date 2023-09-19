@@ -34,9 +34,9 @@ public class RegisterControler {
 
     @PostMapping
     public ResponseEntity<ResponseDTO<ClienteDTO>> cadastrar(@Valid @RequestBody CadastroCliente dados) throws Exception{
-        Optional<Usuario> usuarioExiste = this.usuarioRepository.findByEmail(dados.getEmail());
+        Optional<Usuario> usuarioExiste = this.usuarioRepository.findByEmail(dados.email());
 
-        if(dados.getEndereco() == null){
+        if(dados.endereco() == null){
             throw new BadRequestException("informe o endereço");
         }
         if(usuarioExiste.isPresent()){

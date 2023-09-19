@@ -7,14 +7,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.trabalho.api.dto.UsuarioAdminEmpresaDTO;
 import com.trabalho.api.dto.EmpresaDTO;
 import com.trabalho.api.dto.EstabelecimentoDTO;
+import com.trabalho.api.dto.PedidoDTO;
 import com.trabalho.api.dto.ResponseDTO;
 import com.trabalho.api.model.UsuarioAdminEmpresa;
 import com.trabalho.api.model.Empresa;
 import com.trabalho.api.model.Estabelecimento;
+import com.trabalho.api.model.Pedido;
 import com.trabalho.api.request.CadastroEmpresa;
 import com.trabalho.api.request.CadastroUsuarioAdmin;
 import com.trabalho.api.service.EmpresaService;
 import com.trabalho.api.service.EstabelecimentoService;
+import com.trabalho.api.service.PedidoService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -36,10 +39,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class EmpresaController {
     private final EmpresaService empresaService;
     private final EstabelecimentoService estabelecimentoService;
+    private final PedidoService pedidoService;
 
-    public EmpresaController(EmpresaService empresaService, EstabelecimentoService estabelecimentoService){
+    public EmpresaController(EmpresaService empresaService, EstabelecimentoService estabelecimentoService, PedidoService pedidoService){
         this.empresaService = empresaService;
         this.estabelecimentoService = estabelecimentoService;
+        this.pedidoService = pedidoService;
     }
 
     @GetMapping
@@ -125,5 +130,13 @@ public class EmpresaController {
     public ResponseEntity<?> ativarEstab(@PathVariable(name = "idEstabelecimento") Long id, HttpServletRequest request) throws Exception{
         this.estabelecimentoService.handleAtivacao(id, true, request);
         return new ResponseEntity<>(new ResponseDTO<>(null, true, "ativado com sucesso", null), new HttpHeaders(), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/estabelecimento/{idEstabelecimento}/pedidos")
+    @ResponseBody
+    public ResponseEntity<ResponseDTO<Collection<PedidoDTO>>> findAllPedidosByEstabelecimento(HttpServletRequest request, @PathVariable Long idEstabelecimento){
+        Collection<Pedido> pedidos = this.pedidoService.findAllByEstabelecimentoIdAndEmpresaId(request,idEstabelecimento);
+        ResponseDTO<Collection<PedidoDTO>> responseDTO = ResponseDTO.build(PedidoDTO.convert(pedidos), true, null, null);
+        return new ResponseEntity<ResponseDTO<Collection<PedidoDTO>>>(responseDTO,new HttpHeaders(),HttpStatus.OK);
     }
 }

@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.trabalho.api.exception.DataNotFoundException;
 import com.trabalho.api.model.Usuario;
 import com.trabalho.api.repository.UsuarioRepository;
 
@@ -37,7 +37,7 @@ public class AuthTokenFilter extends OncePerRequestFilter{
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
                 String user_id = jwtUtils.getClaimsFromJwtToken(jwt).getSubject();
 
-                Usuario usuario = usuarioRepository.findById(Long.parseLong(user_id)).orElseThrow(()->new DataNotFoundException("usuario não encontrado no token"));
+                Usuario usuario = usuarioRepository.findById(Long.parseLong(user_id)).orElseThrow(()->new UsernameNotFoundException("usuario não encontrado no token"));
                 UserDetails userDetails = UserDetailsImpl.build(usuario);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails,userDetails.getPassword(),userDetails.getAuthorities());
                 

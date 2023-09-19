@@ -58,7 +58,7 @@ public class LoginController {
     @PostMapping
     public ResponseEntity<TokenDTO<UsuarioDTO>> login(@RequestBody @Valid LoginRequest dados) throws Exception{
         try{
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dados.getEmail(), dados.getSenha()));
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dados.email(), dados.senha()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 

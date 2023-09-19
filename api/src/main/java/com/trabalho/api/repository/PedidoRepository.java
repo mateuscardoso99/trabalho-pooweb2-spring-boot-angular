@@ -22,4 +22,7 @@ public interface PedidoRepository extends JpaRepository<Pedido,Long> {
 
     @Query("SELECT p FROM Pedido p WHERE p.estabelecimento.id = ?1")
     Collection<Pedido> findAllByEstabelecimento(Long idEstab);
+
+    @Query("SELECT p FROM Pedido p WHERE p.estabelecimento.id = ?1 AND p.estabelecimento.empresa.id = ?2")
+    Collection<Pedido> findAllByEstabelecimentoIdAndEmpresaId(Long idEstab, Long idEmpresa);
 }

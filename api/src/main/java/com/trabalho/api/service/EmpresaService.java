@@ -20,6 +20,11 @@ import com.trabalho.api.security.JwtUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+/**
+ * os métodos que pegam o id_empresa do token, são chamados pelo EmpresaController
+ * intuito é impedir que usuario de uma empresa veja dados de outra
+ */
+
 @Service
 public class EmpresaService {
     private final EmpresaRepository empresaRepository;
@@ -38,10 +43,12 @@ public class EmpresaService {
         return empresaRepository.findAll();
     }
 
+    //usado no portal admin
     public Empresa findById(Long id) throws Exception{
         return empresaRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Empresa não encontrada"));
     }
 
+    //usado no portal empresa, busca a empresa do usuario logado pelo id da empresa no jwt
     public Empresa findById(HttpServletRequest request) throws Exception{
         String token = jwtUtils.getTokenFromRequest(request);
         String idEmpresa = jwtUtils.getClaimsFromJwtToken(token).get("empresa_id").toString();
@@ -50,11 +57,20 @@ public class EmpresaService {
 
     @Transactional
     public Empresa salvar(CadastroEmpresa dados){
-        Endereco endereco = dados.getEndereco().toEndereco();
+        Endereco e = new Endereco();
+        e.setBairro(dados.endereco().bairro());
+        e.setCidade(dados.endereco().cidade());
+        e.setComplemento(dados.endereco().complemento());
+        e.setLatitude(dados.endereco().latitude());
+        e.setLongitude(dados.endereco().longitude());
+        e.setNumero(dados.endereco().numero());
+        e.setRua(dados.endereco().rua());
+        e.setUf(dados.endereco().uf());
+
         Empresa empresa = Empresa.builder()
-                            .nome(dados.getNome())
-                            .razaoSocial(dados.getRazaoSocial())
-                            .endereco(endereco)
+                            .nome(dados.nome())
+                            .razaoSocial(dados.razaoSocial())
+                            .endereco(e)
                             .build();
         return this.empresaRepository.save(empresa);
     }
@@ -66,17 +82,17 @@ public class EmpresaService {
         Empresa empresa = empresaRepository.findById(Long.parseLong(idEmpresa)).orElseThrow(() -> new DataNotFoundException("Empresa não encontrada"));
 
         Endereco e = empresa.getEndereco();
-        e.setBairro(dados.getEndereco().getBairro());
-        e.setCidade(dados.getEndereco().getCidade());
-        e.setComplemento(dados.getEndereco().getComplemento());
-        e.setLatitude(dados.getEndereco().getLatitude());
-        e.setLongitude(dados.getEndereco().getLongitude());
-        e.setNumero(dados.getEndereco().getNumero());
-        e.setRua(dados.getEndereco().getRua());
-        e.setUf(dados.getEndereco().getUf());
+        e.setBairro(dados.endereco().bairro());
+        e.setCidade(dados.endereco().cidade());
+        e.setComplemento(dados.endereco().complemento());
+        e.setLatitude(dados.endereco().latitude());
+        e.setLongitude(dados.endereco().longitude());
+        e.setNumero(dados.endereco().numero());
+        e.setRua(dados.endereco().rua());
+        e.setUf(dados.endereco().uf());
 
-        empresa.setNome(dados.getNome());
-        empresa.setRazaoSocial(dados.getRazaoSocial());
+        empresa.setNome(dados.nome());
+        empresa.setRazaoSocial(dados.razaoSocial());
         empresa.setEndereco(e);
 
         return empresa;
@@ -117,11 +133,11 @@ public class EmpresaService {
 
         Empresa empresa = this.findById(Long.parseLong(idEmpresa));
         UsuarioAdminEmpresa user = new UsuarioAdminEmpresa();
-        user.setEmail(dados.getEmail());
+        user.setEmail(dados.email());
         user.setEmpresa(empresa);
-        user.setNome(dados.getNome());
+        user.setNome(dados.nome());
         user.setPermissoes(Arrays.asList(Permissoes.ADMIN_EMPRESA));
-        user.setSenha(passwordEncoder.encode(dados.getSenha()));
+        user.setSenha(passwordEncoder.encode(dados.senha()));
         return this.adminEmpresaRepository.save(user);
     }
 
@@ -132,9 +148,9 @@ public class EmpresaService {
 
         Empresa empresa = this.findById(Long.parseLong(idEmpresa));
         UsuarioAdminEmpresa user = this.findUsuarioEmpresaByIdUsuarioAndIdEmpresa(empresa.getId(),idUsuario);
-        user.setEmail(dados.getEmail());
-        user.setNome(dados.getNome());
-        user.setSenha(passwordEncoder.encode(dados.getSenha()));
+        user.setEmail(dados.email());
+        user.setNome(dados.nome());
+        user.setSenha(passwordEncoder.encode(dados.senha()));
         return user;
     }
 

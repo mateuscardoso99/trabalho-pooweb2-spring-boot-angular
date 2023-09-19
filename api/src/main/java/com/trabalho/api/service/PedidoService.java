@@ -16,16 +16,25 @@ import com.trabalho.api.model.Pedido.StatusPedido;
 import com.trabalho.api.repository.EstabelecimentoRepository;
 import com.trabalho.api.repository.PedidoRepository;
 import com.trabalho.api.request.CadastroPedido;
+import com.trabalho.api.security.JwtUtils;
 import com.trabalho.api.security.UserDetailsImpl;
 
+import jakarta.servlet.http.HttpServletRequest;
+
+/**
+ * os métodos que pegam o id_empresa do token, são chamados pelo EmpresaController
+ * intuito é impedir que usuario de uma empresa veja dados de outra
+ */
 @Service
 public class PedidoService {
     private final EstabelecimentoRepository estabelecimentoRepository;
     private final PedidoRepository pedidoRepository;
+    private final JwtUtils jwtUtils;
 
-    public PedidoService(PedidoRepository pedidoRepository, EstabelecimentoRepository estabelecimentoRepository){
+    public PedidoService(PedidoRepository pedidoRepository, EstabelecimentoRepository estabelecimentoRepository, JwtUtils jwtUtils){
         this.pedidoRepository = pedidoRepository;
         this.estabelecimentoRepository = estabelecimentoRepository;
+        this.jwtUtils = jwtUtils;
     }
 
     public Collection<Pedido> findAllByCliente(){
@@ -35,6 +44,12 @@ public class PedidoService {
 
     public Collection<Pedido> findAllByEstabelecimento(Long idEstab){
         return this.pedidoRepository.findAllByEstabelecimento(idEstab);
+    }
+
+    public Collection<Pedido> findAllByEstabelecimentoIdAndEmpresaId(HttpServletRequest request, Long idEstab){
+        String token = jwtUtils.getTokenFromRequest(request);
+        Long idEmpresa = Long.parseLong(jwtUtils.getClaimsFromJwtToken(token).get("id_empresa").toString());
+        return this.pedidoRepository.findAllByEstabelecimentoIdAndEmpresaId(idEstab,idEmpresa);
     }
 
     public Pedido findByIdAndClienteId(Long idPedido) throws Exception{
@@ -48,7 +63,7 @@ public class PedidoService {
 
     @Transactional
     public Pedido salvar(CadastroPedido dados) throws Exception{
-        Optional<Estabelecimento> estabelecimento = this.estabelecimentoRepository.findById(dados.getIdEstabelecimento());
+        Optional<Estabelecimento> estabelecimento = this.estabelecimentoRepository.findById(dados.idEstabelecimento());
         if(!estabelecimento.isPresent()){
             throw new DataNotFoundException("estab não encontrado");
         }
@@ -61,7 +76,7 @@ public class PedidoService {
         cliente.setNome(userDetails.getUsername());
 
         Pedido pedido = new Pedido();
-        pedido.setDescricao(dados.getDescricao());
+        pedido.setDescricao(dados.descricao());
         pedido.setStatusPedido(StatusPedido.PENDENTE);
         pedido.setDataHora(LocalDateTime.now());
         pedido.setEstabelecimento(estabelecimento.get());
