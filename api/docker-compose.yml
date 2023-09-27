@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:13-alpine
+    restart: always
+    container_name: db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: pooweb
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: pg_isready -U postgres -d pooweb -p 5432
+      interval: 15s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build: .
+    ports:
+      - 8081:8081
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
