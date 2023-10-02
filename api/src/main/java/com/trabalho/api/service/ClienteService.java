@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.trabalho.api.exception.DataNotFoundException;
 import com.trabalho.api.model.Cliente;
+import com.trabalho.api.model.Endereco;
 import com.trabalho.api.model.Permissoes;
 import com.trabalho.api.repository.ClienteRepository;
 import com.trabalho.api.request.CadastroCliente;
@@ -43,12 +44,23 @@ public class ClienteService {
 
     @Transactional
     public Cliente save(CadastroCliente cliente){
+        Endereco e = new Endereco();
+        e.setBairro(cliente.endereco().bairro());
+        e.setCidade(cliente.endereco().cidade());
+        e.setComplemento(cliente.endereco().complemento());
+        e.setLatitude(cliente.endereco().latitude());
+        e.setLongitude(cliente.endereco().longitude());
+        e.setNumero(cliente.endereco().numero());
+        e.setRua(cliente.endereco().rua());
+        e.setUf(cliente.endereco().uf());
+
         Cliente c = new Cliente();
         c.setNome(cliente.nome());
         c.setEmail(cliente.email());
         c.setSenha(passwordEncoder.encode(cliente.senha()));
         c.setPermissoes(Arrays.asList(Permissoes.CLIENTE));
         c.setPedidos(new ArrayList<>());
+        c.setEndereco(e);
         return clienteRepository.save(c);
     }
 
