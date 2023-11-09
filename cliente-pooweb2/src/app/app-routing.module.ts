@@ -24,7 +24,7 @@ const routes: Routes = [
     loadChildren: () => import("./portal-usuario/criar-conta/signup.module").then(m=>m.SignUpModule)
   },
   {
-    path: 'usuario/home',
+    path: 'usuario/inicio',
     loadChildren: () => import("./portal-usuario/home/home.module").then(m=>m.HomeModule)
   }
 ];
