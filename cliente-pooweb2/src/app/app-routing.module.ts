@@ -26,6 +26,10 @@ const routes: Routes = [
   {
     path: 'usuario/inicio',
     loadChildren: () => import("./portal-usuario/home/home.module").then(m=>m.HomeModule)
+  },
+  {
+    path: 'mapa-estabs',
+    loadChildren: () => import("./publico/view-estabelecimentos/view-estabelecimentos.module").then(m=>m.ViewEstabelecimentosModule)
   }
 ];
 
