@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Feature, Map, View } from 'ol';
+import { Feature, Map, Overlay, View } from 'ol';
 import { OSM, Vector } from 'ol/source'
 import TileLayer from 'ol/layer/Tile';
-import * as olProj from 'ol/proj';
 import VectorLayer from 'ol/layer/Vector';
 import { Point } from 'ol/geom';
 import Style from 'ol/style/Style';
 import Icon from 'ol/style/Icon';
+import { fromLonLat } from 'ol/proj';
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-view-estabelecimentos',
@@ -25,7 +26,7 @@ export class ViewEstabelecimentosComponent implements OnInit{
       ],
       target: 'map',
       view: new View({
-        center: olProj.fromLonLat([-53.8098809,-29.7001775]),
+        center: fromLonLat([-53.8098809,-29.7001775]),
         zoom: 7,
         maxZoom: 18
       })
@@ -36,16 +37,16 @@ export class ViewEstabelecimentosComponent implements OnInit{
   private addMarkers(){
     const features = [];
     features.push(new Feature({
-      geometry: new Point(olProj.fromLonLat([-53.8098809, -29.7001775])),
+      geometry: new Point(fromLonLat([-53.8098809, -29.7001775])),
     }));
     features.push(new Feature({
-      geometry: new Point(olProj.fromLonLat([-53.7141824, -29.7211893])),
+      geometry: new Point(fromLonLat([-53.7141824, -29.7211893])),
     }));
     features.push(new Feature({
-      geometry: new Point(olProj.fromLonLat([-53.8301114, -29.688118])),
+      geometry: new Point(fromLonLat([-53.8301114, -29.688118])),
     }));
     features.push(new Feature({
-      geometry: new Point(olProj.fromLonLat([-53.8146908, -29.6630133])),
+      geometry: new Point(fromLonLat([-53.8146908, -29.6630133])),
     }));
 
     const layer = new VectorLayer({
@@ -57,10 +58,43 @@ export class ViewEstabelecimentosComponent implements OnInit{
             anchor: [0.5, 1],
             crossOrigin: 'anonymous',
             src: 'https://docs.maptiler.com/openlayers/default-marker/marker-icon.png',
-            })
+          })
         })
       });
       this.map.addLayer(layer);
   }
 
+  teste(e: any){
+    const coords = this.map.getEventCoordinate(e);
+    const event_pixel = this.map.getPixelFromCoordinate(coords);
+    const feature = this.map.forEachFeatureAtPixel(event_pixel,function(feature, layer){return feature;})
+    console.log(feature,coords)
+    if(feature){
+      const popup = new Overlay({
+        element: document.getElementById("popup") as HTMLElement,
+        positioning: 'bottom-center',
+        stopEvent: false
+      });
+      this.map.addOverlay(popup)
+      popup.setPosition(coords)
+
+      let popover = bootstrap.Popover.getInstance(popup.getElement() as HTMLElement);
+      console.log(popover,coords,this.map.getPixelFromCoordinate(coords))
+
+      if (popover) {
+        popover.dispose();
+      }
+      popover = new bootstrap.Popover(popup.getElement() as HTMLElement, {
+        animation: false,
+        container: popup.getElement(),
+        content: '<p>The location you clicked was:</p><code>' + "hdms" + '</code>',
+        html: true,
+        placement: 'top',
+        title: 'Welcome to OpenLayers',
+      });
+      popover.show();
+    }
+  }
 }
+
+
