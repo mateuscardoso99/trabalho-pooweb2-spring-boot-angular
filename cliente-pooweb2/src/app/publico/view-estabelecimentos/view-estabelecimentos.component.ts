@@ -84,6 +84,7 @@ export class ViewEstabelecimentosComponent implements OnInit{
       if (popover) {
         popover.dispose();
       }
+              //= new (window as any).bootstrap.Popover...
       popover = new bootstrap.Popover(popup.getElement() as HTMLElement, {
         animation: false,
         container: popup.getElement(),
