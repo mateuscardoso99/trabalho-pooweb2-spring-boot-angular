@@ -36,9 +36,12 @@ export class ViewEstabelecimentosComponent implements OnInit{
 
   private addMarkers(){
     const features = [];
-    features.push(new Feature({
+    const f = new Feature({
       geometry: new Point(fromLonLat([-53.8098809, -29.7001775])),
-    }));
+    });
+    f.setProperties({"id":1,"nome":"ola"});
+
+    features.push(f);
     features.push(new Feature({
       geometry: new Point(fromLonLat([-53.7141824, -29.7211893])),
     }));
@@ -88,7 +91,7 @@ export class ViewEstabelecimentosComponent implements OnInit{
       popover = new bootstrap.Popover(popup.getElement() as HTMLElement, {
         animation: false,
         container: popup.getElement(),
-        content: '<p>The location you clicked was:</p><code>' + "hdms" + '</code>',
+        content: '<p>The location you clicked was:</p><code>' + feature.get("nome") + '</code>',
         html: true,
         placement: 'top',
         title: 'Welcome to OpenLayers',
