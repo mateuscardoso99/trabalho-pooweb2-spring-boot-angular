@@ -11,7 +11,7 @@ import { SidebarModule } from "src/app/app-core/components/sidebar/sidebar.modul
     imports:[
         CommonModule,
         HomeRoutingModule,
-        SidebarModule
+        SidebarModule//Para usar o Componente A dentro do Componente B, precisa tê-los declarados dentro do mesmo Módulo ou o Componente A para ser importado para o Módulo onde o Componente B está sendo declarado
     ]
 })
 
