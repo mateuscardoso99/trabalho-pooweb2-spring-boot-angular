@@ -15,11 +15,13 @@ export class ViewWrapperComponent {
     public opcoes = [
         {
             titulo: "Pedidos",
-            route: "../inicio"
+            route: "../inicio",
+            icon: "bi bi-bag-fill"
         },
         {
             titulo: "Novo pedido",
-            route: "../cadastro-pedido"
+            route: "../cadastro-pedido",
+            icon: "bi bi-plus"
         }
     ];
 }

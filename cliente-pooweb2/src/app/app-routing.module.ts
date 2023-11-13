@@ -2,7 +2,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  {path: '', redirectTo: 'login',pathMatch: 'full'},
+  {
+    path: '',
+    loadChildren: () => import("./publico/view-estabelecimentos/view-estabelecimentos.module").then(m=>m.ViewEstabelecimentosModule)
+  },
   {
     path: 'login',
     loadChildren: () => import("./login/login.module").then(m=>m.LoginModule)
@@ -30,10 +33,6 @@ const routes: Routes = [
   {
     path: 'usuario/inicio',
     loadChildren: () => import("./portal-usuario/home/home.module").then(m=>m.HomeModule)
-  },
-  {
-    path: 'mapa-estabs',
-    loadChildren: () => import("./publico/view-estabelecimentos/view-estabelecimentos.module").then(m=>m.ViewEstabelecimentosModule)
   }
 ];
 

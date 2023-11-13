@@ -60,7 +60,7 @@ export class ViewEstabelecimentosComponent implements OnInit{
             image: new Icon({
             anchor: [0.5, 1],
             crossOrigin: 'anonymous',
-            src: 'https://docs.maptiler.com/openlayers/default-marker/marker-icon.png',
+            src: '../../../../assets/img/map-marker-icon.png',
           })
         })
       });

@@ -6,20 +6,16 @@ import { Component } from "@angular/core";
     styleUrls: ['./view-wrapper.component.css']
 })
 export class ViewWrapperComponent {
-    /*
-    route:
-    Se o primeiro segmento começar com /, o roteador procurará a rota na raiz do aplicativo.
-    Se o primeiro segmento começar com ./ ou não começar com uma barra, o roteador procurará nos filhos da rota atualmente ativada.
-    E se o primeiro segmento começar com ../, o roteador subirá um nível.
-     */
     public opcoes = [
         {
             titulo: "Início",
-            route: "/estabelecimento/home"
+            route: "/estabelecimento/home",
+            icon: "bi bi-house"
         },
         {
             titulo: "Usuários",
-            route: "/estabelecimento/usuarios"
+            route: "/estabelecimento/usuarios",
+            icon: "bi bi-people-fill"
         }
     ];
 }
