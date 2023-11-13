@@ -1,18 +1,18 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { CadastrarPedidoComponent } from "./cadastrar-pedido.component";
-import { CadastrarPedidoRoutingModule } from "./cadastrar-pedido.routing.module";
 import { ViewWrapperModule } from "../components/view-wrapper.module";
+import { PerfilComponent } from "./perfil.component";
+import { PerfilRoutingModule } from "./perfil.routing.module";
 
 @NgModule({
     declarations:[
-        CadastrarPedidoComponent
+        PerfilComponent
     ],
     imports:[
         CommonModule,
-        CadastrarPedidoRoutingModule,
+        PerfilRoutingModule,
         ViewWrapperModule
     ]
 })
 
-export class CadastrarPedidoModule{}
+export class PerfilModule{}

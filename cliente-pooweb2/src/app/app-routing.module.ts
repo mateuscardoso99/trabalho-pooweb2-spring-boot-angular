@@ -16,8 +16,12 @@ const routes: Routes = [
     loadChildren: () => import("./portal-estabelecimento/usuarios/usuarios.module").then(m=>m.UsuariosModule)
   },
   {
-    path: 'usuario/pedidos',
+    path: 'usuario/cadastro-pedido',
     loadChildren: () => import("./portal-usuario/cadastrar-pedido/cadastrar-pedido.module").then(m=>m.CadastrarPedidoModule)
+  },
+  {
+    path: 'usuario/perfil',
+    loadChildren: () => import("./portal-usuario/perfil/perfil.module").then(m=>m.PerfilModule)
   },
   {
     path: 'usuario/signup',

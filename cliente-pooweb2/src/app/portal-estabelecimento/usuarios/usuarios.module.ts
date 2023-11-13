@@ -1,17 +1,19 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { CreateUsuarioComponent } from "./create/create-usuario.component";
 import { EditarUsuarioComponent } from "./editar/editar-usuario.component";
 import { UsuariosRoutingModule } from "./usuarios.routing.module";
+import { ViewWrapperModule } from "../components/view-wrapper.module";
+import { VisualizarUsuarioComponent } from "./visualizar/visualizar-usuario.component";
 
 @NgModule({
     declarations:[
-        CreateUsuarioComponent,
+        VisualizarUsuarioComponent,
         EditarUsuarioComponent
     ],
     imports:[
         CommonModule,
-        UsuariosRoutingModule
+        UsuariosRoutingModule,
+        ViewWrapperModule
     ]
 })
 
