@@ -3,6 +3,7 @@ import { NgModule } from "@angular/core";
 import { CadastrarPedidoComponent } from "./cadastrar-pedido.component";
 import { CadastrarPedidoRoutingModule } from "./cadastrar-pedido.routing.module";
 import { ViewWrapperModule } from "../components/view-wrapper.module";
+import { FormsModule } from "@angular/forms";
 
 @NgModule({
     declarations:[
@@ -10,6 +11,7 @@ import { ViewWrapperModule } from "../components/view-wrapper.module";
     ],
     imports:[
         CommonModule,
+        FormsModule,
         CadastrarPedidoRoutingModule,
         ViewWrapperModule
     ]

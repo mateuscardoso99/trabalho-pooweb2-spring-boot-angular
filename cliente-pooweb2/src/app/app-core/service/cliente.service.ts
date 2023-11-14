@@ -7,43 +7,43 @@ import { CadastroPedido } from "../request/CadastroPedido";
 
 @Injectable({ providedIn: 'root' })
 export class ClienteService{
-    private static readonly URL = environment.urlApi + "/cliente";
+    private static readonly URL:string = environment.urlApi + "/cliente";
 
     constructor(private http: HttpClient){}
 
     find(){
-        return this.http.get(URL.toString());
+        return this.http.get(ClienteService.URL);
     }
 
     update(dados: CadastroCliente){
-        return this.http.put(URL.toString(), dados);
+        return this.http.put(ClienteService.URL, dados);
     }
 
     desativarConta(){
-        return this.http.delete(URL + "/desativar");
+        return this.http.delete(ClienteService.URL + "/desativar");
     }
 
     ativarConta(){
-        return this.http.put(URL + "/ativar",{});
+        return this.http.put(ClienteService.URL + "/ativar",{});
     }
 
     getPedidos(){
-        return this.http.get<PedidoDto[]>(URL + "/pedidos")
+        return this.http.get<PedidoDto[]>(ClienteService.URL + "/pedidos")
     }
 
     findPedido(id: number){
-        return this.http.get(URL + "/pedidos/" +id)
+        return this.http.get(ClienteService.URL + "/pedidos/" +id)
     }
 
     salvarPedido(pedido: CadastroPedido){
-        return this.http.post(URL + "/pedidos", pedido)
+        return this.http.post(ClienteService.URL + "/pedidos", pedido)
     }
 
     desativarPedido(id: number){
-        return this.http.delete(URL + "/pedidos/desativar/" +id);
+        return this.http.delete(ClienteService.URL + "/pedidos/desativar/" +id);
     }
 
     ativarPedido(id: number){
-        return this.http.put(URL + "/pedidos/ativar/" +id, {});
+        return this.http.put(ClienteService.URL + "/pedidos/ativar/" +id, {});
     }
 }

@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { PermissaoDto } from './app-core/dto/PermissaoDto';
 import { AuthGuard } from './app-core/middleware/auth.guard';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
+import { GuestAuthGuard } from './app-core/middleware/guest.guard';
 
 const routes: Routes = [
   {
@@ -11,6 +12,7 @@ const routes: Routes = [
   },
   {
     path: 'login',
+    canActivate: [GuestAuthGuard],
     loadChildren: () => import("./login/login.module").then(m=>m.LoginModule)
   },
   {
@@ -45,6 +47,7 @@ const routes: Routes = [
   },
   {
     path: 'usuario/signup',
+    canActivate: [GuestAuthGuard],
     loadChildren: () => import("./portal-usuario/criar-conta/signup.module").then(m=>m.SignUpModule)
   },
   { path: '**', pathMatch: 'full', component: PagenotfoundComponent }, 

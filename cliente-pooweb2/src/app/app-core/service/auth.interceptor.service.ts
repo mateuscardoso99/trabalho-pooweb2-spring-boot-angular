@@ -5,6 +5,7 @@ import { catchError, filter, finalize, switchMap, take } from 'rxjs/operators';
 import { StorageService } from './storage.service';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
 
 const TOKEN_HEADER_KEY = 'Authorization';
 
@@ -13,7 +14,7 @@ export class AuthInterceptor implements HttpInterceptor {
     private isRefreshing = false;
     private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-    constructor(private storageService: StorageService, private authService: AuthService) { }
+    constructor(private storageService: StorageService, private authService: AuthService, private router: Router) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<Object>> {
         let authReq = req;
@@ -27,8 +28,12 @@ export class AuthInterceptor implements HttpInterceptor {
           if (error instanceof HttpErrorResponse && !authReq.url.includes('login') && error.status === 401) {
             return this.handle401Error(authReq, next);
           }
-    
-          return throwError(() => new Error(error.message));
+          if(error.status === 403){
+            this.storageService.signOut();
+            this.router.navigate(['/login']);
+          }
+
+          return throwError(() => error);
         }));
       }
     
@@ -38,7 +43,7 @@ export class AuthInterceptor implements HttpInterceptor {
             this.isRefreshing = true;
             this.refreshTokenSubject.next(null);
         
-            const token = null;//pegar refresh token recebido quando o usuario logou
+            const token:any = null;//pegar refresh token recebido quando o usuario logou
         
             if (token){
                 return this.authService.refreshAuthToken(token).pipe(
@@ -61,6 +66,7 @@ export class AuthInterceptor implements HttpInterceptor {
                         this.isRefreshing = false;
                         
                         this.storageService.signOut();
+                        this.router.navigate(['/login']);
                         return throwError(() => new Error(err.message));
                     })
                 );
@@ -76,7 +82,7 @@ export class AuthInterceptor implements HttpInterceptor {
       }
 
     addAuthToken(request: HttpRequest<any>, token: string) {
-        return request.clone({ headers: request.headers.set(TOKEN_HEADER_KEY, token) });
+        return request.clone({ headers: request.headers.set(TOKEN_HEADER_KEY, "Bearer " + token) });
     }
 }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Feature, Map, Overlay, View } from 'ol';
 import { OSM, Vector } from 'ol/source'
 import TileLayer from 'ol/layer/Tile';
@@ -8,6 +8,9 @@ import Style from 'ol/style/Style';
 import Icon from 'ol/style/Icon';
 import { fromLonLat } from 'ol/proj';
 import * as bootstrap from 'bootstrap';
+import { EstabelecimentoService } from 'src/app/app-core/service/estabelecimento.service';
+import { EstabelecimentoDto } from 'src/app/app-core/dto/EstabelecimentoDto';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-view-estabelecimentos',
@@ -16,6 +19,14 @@ import * as bootstrap from 'bootstrap';
 })
 export class ViewEstabelecimentosComponent implements OnInit{
   public map!: Map
+  public estabelecimentos: EstabelecimentoDto[] = [];
+
+  constructor(
+    private estabelecimentoService: EstabelecimentoService, 
+    private el: ElementRef, 
+    private renderer: Renderer2, 
+    private router: Router
+  ){}
 
   ngOnInit(): void{
     this.map = new Map({
@@ -31,26 +42,42 @@ export class ViewEstabelecimentosComponent implements OnInit{
         maxZoom: 18
       })
     });
-    this.addMarkers();
+    
+    this.estabelecimentoService.findAll().subscribe({
+      next: (resp: any)=> {
+        this.estabelecimentos = resp.data as EstabelecimentoDto[]
+        this.addMarkers();
+      },
+      error: err => {
+        console.log(err)
+      }
+    })
+  }
+
+  ngAfterViewInit() {
+    const estabalecimentoMapa = (<HTMLElement>this.el.nativeElement).querySelector('.container');
+    this.renderer.listen(estabalecimentoMapa, 'click', (event) => {
+      if(event.target.id.startsWith('estab_')){
+        this.realizarPedido(event.target.id.substring(6))
+      }
+    });
   }
 
   private addMarkers(){
-    const features = [];
-    const f = new Feature({
-      geometry: new Point(fromLonLat([-53.8098809, -29.7001775])),
-    });
-    f.setProperties({"id":1,"nome":"ola"});
+    const features:any = [];
 
-    features.push(f);
-    features.push(new Feature({
-      geometry: new Point(fromLonLat([-53.7141824, -29.7211893])),
-    }));
-    features.push(new Feature({
-      geometry: new Point(fromLonLat([-53.8301114, -29.688118])),
-    }));
-    features.push(new Feature({
-      geometry: new Point(fromLonLat([-53.8146908, -29.6630133])),
-    }));
+    this.estabelecimentos.forEach(estab => {
+      const f = new Feature({
+        geometry: new Point(fromLonLat([+estab.endereco.longitude, +estab.endereco.latitude])),
+      });
+      f.setProperties({
+        "id": estab.id,
+        "nome": estab.nome,
+        "horario": estab.horarioFuncionamento
+      });
+      
+      features.push(f)
+    })
 
     const layer = new VectorLayer({
         source: new Vector({
@@ -91,13 +118,18 @@ export class ViewEstabelecimentosComponent implements OnInit{
       popover = new bootstrap.Popover(popup.getElement() as HTMLElement, {
         animation: false,
         container: popup.getElement(),
-        content: '<p>The location you clicked was:</p><code>' + feature.get("nome") + '</code>',
+        content: '<p>Horário de funcionamento:</p><code>' + feature.get("horario") + '</code>'+"<br><div class='estab_mapa btn btn-sm btn-primary mt-2' id=estab_" + feature.get("id") + ">Fazer pedido</div>",
         html: true,
         placement: 'top',
-        title: 'Welcome to OpenLayers',
+        title: feature.get("nome"),
       });
       popover.show();
     }
+  }
+
+  realizarPedido(idEstab: number){
+    console.log(idEstab)
+    this.router.navigate(['/usuario/cadastro-pedido'],{queryParams: {idEstab}})
   }
 }
 

@@ -11,14 +11,14 @@
     <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1">
         <div style="cursor:pointer;" (click)="abrirDropdown()" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1">
             <img src="../../../../assets/img/person-icon.png" alt="hugenerd" width="28" height="28" class="rounded-circle">
-            <span class="d-none d-sm-inline mx-1">Joe</span>
+            <span class="d-none d-sm-inline mx-1">{{usuario?.nome}}</span>
         </div>
         <ul #dropdown class="dropdown-menu dropdown-menu-dark text-small shadow custom-dropdown" aria-labelledby="dropdownUser1">
             <li><a [routerLink]="['../perfil']" class="dropdown-item">Perfil</a></li>
             <li>
                 <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item" [routerLink]="['/login']">Sair</a></li>
+            <li><a class="dropdown-item" (click)="logout()">Sair</a></li>
         </ul>
     </div>
 </div>

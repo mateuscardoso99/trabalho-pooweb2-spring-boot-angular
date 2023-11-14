@@ -2,6 +2,10 @@ import { Component } from "@angular/core";
 import Swal from 'sweetalert2'
 import { AuthService } from "../app-core/service/auth.service";
 import { LoginRequest } from "../app-core/request/LoginRequest";
+import { StorageService } from "../app-core/service/storage.service";
+import { TokenDto } from "../app-core/dto/TokenDto";
+import { PermissaoDto } from "../app-core/dto/PermissaoDto";
+import { Router } from "@angular/router";
 
 @Component({
     selector: 'app-login',
@@ -11,7 +15,9 @@ import { LoginRequest } from "../app-core/request/LoginRequest";
 export class LoginComponent {
     loginRequest: LoginRequest;
 
-    constructor(private authService: AuthService){}
+    constructor(private authService: AuthService, private storageService: StorageService, private router: Router){
+        this.loginRequest = new LoginRequest();
+    }
 
     login(){
         if(!this.loginRequest.email || !this.loginRequest.senha){
@@ -22,13 +28,33 @@ export class LoginComponent {
             });
             return;
         }
-        this.authService.login(this.loginRequest).subscribe({
-            next: resposta => {
-                console.log(resposta)
-            },
-            error: erro => {
-                console.log(erro)
+        this.authService.login(this.loginRequest)
+        .subscribe({
+            next: (resposta:any) => {
+                if(resposta.token){
+                    const user = new TokenDto();
+                    user.token = resposta.token;
+                    user.usuario = resposta.usuario;
+                    this.storageService.saveUser(user);
+                    if(user.usuario.permissoes.includes(PermissaoDto.CLIENTE)){
+                        this.router.navigate(['/usuario/inicio']);
+                    }
+                    else if(user.usuario.permissoes.includes(PermissaoDto.ADMIN_ESTABELECIMENTO)){
+                        this.router.navigate(['/estabelecimento/home']);
+                    }
+                }
+            }, 
+            error: (err) => {
+                let errors:any = [];
+                err?.error?.errors?.errors.forEach((e:any) => {
+                    errors.push(e);
+                });
+                Swal.fire({
+                    title: err.error.message,
+                    text: errors,
+                    icon: "error"
+                })
             }
-        })
+        });
     }
 }

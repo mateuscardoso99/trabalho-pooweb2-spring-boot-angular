@@ -20,7 +20,7 @@ export class ViewWrapperComponent {
         },
         {
             titulo: "Novo pedido",
-            route: "../cadastro-pedido",
+            route: "/",
             icon: "bi bi-plus"
         }
     ];

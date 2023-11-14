@@ -15,25 +15,29 @@ export class SignUpComponent implements OnInit{
     form: FormGroup = new FormGroup({
         nome: new FormControl(''),
         email: new FormControl(''),
-        password: new FormControl(''),
-        cidade: new FormControl(''),
-        uf: new FormControl(false),
-        bairro: new FormControl(''),
-        rua: new FormControl(''),
-        numero: new FormControl(''),
-        complemento: new FormControl(''),
+        senha: new FormControl(''),
+        endereco: new FormGroup({
+            cidade: new FormControl(''),
+            uf: new FormControl(''),
+            bairro: new FormControl(''),
+            rua: new FormControl(''),
+            numero: new FormControl(''),
+            complemento: new FormControl('')
+        })
     });
     submitted = false;
     cadastroCliente: CadastroCliente;
 
-    constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) {}
+    constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) {
+        this.cadastroCliente = new CadastroCliente();
+    }
 
     ngOnInit(): void {
         this.form = this.formBuilder.group(
           {
             nome: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
-            password: [
+            senha: [
               '',
               [
                 Validators.required,
@@ -41,24 +45,30 @@ export class SignUpComponent implements OnInit{
                 Validators.maxLength(40)
               ]
             ],
-            cidade: ['', Validators.required],
-            uf: ['', 
-                [
-                    Validators.required, 
-                    Validators.minLength(2), 
-                    Validators.maxLength(2)
-                ]
-            ],
-            bairro: ['', Validators.required],
-            rua: ['', Validators.required],
-            numero: ['', Validators.required],
-            complemento: ['', Validators.nullValidator],
+            endereco: this.formBuilder.group({
+                cidade: ['', Validators.required],
+                uf: ['', 
+                    [
+                        Validators.required, 
+                        Validators.minLength(2), 
+                        Validators.maxLength(2)
+                    ]
+                ],
+                bairro: ['', Validators.required],
+                rua: ['', Validators.required],
+                numero: ['', Validators.required],
+                complemento: ['', Validators.nullValidator]
+            })
           }
         );
     }
 
     get f(): { [key: string]: AbstractControl } {
         return this.form.controls;
+    }
+
+    get e(): { [key: string]: AbstractControl } {
+        return (this.form.get('endereco') as FormGroup).controls;
     }
 
     onSubmit(): void {
@@ -68,33 +78,25 @@ export class SignUpComponent implements OnInit{
           return;
         }
 
-        const dados: any = JSON.stringify(this.form.value, null, 2);
-
-        this.cadastroCliente = new CadastroCliente(
-            dados.nome,
-            dados.email,
-            dados.password,
-            new CadastroEndereco(
-                dados.cidade,
-                dados.email,
-                dados.password,
-                dados.nome,
-                dados.email,
-                dados.password,
-                "",
-                ""
-            )
-        )
-        this.authService.register(this.cadastroCliente).subscribe(
+        this.authService.register(this.form.getRawValue() as CadastroCliente).subscribe(
             {
                 next: () => {
+                    Swal.fire({
+                        title: "Erro",
+                        text: "Conta criada com sucesso",
+                        icon: "success"
+                    })
                     this.router.navigate(["/login"])
                 },
                 error: (err) => {
-                    console.log(err)
+                    let errors:any = [];
+                    err?.error?.errors?.errors.forEach((e:any) => {
+                        errors.push(e);
+                    });
                     Swal.fire({
-                        title: "Erro",
-                        text: err.message
+                        title: err.error.message,
+                        text: errors,
+                        icon: "error"
                     })
                 }
             }

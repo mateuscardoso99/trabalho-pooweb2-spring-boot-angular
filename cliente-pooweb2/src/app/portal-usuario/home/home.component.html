@@ -4,30 +4,11 @@
             <h1>Pedidos</h1>
         </div>
     </div>
-    <div class="row m-3 dados-pedido">
+    <div class="row m-3 dados-pedido" *ngFor="let pedido of pedidos">
         <div class="col p-4">
-            <h3>12/10/2022 - <span class="badge bg-success">ENTREGUE</span></h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae animi corporis, 
-            ipsam mollitia libero sequi nobis iure ipsum molestias nisi rerum. Velit neque rem modi hic</p>
-            <p>Estabelecimento: erertertert</p>
-            <button class="btn btn-danger">Cancelar</button>
-        </div>
-    </div>
-    <div class="row m-3 dados-pedido">
-        <div class="col p-4">
-            <h3>12/10/2022 - <span class="badge bg-success">ENTREGUE</span></h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae animi corporis, 
-            ipsam mollitia libero sequi nobis iure ipsum molestias nisi rerum. Velit neque rem modi hic</p>
-            <p>Estabelecimento: erertertert</p>
-            <button class="btn btn-danger">Cancelar</button>
-        </div>
-    </div>
-    <div class="row m-3 dados-pedido">
-        <div class="col p-4">
-            <h3>12/10/2022 - <span class="badge bg-success">ENTREGUE</span></h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae animi corporis, 
-            ipsam mollitia libero sequi nobis iure ipsum molestias nisi rerum. Velit neque rem modi hic</p>
-            <p>Estabelecimento: erertertert</p>
+            <h3>{{pedido.dataHora | ddMmYYYYDate}} - <span class="badge bg-success">{{pedido.statusPedido}}</span></h3>
+            <p>{{pedido.descricao}}</p>
+            <p>Estabelecimento: {{pedido.estabelecimento}}</p>
             <button class="btn btn-danger">Cancelar</button>
         </div>
     </div>

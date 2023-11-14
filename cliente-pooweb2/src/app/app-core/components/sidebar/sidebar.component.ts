@@ -1,4 +1,7 @@
 import { Component, ElementRef, Input, ViewChild } from "@angular/core";
+import { StorageService } from "../../service/storage.service";
+import { Router } from "@angular/router";
+import { UsuarioDto } from "../../dto/UsuarioDto";
 
 @Component({
     selector: 'app-sidebar',
@@ -10,8 +13,18 @@ export class SidebarComponent {
   @Input() opcoes: any;
   @ViewChild("dropdown") dropdown: ElementRef;
 
+  usuario: UsuarioDto | undefined;
+  constructor(private storageService: StorageService,private router: Router){
+    this.usuario = this.storageService.getUser()?.usuario;
+  }
+
   public abrirDropdown(){
     console.log(this.dropdown)
     this.dropdown.nativeElement.classList.toggle("open")
+  }
+
+  public logout(){
+    this.storageService.signOut();
+    this.router.navigate(['/login']);
   }
 }

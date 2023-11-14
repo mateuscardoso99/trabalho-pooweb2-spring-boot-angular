@@ -3,10 +3,12 @@ import { NgModule } from "@angular/core";
 import { HomeComponent } from "./home.component";
 import { HomeRoutingModule } from "./home.routing.module";
 import { ViewWrapperModule } from "../components/view-wrapper.module";
+import { DdMmYYYYDatePipe } from "src/app/app-core/pipe/dd-mm-yyyy-date.pipe";
 
 @NgModule({
     declarations:[
-        HomeComponent
+        HomeComponent,
+        DdMmYYYYDatePipe
     ],
     imports:[
         CommonModule,

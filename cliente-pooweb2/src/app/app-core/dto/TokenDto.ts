@@ -1,11 +1,9 @@
-import { UsuarioDto } from "./UsuarioDto";
+import { ClienteDto } from "./ClienteDto";
+import { UsuarioAdminEstabelecimentoDto } from "./UsuarioAdminEstabelecimentoDto";
 
 export class TokenDto{
     token: string;
-    usuario: UsuarioDto;
+    usuario: ClienteDto | UsuarioAdminEstabelecimentoDto;
 
-    constructor(token: string,usuario: UsuarioDto){
-        this.token = token;
-        this.usuario = usuario;
-    }
+    constructor(){}
 }

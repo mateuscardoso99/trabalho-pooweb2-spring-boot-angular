@@ -15,19 +15,16 @@
                     <thead>
                         <tr>
                             <th scope="col">Nome</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Ativo</th>
                             <th scope="col">Opções</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Mark</td>
-                            <td>
-                                <a href="#" class="btn btn-warning me-2">Editar</a>
-                                <button type="button" class="btn btn-danger">Apagar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Jacob</td>
+                        <tr *ngFor="let u of usuarios">
+                            <td>{{u.nome}}</td>
+                            <td>{{u.email}}</td>
+                            <td>{{u.ativo}}</td>
                             <td>
                                 <a href="#" class="btn btn-warning me-2">Editar</a>
                                 <button type="button" class="btn btn-danger">Apagar</button>
