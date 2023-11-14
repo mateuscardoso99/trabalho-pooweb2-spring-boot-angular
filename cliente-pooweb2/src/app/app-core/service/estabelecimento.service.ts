@@ -1,7 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { PedidoDto } from "../dto/PedidoDto";
+import { Injectable } from "@angular/core";
 
+@Injectable({ providedIn: 'root' })
 export class EstabelecimentoService{
     private static readonly URL = environment.urlApi + "/estabelecimento";
 

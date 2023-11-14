@@ -1,4 +1,5 @@
 import { EnderecoDto } from "./EnderecoDto";
+import { PermissaoDto } from "./PermissaoDto";
 
 export class UsuarioDto{
     id: number;
@@ -6,9 +7,9 @@ export class UsuarioDto{
     email: string;
     ativo: boolean;
     endereco: EnderecoDto;
-    permissoes: string[];
+    permissoes: PermissaoDto[];
 
-    constructor(id: number,nome: string,email: string,ativo: boolean,endereco: EnderecoDto,permissoes: string[]){
+    constructor(id: number,nome: string,email: string,ativo: boolean,endereco: EnderecoDto,permissoes: PermissaoDto[]){
         this.id = id;
         this.nome = nome;
         this.email = email;

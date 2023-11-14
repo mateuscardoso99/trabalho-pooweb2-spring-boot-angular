@@ -3,42 +3,79 @@
         <div class="col-md-10">
             <div class="card">
                 <div class="card-body">
-                    <form>
+                    <form [formGroup]="form" (ngSubmit)="onSubmit()">
                         <h1 class="text-center">Criar Conta</h1>
                         <div class="mb-3">
                             <label class="form-label">Nome</label>
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" formControlName="nome" [ngClass]="{ 'is-invalid': submitted && f['nome'].errors }">
+                            <div *ngIf="submitted && f['nome'].errors" class="invalid-feedback">
+                                <div *ngIf="f['nome'].errors['required']">Nome é obrigatório</div>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Email</label>
-                            <input type="email" class="form-control">
+                            <input type="email" class="form-control" formControlName="email" [ngClass]="{ 'is-invalid': submitted && f['email'].errors }">
+                            <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+                                <div *ngIf="f['email'].errors['required']">Email é obrigatório</div>
+                                <div *ngIf="f['email'].errors['email']">Email inválido</div>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Senha</label>
-                            <input type="password" class="form-control">
+                            <input type="password" class="form-control" formControlName="password" [ngClass]="{ 'is-invalid': submitted && f['password'].errors }">
+                            <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+                                <div *ngIf="f['password'].errors['required']">Senha é obrigatória</div>
+                                <div *ngIf="f['password'].errors['minlength']">
+                                    Senha mínimo 4 caracteres
+                                </div>
+                                <div *ngIf="f['password'].errors['maxlength']">
+                                    Senha máximo 40 caracteres
+                                </div>
+                            </div>
                         </div>
 
                         <fieldset class="form-group border mb-3 p-4">
                             <legend>Endereço</legend>
                             <div class="mb-3">
                                 <label class="form-label">Cidade</label>
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" formControlName="cidade" [ngClass]="{ 'is-invalid': submitted && f['cidade'].errors }">
+                                <div *ngIf="submitted && f['cidade'].errors" class="invalid-feedback">
+                                    <div *ngIf="f['cidade'].errors['required']">Cidade é obrigatória</div>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">UF</label>
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" formControlName="uf" [ngClass]="{ 'is-invalid': submitted && f['uf'].errors }">
+                                <div *ngIf="submitted && f['uf'].errors" class="invalid-feedback">
+                                    <div *ngIf="f['uf'].errors['required']">UF é obrigatória</div>
+                                    <div *ngIf="f['uf'].errors['minlength']">
+                                        UF deve ter 2 caracteres
+                                    </div>
+                                    <div *ngIf="f['uf'].errors['maxlength']">
+                                        UF deve ter 2 caracteres
+                                    </div>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Bairro</label>
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" formControlName="bairro" [ngClass]="{ 'is-invalid': submitted && f['bairro'].errors }">
+                                <div *ngIf="submitted && f['bairro'].errors" class="invalid-feedback">
+                                    <div *ngIf="f['bairro'].errors['required']">Bairro é obrigatório</div>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Rua</label>
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" formControlName="rua" [ngClass]="{ 'is-invalid': submitted && f['rua'].errors }">
+                                <div *ngIf="submitted && f['rua'].errors" class="invalid-feedback">
+                                    <div *ngIf="f['rua'].errors['required']">Rua é obrigatório</div>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Número</label>
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" formControlName="numero" [ngClass]="{ 'is-invalid': submitted && f['numero'].errors }">
+                                <div *ngIf="submitted && f['numero'].errors" class="invalid-feedback">
+                                    <div *ngIf="f['numero'].errors['required']">Número é obrigatório</div>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Complemento</label>
@@ -46,7 +83,7 @@
                             </div>
                         </fieldset>
                         <div class="mb-3">
-                            <button type="button" class="btn btn-primary mb-3">Cadastrar</button>
+                            <button type="submit" class="btn btn-primary mb-3">Cadastrar</button>
                         </div>
                     </form>
                     <a [routerLink]="['/login']">Login</a>

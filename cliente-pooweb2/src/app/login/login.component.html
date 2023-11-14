@@ -7,14 +7,14 @@
                         <h1 class="text-center">Login</h1>
                         <div class="mb-3">
                             <label for="exampleFormControlInput1" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="exampleFormControlInput1">
+                            <input type="email" class="form-control" id="exampleFormControlInput1" name="email" required [(ngModel)]="loginRequest.email">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Senha</label>
-                            <input type="password" class="form-control" id="password">
+                            <input type="password" class="form-control" id="password" name="senha" required [(ngModel)]="loginRequest.senha">
                         </div>
                         <div class="mb-3">
-                            <button type="button" class="btn btn-primary mb-3">Entrar</button>
+                            <button type="button" class="btn btn-primary mb-3" (click)="login()">Entrar</button>
                         </div>
                     </form>
                     <a [routerLink]="['/usuario/signup']">Criar conta</a>

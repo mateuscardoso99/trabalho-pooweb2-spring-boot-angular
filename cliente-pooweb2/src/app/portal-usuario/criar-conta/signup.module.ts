@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { SignUpComponent } from "./signup.component";
 import { SignUpRoutingModule } from "./signup.routing.module";
+import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
     declarations:[
@@ -9,6 +10,7 @@ import { SignUpRoutingModule } from "./signup.routing.module";
     ],
     imports:[
         CommonModule,
+        ReactiveFormsModule,
         SignUpRoutingModule
     ]
 })
