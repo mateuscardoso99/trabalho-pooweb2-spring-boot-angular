@@ -1,0 +1,6 @@
+export enum PermissaoDto{
+    ADMIN_SISTEMA,
+    ADMIN_EMPRESA,
+    ADMIN_ESTABELECIMENTO,
+    CLIENTE
+}
