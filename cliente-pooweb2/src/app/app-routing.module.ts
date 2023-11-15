@@ -28,6 +28,18 @@ const routes: Routes = [
     loadChildren: () => import("./portal-estabelecimento/usuarios/usuarios.module").then(m=>m.UsuariosModule)
   },
   {
+    path: 'estabelecimento/perfil-usuario',
+    data: {permission: PermissaoDto.ADMIN_ESTABELECIMENTO},
+    canActivate: [AuthGuard],
+    loadChildren: () => import("./portal-estabelecimento/perfil-usuario/perfil-usuario.module").then(m=>m.PerfilUsuarioModule)
+  },
+  {
+    path: 'estabelecimento/dados-estabelecimento',
+    data: {permission: PermissaoDto.ADMIN_ESTABELECIMENTO},
+    canActivate: [AuthGuard],
+    loadChildren: () => import("./portal-estabelecimento/dados-estabelecimento/dados-estabelecimento.module").then(m=>m.DadosEstabelecimentoModule)
+  },
+  {
     path: 'usuario/cadastro-pedido',
     data: {permission: PermissaoDto.CLIENTE},
     canActivate: [AuthGuard],
