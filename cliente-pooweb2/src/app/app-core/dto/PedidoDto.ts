@@ -1,7 +1,7 @@
 export class PedidoDto{
     id: number;
     descricao: string;
-    statusPedido: StatusPedidoDto;
+    statusPedido: StatusPedido;
     dataHora: Date;
     estabelecimento: string;
     nomeCliente: string;
@@ -10,7 +10,7 @@ export class PedidoDto{
     constructor(){}
 }
 
-export enum StatusPedidoDto{
+export enum StatusPedido{
     PENDENTE = 'PENDENTE',
     CANCELADO = 'CANCELADO',
     FINALIZADO = 'FINALIZADO'

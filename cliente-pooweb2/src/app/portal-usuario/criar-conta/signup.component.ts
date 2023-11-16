@@ -2,7 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from "@angular/router";
 import { CadastroCliente } from "src/app/app-core/request/CadastroCliente";
-import { CadastroEndereco } from "src/app/app-core/request/CadastroEndereco";
 import { AuthService } from "src/app/app-core/service/auth.service";
 import Swal from "sweetalert2";
 

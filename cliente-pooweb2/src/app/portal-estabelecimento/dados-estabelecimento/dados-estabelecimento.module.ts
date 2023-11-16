@@ -3,6 +3,7 @@ import { NgModule } from "@angular/core";
 import { ViewWrapperModule } from "../components/view-wrapper.module";
 import { DadosEstabelecimentoComponent } from "./dados-estabelecimento.component";
 import { DadosEstabelecimentoRoutingModule } from "./dados-estabelecimento.routing.module";
+import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
     declarations:[
@@ -11,6 +12,7 @@ import { DadosEstabelecimentoRoutingModule } from "./dados-estabelecimento.routi
     imports:[
         CommonModule,
         DadosEstabelecimentoRoutingModule,
+        ReactiveFormsModule,
         ViewWrapperModule
     ]
 })

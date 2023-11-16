@@ -1,9 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
-import { PedidoDto, StatusPedidoDto } from "../dto/PedidoDto";
+import { PedidoDto } from "../dto/PedidoDto";
 import { Injectable } from "@angular/core";
 import { UsuarioAdminEstabelecimentoDto } from "../dto/UsuarioAdminEstabelecimentoDto";
 import { CadastroUsuarioAdmin } from "../request/CadastroUsuarioAdmin";
+import { CadastroEstabelecimento } from "../request/CadastroEstabelecimento";
 
 @Injectable({ providedIn: 'root' })
 export class EstabelecimentoService{
@@ -19,6 +20,10 @@ export class EstabelecimentoService{
         return this.http.get(environment.urlApi + "/public/estabelecimentos");
     }
 
+    updateEstabelecimento(estabelecimento: CadastroEstabelecimento, idEstabelecimento: number){
+        return this.http.put(EstabelecimentoService.URL + "/" + idEstabelecimento, estabelecimento);
+    }
+
     getPedidos(idEstab: number){
         return this.http.get<PedidoDto[]>(EstabelecimentoService.URL + "/" + idEstab + "/pedidos")
     }
@@ -27,7 +32,7 @@ export class EstabelecimentoService{
         return this.http.get<PedidoDto[]>(EstabelecimentoService.URL + "/" + idEstab + "/pedidos/" +idPedido)
     }
 
-    mudarStatusPedido(idEstab: number, idPedido: number, statusPedido: StatusPedidoDto){
+    mudarStatusPedido(idEstab: number, idPedido: number, statusPedido: string){
         return this.http.put(EstabelecimentoService.URL + "/" + idEstab + "/pedidos/" +idPedido, {status: statusPedido})
     }
 

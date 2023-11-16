@@ -1,6 +1,7 @@
 package com.trabalho.api.controller;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -115,8 +115,8 @@ public class EstabelecimentoController {
     }
 
     @PutMapping(value = "/{idEstabelecimento}/pedidos/{idPedido}")
-    public ResponseEntity<ResponseDTO<PedidoDTO>> mudarStatusPedido(@PathVariable Long idEstabelecimento, @PathVariable(name = "idPedido") Long idPedido, @RequestParam(name = "status") StatusPedido statusPedido) throws Exception{
-        Pedido pedido = this.pedidoService.mudarStatus(idEstabelecimento, idPedido, statusPedido);
+    public ResponseEntity<ResponseDTO<PedidoDTO>> mudarStatusPedido(@PathVariable Long idEstabelecimento, @PathVariable(name = "idPedido") Long idPedido, @RequestBody Map<String,String> statusPedido) throws Exception{
+        Pedido pedido = this.pedidoService.mudarStatus(idEstabelecimento, idPedido, StatusPedido.valueOf(statusPedido.get("status")));
         ResponseDTO<PedidoDTO> response = ResponseDTO.build(PedidoDTO.convert(pedido), true, null, null);
         return new ResponseEntity<ResponseDTO<PedidoDTO>>(response, new HttpHeaders(), HttpStatus.OK);
     }

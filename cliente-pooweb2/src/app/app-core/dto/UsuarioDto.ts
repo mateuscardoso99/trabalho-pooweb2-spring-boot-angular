@@ -6,12 +6,12 @@ export class UsuarioDto{
     email: string;
     ativo: boolean;
     endereco: EnderecoDto;
-    permissoes: PermissaoDto[];
+    permissoes: Permissao[];
 
     constructor(){}
 }
 
-export enum PermissaoDto{
+export enum Permissao{
     ADMIN_SISTEMA = "ADMIN_SISTEMA",
     ADMIN_EMPRESA = "ADMIN_EMPRESA",
     ADMIN_ESTABELECIMENTO = "ADMIN_ESTABELECIMENTO",

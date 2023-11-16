@@ -5,7 +5,7 @@ import { LoginRequest } from "../app-core/request/LoginRequest";
 import { StorageService } from "../app-core/service/storage.service";
 import { TokenDto } from "../app-core/dto/TokenDto";
 import { Router } from "@angular/router";
-import { PermissaoDto } from "../app-core/dto/UsuarioDto";
+import { Permissao } from "../app-core/dto/UsuarioDto";
 
 @Component({
     selector: 'app-login',
@@ -36,10 +36,10 @@ export class LoginComponent {
                     user.token = resposta.token;
                     user.usuario = resposta.usuario;
                     this.storageService.saveUser(user);
-                    if(user.usuario.permissoes.includes(PermissaoDto.CLIENTE)){
+                    if(user.usuario.permissoes.includes(Permissao.CLIENTE)){
                         this.router.navigate(['/usuario/inicio']);
                     }
-                    else if(user.usuario.permissoes.includes(PermissaoDto.ADMIN_ESTABELECIMENTO)){
+                    else if(user.usuario.permissoes.includes(Permissao.ADMIN_ESTABELECIMENTO)){
                         this.router.navigate(['/estabelecimento/home']);
                     }
                 }

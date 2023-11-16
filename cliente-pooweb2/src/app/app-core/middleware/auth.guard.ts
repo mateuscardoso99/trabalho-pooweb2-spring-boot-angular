@@ -2,7 +2,7 @@ import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } fr
 import { StorageService } from "../service/storage.service";
 import { inject } from "@angular/core";
 import { TokenDto } from "../dto/TokenDto";
-import { PermissaoDto } from "../dto/UsuarioDto";
+import { Permissao } from "../dto/UsuarioDto";
 
 export const AuthGuard: CanActivateFn = (route: ActivatedRouteSnapshot,routeState: RouterStateSnapshot) => {
     const storageService = inject(StorageService);
@@ -12,10 +12,10 @@ export const AuthGuard: CanActivateFn = (route: ActivatedRouteSnapshot,routeStat
 
     if(user){
         if(routeState.url.includes("/login") || routeState.url.includes("/signup")){
-            if(user.usuario.permissoes.includes(PermissaoDto.CLIENTE)){
+            if(user.usuario.permissoes.includes(Permissao.CLIENTE)){
                 router.navigate(['/usuario/inicio'])
             }
-            else if(user.usuario.permissoes.includes(PermissaoDto.ADMIN_ESTABELECIMENTO)){
+            else if(user.usuario.permissoes.includes(Permissao.ADMIN_ESTABELECIMENTO)){
                 router.navigate(['/estabelecimento/home'])
             }
             return false;

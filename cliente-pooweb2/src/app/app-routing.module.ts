@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './app-core/middleware/auth.guard';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
-import { PermissaoDto } from './app-core/dto/UsuarioDto';
+import { Permissao } from './app-core/dto/UsuarioDto';
 
 const routes: Routes = [
   {
@@ -18,25 +18,25 @@ const routes: Routes = [
 
   {
     path: 'estabelecimento/home',
-    data: {permission: PermissaoDto.ADMIN_ESTABELECIMENTO},
+    data: {permission: Permissao.ADMIN_ESTABELECIMENTO},
     canActivate: [AuthGuard],
     loadChildren: () => import("./portal-estabelecimento/home/home.module").then(m=>m.HomeModule)
   },
   {
     path: 'estabelecimento/usuarios',
-    data: {permission: PermissaoDto.ADMIN_ESTABELECIMENTO},
+    data: {permission: Permissao.ADMIN_ESTABELECIMENTO},
     canActivate: [AuthGuard],
     loadChildren: () => import("./portal-estabelecimento/usuarios/usuarios.module").then(m=>m.UsuariosModule),
   },
   {
     path: 'estabelecimento/perfil-usuario',
-    data: {permission: PermissaoDto.ADMIN_ESTABELECIMENTO},
+    data: {permission: Permissao.ADMIN_ESTABELECIMENTO},
     canActivate: [AuthGuard],
     loadChildren: () => import("./portal-estabelecimento/perfil-usuario/perfil-usuario.module").then(m=>m.PerfilUsuarioModule)
   },
   {
     path: 'estabelecimento/dados-estabelecimento',
-    data: {permission: PermissaoDto.ADMIN_ESTABELECIMENTO},
+    data: {permission: Permissao.ADMIN_ESTABELECIMENTO},
     canActivate: [AuthGuard],
     loadChildren: () => import("./portal-estabelecimento/dados-estabelecimento/dados-estabelecimento.module").then(m=>m.DadosEstabelecimentoModule)
   },
@@ -44,19 +44,19 @@ const routes: Routes = [
 
   {
     path: 'usuario/cadastro-pedido',
-    data: {permission: PermissaoDto.CLIENTE},
+    data: {permission: Permissao.CLIENTE},
     canActivate: [AuthGuard],
     loadChildren: () => import("./portal-usuario/cadastrar-pedido/cadastrar-pedido.module").then(m=>m.CadastrarPedidoModule)
   },
   {
     path: 'usuario/perfil',
-    data: {permission: PermissaoDto.CLIENTE},
+    data: {permission: Permissao.CLIENTE},
     canActivate: [AuthGuard],
     loadChildren: () => import("./portal-usuario/perfil/perfil.module").then(m=>m.PerfilModule)
   },
   {
     path: 'usuario/inicio',
-    data: {permission: PermissaoDto.CLIENTE},
+    data: {permission: Permissao.CLIENTE},
     canActivate: [AuthGuard],
     loadChildren: () => import("./portal-usuario/home/home.module").then(m=>m.HomeModule)
   },

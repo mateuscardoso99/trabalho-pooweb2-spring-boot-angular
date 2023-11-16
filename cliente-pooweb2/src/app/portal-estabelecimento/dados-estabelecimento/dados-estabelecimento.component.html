@@ -1,3 +1,102 @@
 <app-view-wrapper>
-    <p>dados</p>
+    <div class="container">
+        <div class="row m-3 d-flex justify-content-center align-items-center h-100">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-body">
+                        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                            <h1 class="text-center">Editar estabelecimento</h1>
+                            <div class="mb-3">
+                                <label class="form-label">Nome</label>
+                                <input type="text" class="form-control" formControlName="nome" [ngClass]="{ 'is-invalid': submitted && f['nome'].errors }">
+                                <div *ngIf="submitted && f['nome'].errors" class="invalid-feedback">
+                                    <div *ngIf="f['nome'].errors['required']">Nome é obrigatório</div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Razão social</label>
+                                <input type="text" class="form-control" formControlName="razaoSocial" [ngClass]="{ 'is-invalid': submitted && f['razaoSocial'].errors }">
+                                <div *ngIf="submitted && f['razaoSocial'].errors" class="invalid-feedback">
+                                    <div *ngIf="f['razaoSocial'].errors['required']">Razão social é obrigatória</div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Horário funcionamento</label>
+                                <input type="text" class="form-control" formControlName="horarioFuncionamento" [ngClass]="{ 'is-invalid': submitted && f['horarioFuncionamento'].errors }">
+                                <div *ngIf="submitted && f['horarioFuncionamento'].errors" class="invalid-feedback">
+                                    <div *ngIf="f['horarioFuncionamento'].errors['required']">Horário de funcionamento é obrigatório</div>
+                                </div>
+                            </div>
+    
+                            <fieldset formGroupName="endereco" class="form-group border mb-3 p-4">
+                                <legend>Endereço</legend>
+                                <div class="mb-3">
+                                    <label class="form-label">Cidade</label>
+                                    <input type="text" class="form-control" formControlName="cidade" [ngClass]="{ 'is-invalid': submitted && e['cidade'].errors }">
+                                    <div *ngIf="submitted && e['cidade'].errors" class="invalid-feedback">
+                                        <div *ngIf="e['cidade'].errors['required']">Cidade é obrigatória</div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">UF</label>
+                                    <input type="text" class="form-control" formControlName="uf" [ngClass]="{ 'is-invalid': submitted && e['uf'].errors }">
+                                    <div *ngIf="submitted && e['uf'].errors" class="invalid-feedback">
+                                        <div *ngIf="e['uf'].errors['required']">UF é obrigatória</div>
+                                        <div *ngIf="e['uf'].errors['minlength']">
+                                            UF deve ter 2 caracteres
+                                        </div>
+                                        <div *ngIf="e['uf'].errors['maxlength']">
+                                            UF deve ter 2 caracteres
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Bairro</label>
+                                    <input type="text" class="form-control" formControlName="bairro" [ngClass]="{ 'is-invalid': submitted && e['bairro'].errors }">
+                                    <div *ngIf="submitted && e['bairro'].errors" class="invalid-feedback">
+                                        <div *ngIf="e['bairro'].errors['required']">Bairro é obrigatório</div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Rua</label>
+                                    <input type="text" class="form-control" formControlName="rua" [ngClass]="{ 'is-invalid': submitted && e['rua'].errors }">
+                                    <div *ngIf="submitted && e['rua'].errors" class="invalid-feedback">
+                                        <div *ngIf="e['rua'].errors['required']">Rua é obrigatório</div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Número</label>
+                                    <input type="text" class="form-control" formControlName="numero" [ngClass]="{ 'is-invalid': submitted && e['numero'].errors }">
+                                    <div *ngIf="submitted && e['numero'].errors" class="invalid-feedback">
+                                        <div *ngIf="e['numero'].errors['required']">Número é obrigatório</div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Complemento</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Latitude</label>
+                                    <input type="text" class="form-control" formControlName="latitude" [ngClass]="{ 'is-invalid': submitted && e['latitude'].errors }">
+                                    <div *ngIf="submitted && e['latitude'].errors" class="invalid-feedback">
+                                        <div *ngIf="e['latitude'].errors['required']">Latitude é obrigatório</div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Longitude</label>
+                                    <input type="text" class="form-control" formControlName="longitude" [ngClass]="{ 'is-invalid': submitted && e['longitude'].errors }">
+                                    <div *ngIf="submitted && e['longitude'].errors" class="invalid-feedback">
+                                        <div *ngIf="e['longitude'].errors['required']">Número é obrigatório</div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-primary mb-3">Cadastrar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </app-view-wrapper>

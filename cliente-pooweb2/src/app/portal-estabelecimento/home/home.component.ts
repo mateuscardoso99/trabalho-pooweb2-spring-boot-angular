@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { PedidoDto, StatusPedidoDto } from "src/app/app-core/dto/PedidoDto";
+import { PedidoDto, StatusPedido } from "src/app/app-core/dto/PedidoDto";
 import { UsuarioAdminEstabelecimentoDto } from "src/app/app-core/dto/UsuarioAdminEstabelecimentoDto";
 import { EstabelecimentoService } from "src/app/app-core/service/estabelecimento.service";
 import { StorageService } from "src/app/app-core/service/storage.service";
@@ -34,14 +34,14 @@ export class HomeComponent implements OnInit{
     }
 
     mudarStatusPedido(pedido: PedidoDto, statusPedido: string){
-        this.estabelecimentoService.mudarStatusPedido(this.usuario.idEstabelecimento, pedido.id, statusPedido as StatusPedidoDto).subscribe({
+        this.estabelecimentoService.mudarStatusPedido(this.usuario.idEstabelecimento, pedido.id, statusPedido).subscribe({
             next: () => {
                 Swal.fire({
                     title: "Sucesso",
                     text: "Pedido atualizado com sucesso",
                     icon: "success"
                 });
-                pedido.statusPedido = statusPedido as StatusPedidoDto
+                pedido.statusPedido = statusPedido as StatusPedido
             },
             error: () => {
                 Swal.fire({
