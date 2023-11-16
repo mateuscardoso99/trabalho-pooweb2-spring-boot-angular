@@ -19,11 +19,11 @@
                             <p class="card-text">{{pedido.descricao}}</p>
                             <p class="card-text"><small class="text-muted">{{pedido.dataHora | ddMmYYYYDate}}</small></p>
                             <div class="d-flex">
-                                <button type="button" class="btn btn-success btn-sm me-2" (click)="mudarStatusPedido(pedido,'FINALIZADO')">
+                                <button *ngIf="pedido.statusPedido == 'PENDENTE'" type="button" class="btn btn-warning btn-sm me-2" (click)="mudarStatusPedido(pedido,'FINALIZADO')">
                                     <i class="bi bi-check-lg"></i>
                                     Marcar com entregue
                                 </button>
-                                <button type="button" class="btn btn-danger btn-sm" (click)="mudarStatusPedido(pedido,'CANCELADO')">
+                                <button *ngIf="pedido.statusPedido == 'PENDENTE'" type="button" class="btn btn-danger btn-sm" (click)="mudarStatusPedido(pedido,'CANCELADO')">
                                     <i class="bi bi-x-lg"></i>
                                     Cancelar
                                 </button>

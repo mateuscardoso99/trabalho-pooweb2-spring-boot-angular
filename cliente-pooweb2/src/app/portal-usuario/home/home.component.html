@@ -6,10 +6,15 @@
     </div>
     <div class="row m-3 dados-pedido" *ngFor="let pedido of pedidos">
         <div class="col p-4">
-            <h3>{{pedido.dataHora | ddMmYYYYDate}} - <span class="badge bg-success">{{pedido.statusPedido}}</span></h3>
+            <h3>
+                {{pedido.dataHora | ddMmYYYYDate}}
+                <span *ngIf="pedido.statusPedido == 'FINALIZADO'" class="badge bg-success">{{pedido.statusPedido}}</span>
+                <span *ngIf="pedido.statusPedido == 'PENDENTE'" class="badge bg-secondary">{{pedido.statusPedido}}</span>
+                <span *ngIf="pedido.statusPedido == 'CANCELADO'" class="badge bg-danger">{{pedido.statusPedido}}</span>
+            </h3>
             <p>{{pedido.descricao}}</p>
             <p>Estabelecimento: {{pedido.estabelecimento}}</p>
-            <button class="btn btn-danger">Cancelar</button>
+            <button *ngIf="pedido.statusPedido == 'PENDENTE'" class="btn btn-danger btn-sm">Cancelar</button>
         </div>
     </div>
 </app-view-wrapper>
