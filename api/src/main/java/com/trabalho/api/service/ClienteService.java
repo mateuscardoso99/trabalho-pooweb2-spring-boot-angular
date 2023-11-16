@@ -70,6 +70,12 @@ public class ClienteService {
         cliente.setEmail(cadastroCliente.email());
         cliente.setNome(cadastroCliente.nome());
         cliente.setSenha(passwordEncoder.encode(cadastroCliente.senha()));
+        cliente.getEndereco().setBairro(cadastroCliente.endereco().bairro());
+        cliente.getEndereco().setCidade(cadastroCliente.endereco().cidade());
+        cliente.getEndereco().setComplemento(cadastroCliente.endereco().complemento());
+        cliente.getEndereco().setNumero(cadastroCliente.endereco().numero());
+        cliente.getEndereco().setRua(cadastroCliente.endereco().rua());
+        cliente.getEndereco().setUf(cadastroCliente.endereco().uf());
         return cliente;
     }
 
