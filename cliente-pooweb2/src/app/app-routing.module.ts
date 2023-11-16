@@ -3,10 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { PermissaoDto } from './app-core/dto/PermissaoDto';
 import { AuthGuard } from './app-core/middleware/auth.guard';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
-import { GuestAuthGuard } from './app-core/middleware/guest.guard';
-import { UsuariosComponent } from './portal-estabelecimento/usuarios/usuarios.component';
-import { VisualizarUsuarioComponent } from './portal-estabelecimento/usuarios/visualizar/visualizar-usuario.component';
-import { EditarUsuarioComponent } from './portal-estabelecimento/usuarios/editar/editar-usuario.component';
 
 const routes: Routes = [
   {
@@ -15,7 +11,7 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    canActivate: [GuestAuthGuard],
+    canActivate: [AuthGuard],
     loadChildren: () => import("./login/login.module").then(m=>m.LoginModule)
   },
 
@@ -30,7 +26,7 @@ const routes: Routes = [
     path: 'estabelecimento/usuarios',
     data: {permission: PermissaoDto.ADMIN_ESTABELECIMENTO},
     canActivate: [AuthGuard],
-    loadChildren: () => import("./portal-estabelecimento/usuarios/usuarios.module").then(m=>m.UsuariosModule)
+    loadChildren: () => import("./portal-estabelecimento/usuarios/usuarios.module").then(m=>m.UsuariosModule),
   },
   {
     path: 'estabelecimento/perfil-usuario',
@@ -66,7 +62,7 @@ const routes: Routes = [
   },
   {
     path: 'usuario/signup',
-    canActivate: [GuestAuthGuard],
+    canActivate: [AuthGuard],
     loadChildren: () => import("./portal-usuario/criar-conta/signup.module").then(m=>m.SignUpModule)
   },
   { path: '**', pathMatch: 'full', component: PagenotfoundComponent }, 
