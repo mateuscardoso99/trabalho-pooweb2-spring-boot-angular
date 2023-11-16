@@ -4,8 +4,8 @@ import { AuthService } from "../app-core/service/auth.service";
 import { LoginRequest } from "../app-core/request/LoginRequest";
 import { StorageService } from "../app-core/service/storage.service";
 import { TokenDto } from "../app-core/dto/TokenDto";
-import { PermissaoDto } from "../app-core/dto/PermissaoDto";
 import { Router } from "@angular/router";
+import { PermissaoDto } from "../app-core/dto/UsuarioDto";
 
 @Component({
     selector: 'app-login',

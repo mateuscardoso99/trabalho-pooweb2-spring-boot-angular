@@ -1,8 +1,8 @@
 import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from "@angular/router";
 import { StorageService } from "../service/storage.service";
 import { inject } from "@angular/core";
-import { PermissaoDto } from "../dto/PermissaoDto";
 import { TokenDto } from "../dto/TokenDto";
+import { PermissaoDto } from "../dto/UsuarioDto";
 
 export const AuthGuard: CanActivateFn = (route: ActivatedRouteSnapshot,routeState: RouterStateSnapshot) => {
     const storageService = inject(StorageService);

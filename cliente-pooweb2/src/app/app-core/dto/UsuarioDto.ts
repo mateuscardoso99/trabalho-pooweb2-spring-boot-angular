@@ -1,5 +1,4 @@
 import { EnderecoDto } from "./EnderecoDto";
-import { PermissaoDto } from "./PermissaoDto";
 
 export class UsuarioDto{
     id: number;
@@ -10,4 +9,11 @@ export class UsuarioDto{
     permissoes: PermissaoDto[];
 
     constructor(){}
+}
+
+export enum PermissaoDto{
+    ADMIN_SISTEMA = "ADMIN_SISTEMA",
+    ADMIN_EMPRESA = "ADMIN_EMPRESA",
+    ADMIN_ESTABELECIMENTO = "ADMIN_ESTABELECIMENTO",
+    CLIENTE = "CLIENTE"
 }

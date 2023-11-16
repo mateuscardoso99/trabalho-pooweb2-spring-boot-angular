@@ -10,74 +10,23 @@
                 <div class="row no-gutters">
                     <div class="col">
                         <div class="card-body">
-                            <h5 class="card-title">{{pedido.nomeCliente}} - <span class="badge bg-success">{{pedido.statusPedido}}</span></h5>
+                            <h5 class="card-title">
+                                {{pedido.nomeCliente}} - 
+                                <span *ngIf="pedido.statusPedido == 'FINALIZADO'" class="badge bg-success">{{pedido.statusPedido}}</span>
+                                <span *ngIf="pedido.statusPedido == 'PENDENTE'" class="badge bg-secondary">{{pedido.statusPedido}}</span>
+                                <span *ngIf="pedido.statusPedido == 'CANCELADO'" class="badge bg-danger">{{pedido.statusPedido}}</span>
+                            </h5>
                             <p class="card-text">{{pedido.descricao}}</p>
                             <p class="card-text"><small class="text-muted">{{pedido.dataHora | ddMmYYYYDate}}</small></p>
                             <div class="d-flex">
-                                <a href="#" class="btn btn-primary me-2">
+                                <button type="button" class="btn btn-success btn-sm me-2" (click)="mudarStatusPedido(pedido,'FINALIZADO')">
                                     <i class="bi bi-check-lg"></i>
                                     Marcar com entregue
-                                </a>
-                                <a href="#" class="btn btn-danger">
+                                </button>
+                                <button type="button" class="btn btn-danger" (click)="mudarStatusPedido(pedido,'CANCELADO')">
                                     <i class="bi bi-x-lg"></i>
                                     Cancelar
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row mb-4">
-        <div class="col">
-            <div class="card p-2">
-                <div class="row no-gutters">
-                    <div class="col">
-                        <div class="card-body">
-                            <h5 class="card-title">nome usuario - <span class="badge bg-success">ENTREGUE</span></h5>
-                            <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                            Recusandae ipsam cumque labore molestiae, exercitationem unde consectetur accusantium 
-                            ullam necessitatibus, iure nam placeat, sapiente consequuntur ut veniam
-                            </p>
-                            <p class="card-text"><small class="text-muted">12/10/2023</small></p>
-                            <div class="d-flex">
-                                <a href="#" class="btn btn-primary me-2">
-                                    <i class="bi bi-check-lg"></i>
-                                    Marcar com entregue
-                                </a>
-                                <a href="#" class="btn btn-danger">
-                                    <i class="bi bi-x-lg"></i>
-                                    Cancelar
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row mb-4">
-        <div class="col">
-            <div class="card p-2">
-                <div class="row no-gutters">
-                    <div class="col">
-                        <div class="card-body">
-                            <h5 class="card-title">nome usuario - <span class="badge bg-success">ENTREGUE</span></h5>
-                            <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                            Recusandae ipsam cumque labore molestiae, exercitationem unde consectetur accusantium 
-                            ullam necessitatibus, iure nam placeat, sapiente consequuntur ut veniam
-                            </p>
-                            <p class="card-text"><small class="text-muted">12/10/2023</small></p>
-                            <div class="d-flex">
-                                <a href="#" class="btn btn-primary me-2">
-                                    <i class="bi bi-check-lg"></i>
-                                    Marcar com entregue
-                                </a>
-                                <a href="#" class="btn btn-danger">
-                                    <i class="bi bi-x-lg"></i>
-                                    Cancelar
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </div>

@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
-import { PedidoDto } from "../dto/PedidoDto";
+import { PedidoDto, StatusPedidoDto } from "../dto/PedidoDto";
 import { Injectable } from "@angular/core";
 import { UsuarioAdminEstabelecimentoDto } from "../dto/UsuarioAdminEstabelecimentoDto";
 import { CadastroUsuarioAdmin } from "../request/CadastroUsuarioAdmin";
@@ -27,7 +27,7 @@ export class EstabelecimentoService{
         return this.http.get<PedidoDto[]>(EstabelecimentoService.URL + "/" + idEstab + "/pedidos/" +idPedido)
     }
 
-    mudarStatusPedido(idEstab: number, idPedido: number, statusPedido: string){
+    mudarStatusPedido(idEstab: number, idPedido: number, statusPedido: StatusPedidoDto){
         return this.http.put(EstabelecimentoService.URL + "/" + idEstab + "/pedidos/" +idPedido, {status: statusPedido})
     }
 

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PermissaoDto } from './app-core/dto/PermissaoDto';
 import { AuthGuard } from './app-core/middleware/auth.guard';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
+import { PermissaoDto } from './app-core/dto/UsuarioDto';
 
 const routes: Routes = [
   {
