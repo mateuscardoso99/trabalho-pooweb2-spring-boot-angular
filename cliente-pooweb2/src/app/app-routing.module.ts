@@ -4,6 +4,9 @@ import { PermissaoDto } from './app-core/dto/PermissaoDto';
 import { AuthGuard } from './app-core/middleware/auth.guard';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 import { GuestAuthGuard } from './app-core/middleware/guest.guard';
+import { UsuariosComponent } from './portal-estabelecimento/usuarios/usuarios.component';
+import { VisualizarUsuarioComponent } from './portal-estabelecimento/usuarios/visualizar/visualizar-usuario.component';
+import { EditarUsuarioComponent } from './portal-estabelecimento/usuarios/editar/editar-usuario.component';
 
 const routes: Routes = [
   {
@@ -15,6 +18,8 @@ const routes: Routes = [
     canActivate: [GuestAuthGuard],
     loadChildren: () => import("./login/login.module").then(m=>m.LoginModule)
   },
+
+
   {
     path: 'estabelecimento/home',
     data: {permission: PermissaoDto.ADMIN_ESTABELECIMENTO},
@@ -39,6 +44,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: () => import("./portal-estabelecimento/dados-estabelecimento/dados-estabelecimento.module").then(m=>m.DadosEstabelecimentoModule)
   },
+
+
   {
     path: 'usuario/cadastro-pedido',
     data: {permission: PermissaoDto.CLIENTE},

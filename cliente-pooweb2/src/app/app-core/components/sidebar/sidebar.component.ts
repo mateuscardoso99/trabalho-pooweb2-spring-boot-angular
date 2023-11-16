@@ -11,6 +11,7 @@ import { UsuarioDto } from "../../dto/UsuarioDto";
 })
 export class SidebarComponent {
   @Input() opcoes: any;
+  @Input() urlPerfil: string;
   @ViewChild("dropdown") dropdown: ElementRef;
 
   usuario: UsuarioDto | undefined;

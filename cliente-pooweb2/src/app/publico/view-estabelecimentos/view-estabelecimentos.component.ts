@@ -55,7 +55,7 @@ export class ViewEstabelecimentosComponent implements OnInit{
   }
 
   ngAfterViewInit() {
-    const estabalecimentoMapa = (<HTMLElement>this.el.nativeElement).querySelector('.container');
+    const estabalecimentoMapa = (<HTMLElement>this.el.nativeElement).querySelector('#map');
     this.renderer.listen(estabalecimentoMapa, 'click', (event) => {
       if(event.target.id.startsWith('estab_')){
         this.realizarPedido(event.target.id.substring(6))
@@ -94,7 +94,7 @@ export class ViewEstabelecimentosComponent implements OnInit{
       this.map.addLayer(layer);
   }
 
-  teste(e: any){
+  onMapClick(e: any){
     const coords = this.map.getEventCoordinate(e);
     const event_pixel = this.map.getPixelFromCoordinate(coords);
     const feature = this.map.forEachFeatureAtPixel(event_pixel,function(feature, layer){return feature;})

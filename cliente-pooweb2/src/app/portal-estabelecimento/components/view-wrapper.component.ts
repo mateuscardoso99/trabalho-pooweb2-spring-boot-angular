@@ -16,6 +16,13 @@ export class ViewWrapperComponent {
             titulo: "Usuários",
             route: "/estabelecimento/usuarios",
             icon: "bi bi-people-fill"
+        },
+        {
+            titulo: "Dados do estabelecimento",
+            route: "/estabelecimento/dados-estabelecimento",
+            icon: "bi bi-database-fill"
         }
     ];
+
+    public urlPerfil: string = "/estabelecimento/perfil-usuario";
 }

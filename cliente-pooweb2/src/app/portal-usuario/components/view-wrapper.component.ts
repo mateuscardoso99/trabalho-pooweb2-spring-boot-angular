@@ -24,4 +24,6 @@ export class ViewWrapperComponent {
             icon: "bi bi-plus"
         }
     ];
+
+    public urlPerfil: string = "../perfil";
 }

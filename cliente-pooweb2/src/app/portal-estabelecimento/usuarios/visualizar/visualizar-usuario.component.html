@@ -1,12 +1,7 @@
-<app-view-wrapper>
-    <div class="m-3">
+<div class="m-3">
         <div class="row mb-3">
             <div class="col">
                 <h1>Usuários</h1>
-                <button type="button" class="btn btn-dark">
-                    <i class="bi bi-plus"></i>
-                    Usuário
-                </button>
             </div>
         </div>
         <div class="row">
@@ -24,10 +19,16 @@
                         <tr *ngFor="let u of usuarios">
                             <td>{{u.nome}}</td>
                             <td>{{u.email}}</td>
-                            <td>{{u.ativo}}</td>
                             <td>
-                                <a href="#" class="btn btn-warning me-2">Editar</a>
-                                <button type="button" class="btn btn-danger">Apagar</button>
+                                <span *ngIf="u.ativo; else inativo" class="badge rounded-pill bg-success">Sim</span>
+                                <ng-template #inativo>
+                                    <span class="badge rounded-pill bg-danger">Não</span>
+                                </ng-template>
+                            </td>
+                            <td>
+                                <a [routerLink]="['/estabelecimento/usuarios/editar/'+u.id]" class="btn btn-warning me-2 btn-sm">Editar</a>
+                                <button *ngIf="u.ativo" type="button" class="btn btn-danger btn-sm" (click)="desativarUsuario(u.id)">Desativar</button>
+                                <button *ngIf="!u.ativo" type="button" class="btn btn-success btn-sm" (click)="ativarUsuario(u.id)">Ativar</button>
                             </td>
                         </tr>
                     </tbody>
@@ -35,4 +36,3 @@
             </div>
         </div>
     </div>
-</app-view-wrapper>

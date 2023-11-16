@@ -3,6 +3,7 @@ import { environment } from "src/environments/environment";
 import { PedidoDto } from "../dto/PedidoDto";
 import { Injectable } from "@angular/core";
 import { UsuarioAdminEstabelecimentoDto } from "../dto/UsuarioAdminEstabelecimentoDto";
+import { CadastroUsuarioAdmin } from "../request/CadastroUsuarioAdmin";
 
 @Injectable({ providedIn: 'root' })
 export class EstabelecimentoService{
@@ -30,7 +31,27 @@ export class EstabelecimentoService{
         return this.http.put(EstabelecimentoService.URL + "/" + idEstab + "/pedidos/" +idPedido, {status: statusPedido})
     }
 
+    findUsuario(idEstab: number, idUsuario: number){
+        return this.http.get<UsuarioAdminEstabelecimentoDto>(EstabelecimentoService.URL + "/" + idEstab + "/buscar-usuario/" + idUsuario)
+    }
+
     getUsuarios(idEstab: number){
         return this.http.get<UsuarioAdminEstabelecimentoDto[]>(EstabelecimentoService.URL + "/" + idEstab + "/usuarios")
+    }
+
+    cadastrarUsuario(idEstab: number, usuario: CadastroUsuarioAdmin){
+        return this.http.post(EstabelecimentoService.URL + "/" + idEstab + "/usuario", usuario);
+    }
+
+    updateUsuario(idEstab: number, idUsuario: number, usuario: CadastroUsuarioAdmin){
+        return this.http.put(EstabelecimentoService.URL + "/" + idEstab + "/update-usuario/" + idUsuario, usuario);
+    }
+
+    desativarUsuario(idEstab: number, idUsuario: number){
+        return this.http.delete(EstabelecimentoService.URL + "/" + idEstab + "/desativar-usuario/" + idUsuario);
+    }
+
+    ativarUsuario(idEstab: number, idUsuario: number){
+        return this.http.put(EstabelecimentoService.URL + "/" + idEstab + "/ativar-usuario/" + idUsuario,{});
     }
 }

@@ -82,7 +82,7 @@ export class SignUpComponent implements OnInit{
             {
                 next: () => {
                     Swal.fire({
-                        title: "Erro",
+                        title: "Sucesso",
                         text: "Conta criada com sucesso",
                         icon: "success"
                     })
