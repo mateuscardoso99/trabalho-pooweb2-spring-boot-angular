@@ -3,7 +3,7 @@ import { NgModule } from "@angular/core";
 import { ViewWrapperModule } from "../components/view-wrapper.module";
 import { PerfilComponent } from "./perfil.component";
 import { PerfilRoutingModule } from "./perfil.routing.module";
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormCriarContaModule } from "src/app/app-core/components/form-criar-conta/form-criar-conta.module";
 
 @NgModule({
     declarations:[
@@ -12,8 +12,8 @@ import { ReactiveFormsModule } from "@angular/forms";
     imports:[
         CommonModule,
         PerfilRoutingModule,
-        ReactiveFormsModule,
-        ViewWrapperModule
+        ViewWrapperModule,
+        FormCriarContaModule
     ]
 })
 
