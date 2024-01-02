@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/views/SplashScreen.dart';
 
 //StatefulWidget: os widgets Stateful são praticamente o oposto dos Stateless. Eles contêm estado e isso os torna mutáveis.
+//LoginPage é um Widget por isso tem um estado associado a ele
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override  
-  SplashScreenState createState() => SplashScreenState();  
+  FormWidgetState createState() => FormWidgetState();  
 }
 
 //setState(): função integrada no Flutter que permite aos desenvolvedores atualizar o estado de um widget específico e causar uma nova renderização da UI, comunica ao Flutter que ele precisa reconstruir a tela para que a alteração seja exibida corretamente.
-class FormWidgetState extends State<FormWidget> {
+class FormWidgetState extends State<LoginPage> {
   int _counter = 0;
 
   void _incrementCounter() {
@@ -40,7 +40,7 @@ class FormWidgetState extends State<FormWidget> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text("title"),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -81,20 +81,20 @@ class FormWidgetState extends State<FormWidget> {
 }
 
 
-class FormWidget extends StatefulWidget {  
-  const FormWidget({super.key, required this.title});
+// class FormWidget extends StatefulWidget {  
+//   const FormWidget({super.key, required this.title});
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
+//   // This widget is the home page of your application. It is stateful, meaning
+//   // that it has a State object (defined below) that contains fields that affect
+//   // how it looks.
 
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+//   // This class is the configuration for the state. It holds the values (in this
+//   // case the title) provided by the parent (in this case the App widget) and
+//   // used by the build method of the State. Fields in a Widget subclass are
+//   // always marked "final".
 
-  final String title;
+//   final String title;
 
-  @override
-  State<FormWidget> createState() => FormWidgetState();
-}
+//   @override
+//   State<FormWidget> createState() => FormWidgetState();
+// }

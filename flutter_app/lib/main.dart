@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/views/Login.dart';
+import 'package:flutter_app/views/SplashScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,6 +9,7 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  //gera a tela
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginPage(),
+      home: const SplashScreen(),
     );
   }
 }
