@@ -101,19 +101,19 @@ class LoginState extends State<LoginPage> {
               child: Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    if (emailController.text == "joao@gmail.com" && passwordController.text == "1234") {
+                    //if (emailController.text == "joao@gmail.com" && passwordController.text == "1234") {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => HomePage(email: emailController.text)
                         ),
                       );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Email ou senha incorretos')),
-                        );
-                    }
+                    // } else {
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     const SnackBar(
+                    //       content: Text('Email ou senha incorretos')),
+                    //     );
+                    // }
                   },
                   child: const Text('ENTRAR'),
                 ),

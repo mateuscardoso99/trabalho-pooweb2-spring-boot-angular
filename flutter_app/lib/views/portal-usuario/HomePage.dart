@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/components/DrawerNavigation.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.email});
@@ -11,32 +12,7 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Home Page'),
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountEmail: Text(email),
-              accountName: Text(email),
-              currentAccountPicture: const CircleAvatar(
-                child: Text("AA"),
-              ),
-            ),
-
-            ListTile(
-              leading: const Icon(Icons.shopping_basket),
-              title: const Text("Pedidos"),
-              onTap: () => {}
-            ),
-
-            ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text("Perfil"),
-              onTap: () => {}
-            )
-          ],
-        ),
-      ),
+      drawer: DrawerNavigation(email: email),
       body: Column(
         children: [
           Text(email),
