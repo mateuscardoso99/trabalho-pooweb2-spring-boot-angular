@@ -72,8 +72,11 @@ StatelessWidget: Este tipo de widget não possibilita alterações dinâmicas, e
 Eles são amplamente utilizados para a criação de estruturas não mutáveis nos aplicativos (telas, menus, imagens etc.), 
 ou seja, tudo que não envolva entradas de dados dos usuários, acessos a APIs e coisas que mudem ao longo do processo.
 
+Widgets sem estado são widgets imutáveis, o que significa que não mudam. Qualquer informação que eles carreguem permanece constante durante toda a vida útil do widget
+
 # StatefulWidget
 StatefulWidget: os widgets Stateful são praticamente o oposto dos Stateless. Eles contêm estado e isso os torna mutáveis.
+Widgets com estado são widgets cujas informações e propriedades podem mudar durante o tempo de execução do widget. Suas propriedades podem ser atualizadas, alteradas ou excluídas enquanto ainda está em tempo de execução
 
 # + estado
 um estado é mapeado como uma classe que extende de State, essa classe sobrescreve o método build() esse método recria a interface para aplicar as

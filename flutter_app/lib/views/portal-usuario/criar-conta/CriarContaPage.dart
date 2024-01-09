@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/views/login/LoginPage.dart';
 import 'package:flutter_app/views/portal-usuario/HomePage.dart';
 
 class CriarContaPage extends StatefulWidget {
@@ -99,6 +101,45 @@ class CriarContaPageState extends State<CriarContaPage> {
                 ),
               ),
             ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  verticalDirection: VerticalDirection.down,
+                  textDirection: TextDirection.ltr,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(10),
+                      child: RichText(
+                        text: TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: 'ir para login',
+                              style: const TextStyle(
+                                color: Colors.blue,
+                                decoration: TextDecoration.underline
+                              ),
+                              recognizer: TapGestureRecognizer()..onTap = () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginPage(titulo: "Login")
+                                  ),
+                                );
+                              },
+                            )
+                          ]
+                        ),
+                      )
+                    )
+                  ]
+                )
+              ),
+            )
           ],
         ),
       ),

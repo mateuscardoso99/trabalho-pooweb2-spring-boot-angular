@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/components/DrawerNavigation.dart';
 import 'package:flutter_app/views/portal-usuario/HomePage.dart';
 
 class PerfilPage extends StatefulWidget {
@@ -28,6 +29,7 @@ class PerfilPageState extends State<PerfilPage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.titulo),//recebido por parametro quando chamado por meio de LoginPage()
       ),
+      drawer: const DrawerNavigation(email: "email"),
       body: Center(
         child: SingleChildScrollView( //quando conteúdo da tela é maior que o tamanho dela, permite rolar
           child: Form(
