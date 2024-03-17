@@ -37,12 +37,12 @@ class MapaPageState extends State<MapaPage> {
               flex: 1,
               child: Text("Escolha um estabelecimento")
             ),
-            const Expanded(
+            Expanded(
               flex: 6,
               child: FractionallySizedBox(
                 widthFactor: 0.9,
                 heightFactor: 0.9,
-                child: Mapa(lat: 675.67, lng: -56)
+                child: (currentPosition != null) ? Mapa(lat: currentPosition!.latitude, lng: currentPosition!.longitude) : const Text("É preciso da permissão de localização")
               ),
             ),
           ],
@@ -61,6 +61,11 @@ class MapaPageState extends State<MapaPage> {
       }).catchError((e) {
         print(e);
       });
+  }
+
+  Widget check(){
+    if(currentPosition != null) return Mapa(lat: currentPosition!.latitude, lng: currentPosition!.longitude);
+    return Text("data");
   }
 
   void _determinePosition() async {

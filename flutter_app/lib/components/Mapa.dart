@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
 class Mapa extends StatelessWidget {
@@ -8,7 +7,6 @@ class Mapa extends StatelessWidget {
   final double lat;
   final double lng;
   const Mapa({super.key, required this.lat, required this.lng});
-
 
   @override
    Widget build(BuildContext context) {

@@ -15,6 +15,46 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
+# install
+- precisa instalar o Android Studio para obter o Android SDK. Depois de usar o Android Studio para obter o Android SDK, pode continuar usando o VScode para desenvolvimento flutter.
+
+-precisará do Android SDK para poder desenvolver aplicativos Android. 
+não precisa instalar o android studio, mas terá que usar as ferramentas de linha de comando, (sdkmanager)
+e instalar todos os pacotes necessários manualmente
+pacotes: build-tools, emulator, platform-tools, system-images;android-34;default;x86_64, platforms;android-34
+
+-não precisa especificamente do Android Studio, tudo que precisa é do Android SDK, baixá-lo e definir a variável de ambiente para o 
+caminho do SDK para que a instalação do flutter reconheça isso.
+
+*android studio instala por padrão o emulador e o sdk android
+
+variáveis de ambiente:
+ANDROID_SDK_ROOT = Path to your SDK android folder
+ANDROID_HOME = The same as ANDROID_SDK_ROOT
+
+adicionar na variável path:
+[Path to your SDK folder]/emulator
+[Path to your SDK folder]/platform-tools
+[Path to your SDK folder]/tools/bin
+
+adicionar na variável path tanto do usuário como do sistema o caminho do sdk do flutter:
+C:\Users\Downloads\flutter\bin
+
+depois rodar flutter doctor pra ver se achou o sdk android
+
+se não instalar o android studio precisa configurar manualmente o emulador..
+
+criar emulador:
+-avdmanager create avd --name [nome do emulador] --package "system-images;android-28;default;x86" 
+//--package é a versão da imagem do android, nesse exemplo é a api nivel 28
+
+rodar emulador:
+-emulator -avd [nome do emulador]
+
+# obs
+Não usar a palavra-chave const se não estiver usando valores fixos. Por exemplo, no caso de Text, se a string for constante, Text("something here") deve usar o const, mas se a string de Textfor dinâmica, não usar const antes Text do widget. const Text("something") e Text(anyVariabale). O mesmo acontece com todos os widgets.
+
+pub: gerenciador de pacotes do Dart
 
 # pastas: 
 android: este diretório contém todos os arquivos e configurações específicos do Android, incluindo AndroidManifest.xml, arquivos de compilação Gradle e outros ativos necessários para criar a versão Android do seu aplicativo.
