@@ -14,6 +14,12 @@ class MapaPageState extends State<MapaPage> {
   Position? currentPosition;
 
   @override
+  void initState() {
+    super.initState();
+    _determinePosition();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -24,26 +30,26 @@ class MapaPageState extends State<MapaPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            if (currentPosition != null) Text(
-              "LAT: ${currentPosition?.latitude}, LNG: ${currentPosition?.longitude}"
-            ),
+            /*if (currentPosition != null)
+              Text(
+                  "LAT: ${currentPosition?.latitude}, LNG: ${currentPosition?.longitude}"),
             ElevatedButton(
               child: const Text("Get location"),
               onPressed: () {
                 _determinePosition();
               },
-            ),
-            const Expanded(
-              flex: 1,
-              child: Text("Escolha um estabelecimento")
-            ),
+            ),*/
+            const Expanded(flex: 1, child: Text("Escolha um estabelecimento")),
             Expanded(
-              flex: 6,
+              flex: 9,
               child: FractionallySizedBox(
-                widthFactor: 0.9,
-                heightFactor: 0.9,
-                child: (currentPosition != null) ? Mapa(lat: currentPosition!.latitude, lng: currentPosition!.longitude) : const Text("É preciso da permissão de localização")
-              ),
+                  widthFactor: 0.9,
+                  heightFactor: 0.9,
+                  child: (currentPosition != null)
+                      ? Mapa(
+                          lat: currentPosition!.latitude,
+                          lng: currentPosition!.longitude)
+                      : const Text("É preciso da permissão de localização")),
             ),
           ],
         ),
@@ -52,20 +58,16 @@ class MapaPageState extends State<MapaPage> {
   }
 
   getCurrentLocation() {
-    Geolocator
-      .getCurrentPosition(desiredAccuracy: LocationAccuracy.best, forceAndroidLocationManager: true)
-      .then((Position position) {
-        setState(() {
-          currentPosition = position;
-        });
-      }).catchError((e) {
-        print(e);
+    Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.best,
+            forceAndroidLocationManager: true)
+        .then((Position position) {
+      setState(() {
+        currentPosition = position;
       });
-  }
-
-  Widget check(){
-    if(currentPosition != null) return Mapa(lat: currentPosition!.latitude, lng: currentPosition!.longitude);
-    return Text("data");
+    }).catchError((e) {
+      print(e);
+    });
   }
 
   void _determinePosition() async {
@@ -76,7 +78,7 @@ class MapaPageState extends State<MapaPage> {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       // Location services are not enabled don't continue
-      // accessing the position and request users of the 
+      // accessing the position and request users of the
       // App to enable the location services.
       return Future.error('Location services are disabled.');
     }
@@ -87,18 +89,18 @@ class MapaPageState extends State<MapaPage> {
       if (permission == LocationPermission.denied) {
         // Permissions are denied, next time you could try
         // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale 
+        // Android's shouldShowRequestPermissionRationale
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
         return Future.error('Location permissions are denied');
       }
     }
-    
+
     if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately. 
+      // Permissions are denied forever, handle appropriately.
       return Future.error(
-        'Location permissions are permanently denied, we cannot request permissions.');
-    } 
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
@@ -130,8 +132,7 @@ class MapaPageState extends State<MapaPage> {
 //           )
 //         ),
 //       )
-      
-      
+
 //     );
 //   }
 // }
