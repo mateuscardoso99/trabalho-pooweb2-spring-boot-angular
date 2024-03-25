@@ -53,8 +53,19 @@ rodar emulador:
 
 # obs
 Não usar a palavra-chave const se não estiver usando valores fixos. Por exemplo, no caso de Text, se a string for constante, Text("something here") deve usar o const, mas se a string de Textfor dinâmica, não usar const antes Text do widget. const Text("something") e Text(anyVariabale). O mesmo acontece com todos os widgets.
+se a classe que representa a tela for imutável (não for dinâmica (não tiver valores dinâmicos na tela) ) usar const para chamá-la
 
 pub: gerenciador de pacotes do Dart
+
+import 'package:json_annotation/json_annotation.dart'; gera json automaticamente adicionando os métodos:
+Map<String, dynamic> toJson() => _$UserToJson(this); 
+factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+e anotação @JsonSerializable()
+
+fromJson: retorna uma instancia da classe apartir de um json.
+1° o json é desserializado e transformado em um Map<String, dynamic>, depois é transformado em um objeto da classe
+
+toJson: converte objeto da classe em Map<String, dynamic>, depois jsonEncode() chamará esse método transformará em json
 
 # pastas: 
 android: este diretório contém todos os arquivos e configurações específicos do Android, incluindo AndroidManifest.xml, arquivos de compilação Gradle e outros ativos necessários para criar a versão Android do seu aplicativo.

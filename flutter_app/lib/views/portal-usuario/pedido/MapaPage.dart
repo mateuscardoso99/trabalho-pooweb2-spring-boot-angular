@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/components/DrawerNavigation.dart';
 import 'package:flutter_app/components/Mapa.dart';
 import 'package:geolocator/geolocator.dart';
 
 class MapaPage extends StatefulWidget {
-  const MapaPage({super.key});
+  MapaPage({super.key});
 
   @override
   MapaPageState createState() => MapaPageState();
@@ -14,7 +13,7 @@ class MapaPageState extends State<MapaPage> {
   Position? currentPosition;
 
   @override
-  void initState() {
+  void initState() {//roda quando o componente é carregado
     super.initState();
     _determinePosition();
   }
@@ -25,7 +24,6 @@ class MapaPageState extends State<MapaPage> {
       appBar: AppBar(
         title: const Text("Location"),
       ),
-      drawer: const DrawerNavigation(email: "email"),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

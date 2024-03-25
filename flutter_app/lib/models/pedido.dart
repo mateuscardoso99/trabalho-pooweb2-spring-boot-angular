@@ -1,5 +1,5 @@
 class Pedido{
-  final BigInt? id;
+  final int? id;
   final String descricao;
   final StatusPedido statusPedido;
   final DateTime dataHora;
@@ -17,9 +17,11 @@ class Pedido{
     required this.emailCliente
   });
 
+  //retorna uma instancia da classe apartir de um json
+  //1° o json é desserializado e transformado em um Map<String, dynamic>, depois é transformado em um objeto da classe
   factory Pedido.fromJson(Map<String, dynamic> json){
     return Pedido(
-      id: json['id'] as BigInt, 
+      id: json['id'] as int, 
       descricao: json['descricao'], 
       dataHora: json['dataHora'], 
       statusPedido: json['statusPedido'], 

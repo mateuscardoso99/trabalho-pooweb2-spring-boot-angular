@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/main.dart';
+import 'package:flutter_app/models/token.dart';
 import 'package:flutter_app/views/portal-usuario/HomePage.dart';
 import 'package:flutter_app/views/portal-usuario/criar-conta/CriarContaPage.dart';
+import 'package:flutter_app/services/auth_service.dart';
 
 //StatefulWidget: os widgets Stateful são praticamente o oposto dos Stateless. Eles contêm estado e isso os torna mutáveis.
 //LoginPage é um Widget por isso tem um estado associado a ele
@@ -100,20 +105,38 @@ class LoginState extends State<LoginPage> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
               child: Center(
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     //if (emailController.text == "joao@gmail.com" && passwordController.text == "1234") {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomePage(email: emailController.text)
-                        ),
-                      );
+                      
                     // } else {
                     //   ScaffoldMessenger.of(context).showSnackBar(
                     //     const SnackBar(
                     //       content: Text('Email ou senha incorretos')),
                     //     );
                     // }
+
+                    var email = emailController.text;
+                    var password = passwordController.text;
+                    var resp = await AuthService().login("joao@gmail.com", "12345");
+                    if(resp.statusCode == 200) {
+                      Token token = Token.fromJson(jsonDecode(resp.body));
+                      storage.write(key: "user", value: Token.serialize(token));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomePage(email: emailController.text)
+                        )
+                      );
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) =>
+                          const AlertDialog(
+                            title: Text("Erro"),
+                            content: Text("email ou senha incorretos")
+                          )
+                      );
+                    }
                   },
                   child: const Text('ENTRAR'),
                 ),

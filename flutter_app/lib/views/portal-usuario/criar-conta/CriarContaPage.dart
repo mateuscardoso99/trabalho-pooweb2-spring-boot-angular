@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/request/cadastro_cliente.dart';
+import 'package:flutter_app/services/auth_service.dart';
 import 'package:flutter_app/views/login/LoginPage.dart';
-import 'package:flutter_app/views/portal-usuario/HomePage.dart';
 
 class CriarContaPage extends StatefulWidget {
   const CriarContaPage({super.key, required this.titulo});
@@ -82,21 +85,46 @@ class CriarContaPageState extends State<CriarContaPage> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
               child: Center(
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (form.currentState!.validate()) {
-                      Navigator.push(
+                      /*Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => HomePage(email: emailController.text)
                         ),
-                      );
+                      );*/
+
+                      var dados = CadastroClienteRequest(nome: nomeController.text, email: emailController.text, senha: passwordController.text, endereco: null);
+                      var response = await AuthService().signUp(dados);
+                      if(response == 201){
+                        showDialog(
+                          context: context,
+                          builder: (context) =>
+                            const AlertDialog(
+                              title: Text("Sucesso"),
+                              content: Text("Conta criada com sucesso.")
+                            ),
+                        );
+                      }
+                      else{
+                        var resp = jsonDecode(response.body);
+
+                        showDialog(
+                          context: context,
+                          builder: (context) =>
+                            const AlertDialog(
+                              title: Text("Erro"),
+                              content: Text("Erro ao criar a conta.")
+                            ),
+                        );
+                      }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Preencha todos os campos')),
                         );
                     }
-                  },
+                  },                    
                   child: const Text('CRIAR CONTA'),
                 ),
               ),

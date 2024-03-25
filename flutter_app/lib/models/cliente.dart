@@ -13,6 +13,8 @@ class Cliente extends Usuario{
     required super.endereco
   });
 
+  //retorna uma instancia da classe apartir de um json
+  //1° o json é desserializado e transformado em um Map<String, dynamic>, depois é transformado em um objeto da classe
   factory Cliente.fromJson(Map<String, dynamic> json){
     return Cliente(
       pedidos: json['pedidos'] as List<Pedido>, 
