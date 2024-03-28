@@ -1,8 +1,8 @@
 class Pedido{
   final int? id;
   final String descricao;
-  final StatusPedido statusPedido;
-  final DateTime dataHora;
+  final String statusPedido;
+  final String dataHora;
   final String estabelecimento;
   final String nomeCliente;
   final String emailCliente;
@@ -20,15 +20,27 @@ class Pedido{
   //retorna uma instancia da classe apartir de um json
   //1° o json é desserializado e transformado em um Map<String, dynamic>, depois é transformado em um objeto da classe
   factory Pedido.fromJson(Map<String, dynamic> json){
-    return Pedido(
-      id: json['id'] as int, 
-      descricao: json['descricao'], 
-      dataHora: json['dataHora'], 
-      statusPedido: json['statusPedido'], 
-      estabelecimento: json['estabelecimento'], 
-      nomeCliente: json['nomeCliente'],
-      emailCliente: json['emailCliente']
-    );
+    return switch (json){
+      {
+        'id': int id, 
+        'descricao': String descricao, 
+        'dataHora': String dataHora, 
+        'statusPedido': String statusPedido, 
+        'estabelecimento': String estabelecimento, 
+        'nomeCliente': String nomeCliente,
+        'emailCliente': String emailCliente
+      } => 
+      Pedido(
+        id: id,
+        descricao: descricao, 
+        dataHora: dataHora, 
+        statusPedido: statusPedido, 
+        estabelecimento: estabelecimento, 
+        nomeCliente: nomeCliente, 
+        emailCliente: emailCliente
+      ),
+      _ => throw const FormatException("erro convert to pedido")
+    };
   }
 }
 

@@ -115,13 +115,13 @@ class LoginState extends State<LoginPage> {
                     //     );
                     // }
 
-                    var email = emailController.text;
-                    var password = passwordController.text;
-                    var resp = await AuthService().login("joao@gmail.com", "12345");
+                    final String email = emailController.text;
+                    final String password = passwordController.text;
+                    var resp = await AuthService().login("joao@gmail.com", "1234");
                     if(resp.statusCode == 200) {
                       Token token = Token.fromJson(jsonDecode(resp.body));
                       storage.write(key: "user", value: Token.serialize(token));
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => HomePage(email: emailController.text)

@@ -53,8 +53,10 @@ class ClienteService extends BaseService{
   Future<List<Pedido>> getPedidos() async{
     final response = await client.get(Uri.parse("$urlAPI/pedidos"));
     if (response.statusCode == 200) {
-      final Iterable json = jsonDecode(response.body);
-      return json.map((e) => Pedido.fromJson(e)).toList();
+      var jsonResponse = jsonDecode(response.body);
+      final Iterable json = jsonResponse['data'];
+      final List<Pedido> pedidos = json.map((e) => Pedido.fromJson(e)).toList();
+      return pedidos;
     }
     else{
       return Future.error("error");

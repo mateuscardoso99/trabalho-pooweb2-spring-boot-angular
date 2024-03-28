@@ -31,6 +31,7 @@ class Usuario {
   //pra salvar no storage, precisa serializar usando toMap()
   static Map<String, dynamic> toMap(Usuario u) => 
     <String, dynamic> {
+      'id': u.id,
       'nome': u.nome,
       'email': u.email,
       'ativo': u.ativo,

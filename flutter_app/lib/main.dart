@@ -7,7 +7,7 @@ import 'package:flutter_app/views/SplashScreen.dart';
 import 'package:flutter_app/views/portal-usuario/HomePage.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-const urlApi = 'http://localhost:8080';
+const urlApi = 'http://localhost:8081';
 final storage = FlutterSecureStorage();
 
 void main() {

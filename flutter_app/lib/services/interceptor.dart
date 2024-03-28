@@ -1,3 +1,5 @@
+import 'package:flutter_app/main.dart';
+import 'package:flutter_app/models/token.dart';
 import 'package:http_interceptor/http_interceptor.dart';
 
 class HttpInterceptor implements InterceptorContract {
@@ -7,6 +9,11 @@ class HttpInterceptor implements InterceptorContract {
         'Content-type': 'application/json',
         'Accept': 'application/json'
     });
+    final String? userStorage = await storage.read(key: "user");
+    if(userStorage != null){
+      final String token = Token.deserialize(userStorage).token;
+      request.headers.putIfAbsent("Authorization", () => "Bearer $token");
+    }
     return request;
   }
 

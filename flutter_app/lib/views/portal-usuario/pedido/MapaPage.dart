@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/Mapa.dart';
+import 'package:flutter_app/models/estabelecimento.dart';
+import 'package:flutter_app/services/mapa_service.dart';
 import 'package:geolocator/geolocator.dart';
 
 class MapaPage extends StatefulWidget {
@@ -11,6 +13,7 @@ class MapaPage extends StatefulWidget {
 
 class MapaPageState extends State<MapaPage> {
   Position? currentPosition;
+  Future<List<Estabelecimento>> postsFuture = MapaService().findAll();
 
   @override
   void initState() {//roda quando o componente é carregado
