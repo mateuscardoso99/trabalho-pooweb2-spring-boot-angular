@@ -1,8 +1,8 @@
 class Pedido{
   final int? id;
   final String descricao;
-  final String statusPedido;
-  final String dataHora;
+  final StatusPedido statusPedido;
+  final DateTime dataHora;
   final String estabelecimento;
   final String nomeCliente;
   final String emailCliente;
@@ -33,8 +33,8 @@ class Pedido{
       Pedido(
         id: id,
         descricao: descricao, 
-        dataHora: dataHora, 
-        statusPedido: statusPedido, 
+        dataHora: DateTime.parse(dataHora.toString()), 
+        statusPedido: StatusPedido.values.byName(statusPedido), 
         estabelecimento: estabelecimento, 
         nomeCliente: nomeCliente, 
         emailCliente: emailCliente

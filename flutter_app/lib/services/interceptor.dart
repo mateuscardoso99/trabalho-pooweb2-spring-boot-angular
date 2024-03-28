@@ -1,4 +1,4 @@
-import 'package:flutter_app/main.dart';
+import 'package:flutter_app/api.dart';
 import 'package:flutter_app/models/token.dart';
 import 'package:http_interceptor/http_interceptor.dart';
 

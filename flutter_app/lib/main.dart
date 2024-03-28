@@ -1,14 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/api.dart';
 import 'package:flutter_app/components/BottomTabNavigator.dart';
 import 'package:flutter_app/models/token.dart';
 import 'package:flutter_app/views/SplashScreen.dart';
 import 'package:flutter_app/views/portal-usuario/HomePage.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-const urlApi = 'http://localhost:8081';
-final storage = FlutterSecureStorage();
 
 void main() {
   runApp(const MyApp());
@@ -59,12 +56,12 @@ class MyApp extends StatelessWidget {
             if(userStorage == null) {
               return const SplashScreen();
             } else {
-              var payload = json.decode(ascii.decode(base64.decode(base64.normalize(userStorage.token))));
-              if(DateTime.fromMillisecondsSinceEpoch(payload["exp"]*1000).isAfter(DateTime.now())) {
-                return const HomePage(email: "teste");
-              } else {
-                return BottomTabNavigator(selectedTab: 1);
-              }
+              //var payload = json.decode(ascii.decode(base64.decode(base64.normalize(userStorage.token))));
+              //if(DateTime.fromMillisecondsSinceEpoch(payload["exp"]*1000).isAfter(DateTime.now())) {
+                return HomePage(email: userStorage.usuario.email);
+              //} else {
+              // return BottomTabNavigator(selectedTab: 1);
+              //}
             }
           } else {
             return const SplashScreen();

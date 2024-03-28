@@ -1,9 +1,8 @@
 import 'dart:convert';
 
-import 'package:flutter_app/main.dart';
+import 'package:flutter_app/api.dart';
 import 'package:flutter_app/models/estabelecimento.dart';
 import 'package:flutter_app/services/base_service.dart';
-import 'package:http/http.dart';
 
 class MapaService extends BaseService{
   final String urlAPI = "$urlApi/public/estabelecimentos";
@@ -12,7 +11,9 @@ class MapaService extends BaseService{
     final response = await client.get(Uri.parse(urlAPI));
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
-      return List.empty();
+      final Iterable iterable = json['data'];
+      List<Estabelecimento> e = iterable.map((e) => Estabelecimento.fromJson(e)).toList();
+      return e;
     }
     else{
       return Future.error("error");

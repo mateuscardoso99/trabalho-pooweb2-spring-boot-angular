@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/api.dart';
 import 'package:flutter_app/components/BottomTabNavigator.dart';
-import 'package:flutter_app/main.dart';
 import 'package:flutter_app/views/portal-usuario/HomePage.dart';
 import 'package:flutter_app/views/portal-usuario/pedido/MapaPage.dart';
 import 'package:flutter_app/views/portal-usuario/perfil/PerfilPage.dart';

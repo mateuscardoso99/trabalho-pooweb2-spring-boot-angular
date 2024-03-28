@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/DrawerNavigation.dart';
 import 'package:flutter_app/services/cliente_service.dart';
+import 'package:intl/intl.dart';
 
 import '../../models/pedido.dart';
 
@@ -58,7 +59,7 @@ class HomePageState extends State<HomePage>{
                         //   height: 2,
                         // ),
                         const SizedBox(height: 4),
-                        Text(pedido.dataHora)
+                        Text(DateFormat("dd/MM/yyyy HH:mm").format(pedido.dataHora))
                       ],
                     ),
                   ],
@@ -87,7 +88,7 @@ class HomePageState extends State<HomePage>{
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          pedido.statusPedido,
+                          pedido.statusPedido.name,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

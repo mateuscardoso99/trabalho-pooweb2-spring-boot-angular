@@ -13,11 +13,12 @@ class MapaPage extends StatefulWidget {
 
 class MapaPageState extends State<MapaPage> {
   Position? currentPosition;
-  Future<List<Estabelecimento>> postsFuture = MapaService().findAll();
+  late Future<List<Estabelecimento>> estabsFuture;
 
   @override
   void initState() {//roda quando o componente é carregado
     super.initState();
+    estabsFuture = MapaService().findAll();
     _determinePosition();
   }
 
@@ -25,7 +26,7 @@ class MapaPageState extends State<MapaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Location"),
+        title: const Text("Escolha um estabelecimento"),
       ),
       body: Center(
         child: Column(
@@ -40,17 +41,35 @@ class MapaPageState extends State<MapaPage> {
                 _determinePosition();
               },
             ),*/
-            const Expanded(flex: 1, child: Text("Escolha um estabelecimento")),
             Expanded(
-              flex: 9,
+              flex: 1,
               child: FractionallySizedBox(
                   widthFactor: 0.9,
                   heightFactor: 0.9,
-                  child: (currentPosition != null)
-                      ? Mapa(
-                          lat: currentPosition!.latitude,
-                          lng: currentPosition!.longitude)
-                      : const Text("É preciso da permissão de localização")),
+                  child: (currentPosition != null) 
+                      ?
+                        FutureBuilder<List<Estabelecimento>>(
+                          future: estabsFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              // until data is fetched, show loader
+                              return const CircularProgressIndicator();
+                            } else if (snapshot.hasData && currentPosition != null) {
+                              // once data is fetched, display it on screen (call buildPedidos())
+                              final estabs = snapshot.data!;
+                              
+                              return Mapa(
+                                      lat: currentPosition!.latitude,
+                                      lng: currentPosition!.longitude,
+                                      estabelecimentos: estabs
+                                    );
+                            } else {
+                              // if no data, show simple Text
+                              return const Text("No data available");
+                            }
+                          },
+                        )
+                    : const Text("É preciso da permissão de localização")),
             ),
           ],
         ),
