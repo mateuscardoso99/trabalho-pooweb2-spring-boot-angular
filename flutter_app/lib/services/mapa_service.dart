@@ -10,10 +10,21 @@ class MapaService extends BaseService{
   Future<List<Estabelecimento>> findAll() async{
     final response = await client.get(Uri.parse(urlAPI));
     if (response.statusCode == 200) {
-      final json = jsonDecode(response.body);
+      final json = jsonDecode(utf8.decode(response.bodyBytes));
       final Iterable iterable = json['data'];
       List<Estabelecimento> e = iterable.map((e) => Estabelecimento.fromJson(e)).toList();
       return e;
+    }
+    else{
+      return Future.error("error");
+    }
+  }
+
+  Future<Estabelecimento> findById(id) async{
+    final response = await client.get(Uri.parse("$urlAPI/$id"));
+    if (response.statusCode == 200) {
+      final json = jsonDecode(utf8.decode(response.bodyBytes));
+      return Estabelecimento.fromJson(json['data']);
     }
     else{
       return Future.error("error");

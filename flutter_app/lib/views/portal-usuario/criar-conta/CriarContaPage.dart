@@ -24,8 +24,14 @@ class CriarContaPageState extends State<CriarContaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.titulo),//recebido por parametro quando chamado por meio de LoginPage()
+        backgroundColor: Colors.red,
+        title: Text(
+          widget.titulo,
+          style: const TextStyle(
+            color: Colors.white
+          ),
+        ),//recebido por parametro quando chamado por meio de LoginPage()
+        centerTitle: true,
       ),
       body: Form(
         key: form,
@@ -96,7 +102,7 @@ class CriarContaPageState extends State<CriarContaPage> {
 
                       var dados = CadastroClienteRequest(nome: nomeController.text, email: emailController.text, senha: passwordController.text, endereco: null);
                       var response = await AuthService().signUp(dados);
-                      if(response == 201){
+                      if(response.statusCode == 201){
                         showDialog(
                           context: context,
                           builder: (context) =>
@@ -107,7 +113,7 @@ class CriarContaPageState extends State<CriarContaPage> {
                         );
                       }
                       else{
-                        var resp = jsonDecode(response.body);
+                        //var resp = jsonDecode(utf8.decode(response.bodyBytes));
 
                         showDialog(
                           context: context,
@@ -146,9 +152,10 @@ class CriarContaPageState extends State<CriarContaPage> {
                         text: TextSpan(
                           children: <TextSpan>[
                             TextSpan(
-                              text: 'ir para login',
+                              text: 'Fazer login',
                               style: const TextStyle(
                                 color: Colors.blue,
+                                fontWeight: FontWeight.bold,
                                 decoration: TextDecoration.underline
                               ),
                               recognizer: TapGestureRecognizer()..onTap = () {

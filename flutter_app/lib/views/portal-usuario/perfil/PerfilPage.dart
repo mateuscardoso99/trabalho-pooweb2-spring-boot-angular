@@ -1,6 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/DrawerNavigation.dart';
-import 'package:flutter_app/views/portal-usuario/HomePage.dart';
+import 'package:flutter_app/models/endereco.dart';
+import 'package:flutter_app/models/token.dart';
+import 'package:flutter_app/models/usuario.dart';
+import 'package:flutter_app/request/cadastro_cliente.dart';
+import 'package:flutter_app/services/auth_service.dart';
+import 'package:flutter_app/services/cliente_service.dart';
 
 class PerfilPage extends StatefulWidget {
   const PerfilPage({super.key, required this.titulo});
@@ -12,196 +19,279 @@ class PerfilPage extends StatefulWidget {
 
 class PerfilPageState extends State<PerfilPage> {
   final form = GlobalKey<FormState>();
-  TextEditingController nomeController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController cidadeController = TextEditingController();
-  TextEditingController ufController = TextEditingController();
-  TextEditingController bairroController = TextEditingController();
-  TextEditingController ruaController = TextEditingController();
-  TextEditingController numeroController = TextEditingController();
-  TextEditingController complementoController = TextEditingController();
+  String nome = '';
+  String email = '';
+  String password = '';
+  String cidade = '';
+  String uf = '';
+  String bairro = '';
+  String rua = '';
+  String numero = '';
+  String? complemento = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.titulo),//recebido por parametro quando chamado por meio de LoginPage()
+        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: Colors.red,
+        title: Text(
+          widget.titulo,
+          style: const TextStyle(
+            color: Colors.white
+          )
+        ),//recebido por parametro quando chamado por meio de LoginPage()
       ),
-      drawer: const DrawerNavigation(email: "email"),
+      drawer: const DrawerNavigation(),
       body: Center(
-        child: SingleChildScrollView( //quando conteúdo da tela é maior que o tamanho dela, permite rolar
-          child: Form(
-            key: form,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextFormField(
-                    controller: nomeController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: "Nome"
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'informe o nome';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
+        child: FutureBuilder<String>(
+          future: AuthService().getUser, 
+          builder: (context, snapshot) {
+            if(snapshot.connectionState == ConnectionState.waiting){
+              return const CircularProgressIndicator();
+            }
+            else if(snapshot.hasData){
+              final Usuario usuario = Token.deserialize(snapshot.data!)!.usuario;
 
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextFormField(
-                    controller: emailController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: "Email"
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'informe o email';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextFormField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: "Senha"
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'informe a senha';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextFormField(
-                    controller: cidadeController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: "Cidade"
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'informe a cidade';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextFormField(
-                    controller: ufController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: "UF"
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'informe a UF';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextFormField(
-                    controller: bairroController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: "Bairro"
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'informe o Bairro';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextFormField(
-                    controller: ruaController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: "Rua"
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'informe a Rua';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextFormField(
-                    controller: numeroController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: "Número"
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'informe o Número';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextFormField(
-                    controller: complementoController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: "Complemento"
-                    ),
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
-                  child: Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (form.currentState!.validate()) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomePage(email: emailController.text)
+              return SingleChildScrollView( //quando conteúdo da tela é maior que o tamanho dela, permite rolar
+                      child: Form(
+                        key: form,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                              child: TextFormField(
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(), labelText: "Nome"
+                                ),
+                                initialValue: usuario.nome,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'informe o nome';
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value) {
+                                  setState(() {
+                                    nome = value;
+                                  });
+                                },
+                              ),
                             ),
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Preencha todos os campos')),
-                            );
-                        }
-                      },
-                      child: const Text('ATUALIZAR'),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                              child: TextFormField(
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(), labelText: "Email"
+                                ),
+                                initialValue: usuario.email,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'informe o email';
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value) {
+                                  setState(() {
+                                    email = value;
+                                  });
+                                },
+                              ),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                              child: TextFormField(
+                                obscureText: true,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(), labelText: "Senha"
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'informe a senha';
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value) {
+                                  password = value;
+                                },
+                              ),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                              child: TextFormField(
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(), labelText: "Cidade"
+                                ),
+                                initialValue: usuario.endereco.cidade,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'informe a cidade';
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value) {
+                                  setState(() {
+                                    cidade = value;
+                                  });
+                                },
+                              ),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                              child: TextFormField(
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(), labelText: "UF"
+                                ),
+                                initialValue: usuario.endereco.uf,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'informe a UF';
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value) {
+                                  uf = value;
+                                },
+                              ),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                              child: TextFormField(
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(), labelText: "Bairro"
+                                ),
+                                initialValue: usuario.endereco.bairro,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'informe o Bairro';
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value) {
+                                  bairro = value;
+                                },
+                              ),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                              child: TextFormField(
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(), labelText: "Rua"
+                                ),
+                                initialValue: usuario.endereco.rua,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'informe a Rua';
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value) {
+                                  setState(() {
+                                    rua = value;
+                                  });
+                                },
+                              ),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                              child: TextFormField(
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(), labelText: "Número"
+                                ),
+                                initialValue: usuario.endereco.numero,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'informe o Número';
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value) {
+                                  setState(() {
+                                    numero = value;
+                                  });
+                                },
+                              ),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                              child: TextFormField(
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(), labelText: "Complemento"
+                                ),
+                                initialValue: usuario.endereco.complemento,
+                                onChanged: (value) {
+                                  complemento = value;
+                                }
+                              ),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
+                              child: Center(
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    if (form.currentState!.validate()) {
+                                      /*Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => HomePage(email: emailController.text)
+                                        ),
+                                      );*/
+                                      var endereco = Endereco(cidade: cidade, uf: uf, bairro: bairro, rua: rua, numero: numero, latitude: '', longitude: '');
+                                      var dados = CadastroClienteRequest(nome: nome, email: email, senha: password, endereco: endereco);
+                                      var response = await ClienteService().update(dados);
+                                      if(response.statusCode == 200){
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) =>
+                                            const AlertDialog(
+                                              title: Text("Sucesso"),
+                                              content: Text("perfil atualizado com sucesso.")
+                                            ),
+                                        );
+                                      }
+                                      else{
+                                        //var resp = jsonDecode(utf8.decode(response.bodyBytes));
+
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) =>
+                                            const AlertDialog(
+                                              title: Text("Erro"),
+                                              content: Text("Erro ao criar a conta.")
+                                            ),
+                                        );
+                                      }
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Preencha todos os campos')),
+                                        );
+                                    }
+                                  },
+                                  child: const Text('ATUALIZAR'),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+            }
+            else {
+              // if no data, show simple Text
+              return const Text("No data available");
+            }
+          }
         ),
       )
     );

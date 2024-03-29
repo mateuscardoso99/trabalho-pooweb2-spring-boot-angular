@@ -38,16 +38,16 @@ class LoginState extends State<LoginPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
+      //appBar: AppBar(
         // TRY THIS: Try changing the color here to a specific color (to
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
         // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        //backgroundColor: Theme.of(context).colorScheme.onPrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
 
-        title: Text(widget.titulo),//recebido por parametro quando chamado por meio de LoginPage()
-      ),
+        //title: Text(widget.titulo),//recebido por parametro quando chamado por meio de LoginPage()
+      //),
       body: Form(
         key: form,
         // Center is a layout widget. It takes a single child and positions it
@@ -118,8 +118,11 @@ class LoginState extends State<LoginPage> {
                     final String email = emailController.text;
                     final String password = passwordController.text;
                     var resp = await AuthService().login("joao@gmail.com", "1234");
-                    if(resp.statusCode == 200) {
-                      Token token = Token.fromJson(jsonDecode(resp.body));
+                    int statusCode = resp.statusCode;
+                    var jsonResponse = jsonDecode(utf8.decode(resp.bodyBytes));
+
+                    if(statusCode == 200) {
+                      Token token = Token.fromJson(jsonResponse);
                       storage.write(key: "user", value: Token.serialize(token));
                       Navigator.pushReplacement(
                         context,
@@ -128,6 +131,7 @@ class LoginState extends State<LoginPage> {
                         )
                       );
                     } else {
+                      
                       showDialog(
                         context: context,
                         builder: (context) =>
@@ -162,14 +166,16 @@ class LoginState extends State<LoginPage> {
                             TextSpan(
                               text: 'Cadastre-se',
                               style: const TextStyle(
-                                color: Colors.blue,
-                                decoration: TextDecoration.underline
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline,
+                                fontSize: 17
                               ),
                               recognizer: TapGestureRecognizer()..onTap = () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const CriarContaPage(titulo: "Criar conta")
+                                    builder: (context) => const CriarContaPage(titulo: "Cadastro")
                                   ),
                                 );
                               },

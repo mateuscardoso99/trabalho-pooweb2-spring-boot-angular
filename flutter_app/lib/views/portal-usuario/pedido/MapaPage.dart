@@ -5,8 +5,10 @@ import 'package:flutter_app/services/mapa_service.dart';
 import 'package:geolocator/geolocator.dart';
 
 class MapaPage extends StatefulWidget {
-  MapaPage({super.key});
+  const MapaPage({super.key, required this.showTitle});
 
+  final bool showTitle;
+  
   @override
   MapaPageState createState() => MapaPageState();
 }
@@ -25,9 +27,16 @@ class MapaPageState extends State<MapaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Escolha um estabelecimento"),
-      ),
+      appBar: widget.showTitle ? AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: Colors.red,
+        title: const Text(
+          "Escolha um estabelecimento",
+          style: TextStyle(
+            color: Colors.white
+          )
+        ),
+      ) : null,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -51,12 +60,14 @@ class MapaPageState extends State<MapaPage> {
                         FutureBuilder<List<Estabelecimento>>(
                           future: estabsFuture,
                           builder: (context, snapshot) {
+                            late List<Estabelecimento> estabs = [];
+
                             if (snapshot.connectionState == ConnectionState.waiting) {
                               // until data is fetched, show loader
                               return const CircularProgressIndicator();
-                            } else if (snapshot.hasData && currentPosition != null) {
+                            } else if (snapshot.hasData) {
                               // once data is fetched, display it on screen (call buildPedidos())
-                              final estabs = snapshot.data!;
+                              estabs = snapshot.data!;
                               
                               return Mapa(
                                       lat: currentPosition!.latitude,
@@ -64,12 +75,24 @@ class MapaPageState extends State<MapaPage> {
                                       estabelecimentos: estabs
                                     );
                             } else {
-                              // if no data, show simple Text
-                              return const Text("No data available");
+                              return Mapa(
+                                      lat: currentPosition!.latitude,
+                                      lng: currentPosition!.longitude,
+                                      estabelecimentos: estabs
+                                    );
                             }
                           },
                         )
-                    : const Text("É preciso da permissão de localização")),
+                    : Column(
+                        children: [
+                          const Text("É preciso da permissão de localização"),
+                          ElevatedButton(
+                            onPressed: _determinePosition, 
+                            child: const Text("Permitir acesso a localização"),
+                          )
+                        ],
+                      )
+              ),
             ),
           ],
         ),

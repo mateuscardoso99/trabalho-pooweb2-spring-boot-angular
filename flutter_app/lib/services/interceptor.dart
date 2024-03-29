@@ -11,8 +11,10 @@ class HttpInterceptor implements InterceptorContract {
     });
     final String? userStorage = await storage.read(key: "user");
     if(userStorage != null){
-      final String token = Token.deserialize(userStorage).token;
-      request.headers.putIfAbsent("Authorization", () => "Bearer $token");
+      final String token = Token.deserialize(userStorage)!.token;
+      if(token != ""){
+        request.headers.putIfAbsent("Authorization", () => "Bearer $token");
+      }
     }
     return request;
   }

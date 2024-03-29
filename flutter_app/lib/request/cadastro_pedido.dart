@@ -5,7 +5,7 @@
 
 class CadastroPedidoRequest{
   String descricao;
-  BigInt idEstabelecimento;
+  int idEstabelecimento;
 
   CadastroPedidoRequest({
     required this.descricao,

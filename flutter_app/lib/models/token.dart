@@ -28,5 +28,11 @@ class Token{
     };
 
   static String serialize(Token t) => json.encode(Token.toMap(t));
-  static Token deserialize(String json) => Token.fromJson(jsonDecode(json));//jsonDecode retorna um Map<String, dynamic>
+  
+  static Token? deserialize(String json) {
+    if(json == "") return null;
+    var result = jsonDecode(json);
+    if(result == null) return null;
+    return Token.fromJson(result);
+  }//jsonDecode retorna um Map<String, dynamic>
 }

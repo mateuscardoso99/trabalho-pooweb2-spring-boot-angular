@@ -134,3 +134,36 @@ um estado é mapeado como uma classe que extende de State, essa classe sobrescre
 mudanças na tela, por extender de State tem acesso ao método setState() para mudar o estado
 
 toda classe que extende de StatefulWidget deve sobrescrever o método createState(), esse método cria um estado para esse widget
+
+# late
+variável não nula, que será inicializada posteriormente
+
+# future
+O recurso Future permite que você execute o trabalho de forma assíncrona para liberar quaisquer outros segmentos/threads que não devem ser bloqueados, como o segmento/thread da interface do usuário.
+
+Como exemplo, para ilustar, pense na tarefa de recuperar dados de um servidor remoto usando http. Neste cenário temos as seguintes situações:
+
+1 - Quando o Future for concluído com êxito, precisaremos exibir o resultado para o usuário;
+2 - Quando o Future for concluído com um erro, precisamos exibir notificações para o usuário;
+3 - Quando a solicitação ainda está em andamento, podemos mostrar um controle de carregamento para indicar isso.
+
+Isso geralmente significa que precisamos ter UIs diferentes para os três estados possíveis em que um Future pode estar.
+
+pending - Exibir um spinner de carregamento.
+completed with value - Exibir o resultado.
+completed with error - Exibir uma notificação de erro.
+Para poder tratar esses comportamentos o Flutter tem um widget stateful embutido, chamado FutureBuilder, que se constrói baseado no último instantâneo(snapshot) da interação com o Future.
+
+Assim, usando FutureBuilder podemos determinar o estado atual de um Future e selecionar o que mostrar enquanto está carregando, quando se torna disponível ou quando ocorre um erro.
+
+O Construtor da classe FutureBuilder pode usar até 3 parâmetros:
+
+future:  recebe os dados após algum intervalo e representa um processamento assíncrono;
+builder: recebe os dados do futuro e retorna o widget baseado em uma interação assíncrona;
+initialData: é opcional, representa o snapshot inicial dos dados antes de um futuro não nulo ser concluído;
+
+Sempre que quiser trabalhar com FutureBuilder, não coloque a função diretamente na propriedade future, pois o setState sempre executa o método build, iniciando novamente a função.
+
+Crie uma variável do tipo Future<Tipo> e inicie a função no InitState de seu widget;
+
+Utilize essa variável na propriedade future, dessa forma não iniciará novamente a função com um setState;

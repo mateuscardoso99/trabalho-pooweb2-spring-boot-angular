@@ -112,9 +112,16 @@ class HomePageState extends State<HomePage>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home Page'),
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text(
+          'Home Page',
+          style: TextStyle(
+            color: Colors.white
+          )
+        ),
+        backgroundColor: Colors.red,
       ),
-      drawer: DrawerNavigation(email: widget.email),
+      drawer: const DrawerNavigation(),
       body: Center(
         child: FutureBuilder<List<Pedido>>(
           future: pedidos,

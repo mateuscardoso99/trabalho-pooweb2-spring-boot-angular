@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/components/ExamplePopup.dart';
+import 'package:flutter_app/components/PopupMapa.dart';
 import 'package:flutter_app/models/estabelecimento.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
@@ -56,7 +56,7 @@ class MapaState extends State<Mapa>{
             options: PopupMarkerLayerOptions(
               markers: markers,
               popupDisplayOptions: PopupDisplayOptions(
-                builder: (BuildContext context, Marker marker) => ExamplePopup(marker)
+                builder: (BuildContext context, Marker marker) => PopupMapa(marker)
               )
             )
           )

@@ -24,4 +24,10 @@ class AuthService extends BaseService{
     );
     return res;    
   }
+
+  Future<String> get getUser async {
+    var userStorage = await storage.read(key: "user");
+    if(userStorage == null) return "";
+    return userStorage;
+  }
 }
