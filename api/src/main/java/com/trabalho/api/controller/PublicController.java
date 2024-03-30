@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -36,5 +37,19 @@ public class PublicController {
         Estabelecimento estabelecimento = estabelecimentoService.findById(id);
         ResponseDTO<EstabelecimentoDTO> responseDTO = ResponseDTO.build(EstabelecimentoDTO.convert(estabelecimento), true, null, null);
         return new ResponseEntity<ResponseDTO<EstabelecimentoDTO>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping("/estabelecimentos/cidades")
+    public ResponseEntity<ResponseDTO<Collection<String>>> findCidadesEstabs(){
+        Collection<String> cidades = estabelecimentoService.findCidadesEstabs();
+        ResponseDTO<Collection<String>> responseDTO = ResponseDTO.build(cidades, true, null, null);
+        return new ResponseEntity<ResponseDTO<Collection<String>>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping("/estabelecimentos/get-by-cidade")
+    public ResponseEntity<ResponseDTO<Collection<Estabelecimento>>> findByCidade(@RequestParam("cidade") String cidade){
+        Collection<Estabelecimento> estabelecimentos = estabelecimentoService.findByCidade(cidade);
+        ResponseDTO<Collection<Estabelecimento>> responseDTO = ResponseDTO.build(estabelecimentos, true, null, null);
+        return new ResponseEntity<ResponseDTO<Collection<Estabelecimento>>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 }

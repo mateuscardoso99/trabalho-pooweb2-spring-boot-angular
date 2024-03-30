@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/api.dart';
+import 'package:flutter_app/components/HandleErrors.dart';
 import 'package:flutter_app/models/token.dart';
 import 'package:flutter_app/views/portal-usuario/HomePage.dart';
 import 'package:flutter_app/views/portal-usuario/criar-conta/CriarContaPage.dart';
@@ -27,10 +28,26 @@ class LoginState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  final FocusNode _focusNodePassword = FocusNode();
+  bool escondeSenha = true;
+
+  //quando o state é desmontado, (tela é fechada)
+  @override
+  void dispose() {
+    _focusNodePassword.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   //método build constrói a UI
   @override
   Widget build(BuildContext context) {
+    //PODE ESCREVER CONDIÇÕES AQUI
+    /*if (_boxLogin.get("loginStatus") ?? false) {
+      return HomePage(email: "teste");
+    }*/
+
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -67,13 +84,23 @@ class LoginState extends State<LoginPage> {
           // action in the IDE, or press "p" in the console), to see the
           // wireframe for each widget.
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: TextFormField(
                 controller: emailController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(), labelText: "Email"
+                decoration: InputDecoration(
+                  labelText: "Email",
+                  labelStyle: const TextStyle(color: Colors.red),
+                  prefixIcon: const Icon(Icons.email, color: Colors.red),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: Colors.red, width: 1.0)
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -88,9 +115,29 @@ class LoginState extends State<LoginPage> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: TextFormField(
                 controller: passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(), labelText: "Password"
+                focusNode: _focusNodePassword,
+                obscureText: escondeSenha,
+                decoration: InputDecoration(
+                  labelText: "Senha",
+                  labelStyle: const TextStyle(color: Colors.red),
+                  prefixIcon: const Icon(Icons.padding_rounded, color: Colors.red),
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        escondeSenha = !escondeSenha;
+                      });
+                    },
+                    icon: escondeSenha
+                        ? const Icon(Icons.visibility_outlined, color: Colors.red)
+                        : const Icon(Icons.visibility_off_outlined, color: Colors.red)
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.red, width: 1.0),
+                    borderRadius: BorderRadius.circular(10)
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -105,44 +152,70 @@ class LoginState extends State<LoginPage> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
               child: Center(
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    minimumSize: const Size.fromHeight(50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
                   onPressed: () async {
-                    //if (emailController.text == "joao@gmail.com" && passwordController.text == "1234") {
-                      
-                    // } else {
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     const SnackBar(
-                    //       content: Text('Email ou senha incorretos')),
-                    //     );
-                    // }
+                    if (form.currentState?.validate() ?? false) {
+                      final String email = emailController.text;
+                      final String password = passwordController.text;
+                      var resp = await AuthService().login(email, password);
+                      final Map<String, dynamic> jsonResponse = jsonDecode(utf8.decode(resp.bodyBytes));
 
-                    final String email = emailController.text;
-                    final String password = passwordController.text;
-                    var resp = await AuthService().login("joao@gmail.com", "1234");
-                    int statusCode = resp.statusCode;
-                    var jsonResponse = jsonDecode(utf8.decode(resp.bodyBytes));
-
-                    if(statusCode == 200) {
-                      Token token = Token.fromJson(jsonResponse);
-                      storage.write(key: "user", value: Token.serialize(token));
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomePage(email: emailController.text)
-                        )
-                      );
-                    } else {
-                      
-                      showDialog(
-                        context: context,
-                        builder: (context) =>
-                          const AlertDialog(
-                            title: Text("Erro"),
-                            content: Text("email ou senha incorretos")
+                      if(resp.statusCode == 200) {
+                        Token token = Token.fromJson(jsonResponse);
+                        storage.write(key: "user", value: Token.serialize(token));
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomePage(email: emailController.text)
                           )
-                      );
+                        );
+                      } else {
+                        final String msg = jsonResponse["message"] ?? "Ocorreu um erro";
+                        final List<String> errorsMsg = HandleErrors(response: jsonResponse).errors();
+
+                        showDialog(
+                          context: context,
+                          //barrierDismissible: false, // user must tap button!
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text(msg),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(5))
+                              ),
+                              backgroundColor: Colors.white,
+                              content: SingleChildScrollView(
+                                child: ListBody(
+                                  children: [
+                                    for(var error in errorsMsg) 
+                                      Text(
+                                        error.toString(),
+                                        style: TextStyle(
+                                          color: Colors.red[300],
+                                          fontWeight: FontWeight.bold
+                                        ),
+                                      )
+                                  ]
+                                ),
+                              ),
+                            );
+                          }
+                        );
+                      }
+                    }
+                    else{
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Preencha todos os campos')),
+                        );
                     }
                   },
-                  child: const Text('ENTRAR'),
+                  child: const Text('ENTRAR', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                 ),
               ),
             ),

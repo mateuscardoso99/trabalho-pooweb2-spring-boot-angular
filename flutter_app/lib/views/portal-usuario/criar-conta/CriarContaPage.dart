@@ -2,9 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/components/BottomTabNavigator.dart';
+import 'package:flutter_app/components/HandleErrors.dart';
 import 'package:flutter_app/request/cadastro_cliente.dart';
 import 'package:flutter_app/services/auth_service.dart';
-import 'package:flutter_app/views/login/LoginPage.dart';
 
 class CriarContaPage extends StatefulWidget {
   const CriarContaPage({super.key, required this.titulo});
@@ -19,11 +20,14 @@ class CriarContaPageState extends State<CriarContaPage> {
   TextEditingController nomeController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  final FocusNode _focusPassword = FocusNode();
+  bool escondeSenha = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Colors.red,
         title: Text(
           widget.titulo,
@@ -37,13 +41,23 @@ class CriarContaPageState extends State<CriarContaPage> {
         key: form,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: TextFormField(
                 controller: nomeController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(), labelText: "Nome"
+                decoration: InputDecoration(
+                  labelText: "Nome",
+                  labelStyle: const TextStyle(color: Colors.red),
+                  prefixIcon: const Icon(Icons.person, color: Colors.red),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: Colors.red, width: 1.0)
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -58,8 +72,17 @@ class CriarContaPageState extends State<CriarContaPage> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: TextFormField(
                 controller: emailController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(), labelText: "Email"
+                decoration: InputDecoration(
+                  labelText: "Email",
+                  labelStyle: const TextStyle(color: Colors.red),
+                  prefixIcon: const Icon(Icons.email, color: Colors.red),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: Colors.red, width: 1.0)
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -74,9 +97,29 @@ class CriarContaPageState extends State<CriarContaPage> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: TextFormField(
                 controller: passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(), labelText: "Senha"
+                focusNode: _focusPassword,
+                obscureText: escondeSenha,
+                decoration: InputDecoration(
+                  labelText: "Senha",
+                  labelStyle: const TextStyle(color: Colors.red),
+                  prefixIcon: const Icon(Icons.padding_rounded, color: Colors.red),
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        escondeSenha = !escondeSenha;
+                      });
+                    },
+                    icon: escondeSenha
+                        ? const Icon(Icons.visibility_outlined, color: Colors.red)
+                        : const Icon(Icons.visibility_off_outlined, color: Colors.red)
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.red, width: 1.0),
+                    borderRadius: BorderRadius.circular(10)
+                  ),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -91,6 +134,13 @@ class CriarContaPageState extends State<CriarContaPage> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
               child: Center(
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    minimumSize: const Size.fromHeight(50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
                   onPressed: () async {
                     if (form.currentState!.validate()) {
                       /*Navigator.push(
@@ -102,6 +152,8 @@ class CriarContaPageState extends State<CriarContaPage> {
 
                       var dados = CadastroClienteRequest(nome: nomeController.text, email: emailController.text, senha: passwordController.text, endereco: null);
                       var response = await AuthService().signUp(dados);
+                      final Map<String, dynamic> jsonResponse = jsonDecode(utf8.decode(response.bodyBytes));
+
                       if(response.statusCode == 201){
                         showDialog(
                           context: context,
@@ -113,15 +165,35 @@ class CriarContaPageState extends State<CriarContaPage> {
                         );
                       }
                       else{
-                        //var resp = jsonDecode(utf8.decode(response.bodyBytes));
+                        final String msg = jsonResponse["message"] ?? "Ocorreu um erro";
+                        final List<String> errorsMsg = HandleErrors(response: jsonResponse).errors();
 
                         showDialog(
                           context: context,
-                          builder: (context) =>
-                            const AlertDialog(
-                              title: Text("Erro"),
-                              content: Text("Erro ao criar a conta.")
-                            ),
+                          //barrierDismissible: false, // user must tap button!
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text(msg),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(5))
+                              ),
+                              backgroundColor: Colors.white,
+                              content: SingleChildScrollView(
+                                child: ListBody(
+                                  children: [
+                                    for(var error in errorsMsg) 
+                                      Text(
+                                        error.toString(),
+                                        style: TextStyle(
+                                          color: Colors.red[300],
+                                          fontWeight: FontWeight.bold
+                                        ),
+                                      )
+                                  ]
+                                ),
+                              ),
+                            );
+                          }
                         );
                       }
                     } else {
@@ -131,7 +203,7 @@ class CriarContaPageState extends State<CriarContaPage> {
                         );
                     }
                   },                    
-                  child: const Text('CRIAR CONTA'),
+                  child: const Text('CRIAR CONTA', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                 ),
               ),
             ),
@@ -156,13 +228,14 @@ class CriarContaPageState extends State<CriarContaPage> {
                               style: const TextStyle(
                                 color: Colors.blue,
                                 fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.underline
+                                decoration: TextDecoration.underline,
+                                fontSize: 17
                               ),
                               recognizer: TapGestureRecognizer()..onTap = () {
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const LoginPage(titulo: "Login")
+                                    builder: (context) => BottomTabNavigator(selectedTab: 1)
                                   ),
                                 );
                               },

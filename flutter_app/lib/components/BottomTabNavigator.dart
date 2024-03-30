@@ -7,7 +7,6 @@ class BottomTabNavigator extends StatefulWidget {
   BottomTabNavigator({Key? key, required this.selectedTab}) : super(key: key);
 
   int selectedTab = 0;
-  String title = "Escolha um estabelecimento";
 
   @override
   BottomTabNavigatorState createState() =>
@@ -15,21 +14,32 @@ class BottomTabNavigator extends StatefulWidget {
 }
 
 class BottomTabNavigatorState extends State<BottomTabNavigator> {
+  late String title;
 
   final List _pages = [
     const MapaPage(showTitle: false),
     const LoginPage(titulo: "Login")
   ];
 
+  @override
+  void initState(){
+    super.initState();
+    setTitle();
+  }
+
+  setTitle(){
+    if(widget.selectedTab == 0){
+      title = "Escolha um estabelecimento";
+    }
+    else{
+      title = "Login";
+    }
+  }
+
   _changeTab(int index) {
     setState(() {
       widget.selectedTab = index;
-      if(index == 0){
-        widget.title = "Escolha um estabelecimento";
-      }
-      else{
-        widget.title = "Login";
-      }
+      setTitle();
     });
   }
 
@@ -39,7 +49,7 @@ class BottomTabNavigatorState extends State<BottomTabNavigator> {
       appBar: AppBar(
         backgroundColor: Colors.red,
         title: Text(
-          widget.title,
+          title,
           style: const TextStyle(
             color: Colors.white
           )
@@ -52,7 +62,7 @@ class BottomTabNavigatorState extends State<BottomTabNavigator> {
         onTap: (index) => _changeTab(index),
         backgroundColor: Colors.red,
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-        selectedItemColor: Colors.yellow,
+        selectedItemColor: Colors.yellow[600],
         unselectedItemColor: Colors.white,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.map), label: "Mapa"),

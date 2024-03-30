@@ -16,4 +16,10 @@ public interface EstabelecimentoRepository extends JpaRepository<Estabelecimento
 
     @Query("SELECT e FROM Estabelecimento e WHERE e.empresa.id = ?1 AND e.id = ?2")
     Optional<Estabelecimento> findByIdAndEmpresaId(Long idEstab, Long idEmpresa);
+
+    @Query("SELECT DISTINCT e.cidade FROM Estabelecimento est JOIN est.endereco e")
+    Collection<String> findCidadesEstabs();
+
+    @Query("SELECT e FROM Estabelecimento e WHERE e.endereco.cidade = ?1")
+    Collection<Estabelecimento> findEstabelecimentosCidade(String cidade);
 }

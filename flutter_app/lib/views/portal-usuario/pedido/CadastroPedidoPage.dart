@@ -40,9 +40,16 @@ class CadastroPedidoPageState extends State<CadastroPedidoPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                   child: TextFormField(
-                    maxLines: 8,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: "Descrição"
+                    maxLines: 5,
+                    decoration: InputDecoration(
+                      labelText: "Descrição",
+                      prefixIcon: const Icon(Icons.email),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -61,8 +68,15 @@ class CadastroPedidoPageState extends State<CadastroPedidoPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
                   child: Center(
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        minimumSize: const Size.fromHeight(50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
                       onPressed: () async {
-                        if (form.currentState!.validate()) {
+                        if (form.currentState?.validate() ?? false) {
                           var pedido = CadastroPedidoRequest(descricao: descricao, idEstabelecimento: widget.estabelecimento.id!);
                           var response = await ClienteService().salvarPedido(pedido);
                           if(response.statusCode == 201){
@@ -89,12 +103,12 @@ class CadastroPedidoPageState extends State<CadastroPedidoPage> {
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text('Preencha todos os campos')
+                              content: Text('Preencha a descrição')
                             ),
                           );
                         }
                       },
-                      child: const Text('SALVAR'),
+                      child: const Text('SALVAR', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                     ),
                   ),
                 ),

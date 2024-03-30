@@ -57,6 +57,14 @@ public class EstabelecimentoService {
         return estabelecimentoRepository.findById(id).orElseThrow(() -> new DataNotFoundException("estab não encontrado"));
     }
 
+    public Collection<Estabelecimento> findByCidade(String cidade){
+        return estabelecimentoRepository.findEstabelecimentosCidade(cidade);
+    }
+
+    public Collection<String> findCidadesEstabs(){
+        return estabelecimentoRepository.findCidadesEstabs();
+    }
+
     public Estabelecimento findByIdAndEmpresaId(HttpServletRequest request, Long idEstab) throws Exception{
         String token = jwtUtils.getTokenFromRequest(request);
         String idEmpresa = jwtUtils.getClaimsFromJwtToken(token).get("empresa_id").toString();

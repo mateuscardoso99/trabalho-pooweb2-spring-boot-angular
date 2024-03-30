@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/DrawerNavigation.dart';
 import 'package:flutter_app/models/endereco.dart';
@@ -28,6 +26,7 @@ class PerfilPageState extends State<PerfilPage> {
   String rua = '';
   String numero = '';
   String? complemento = '';
+  bool escondeSenha = true;
 
   @override
   Widget build(BuildContext context) {
@@ -62,8 +61,15 @@ class PerfilPageState extends State<PerfilPage> {
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                               child: TextFormField(
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(), labelText: "Nome"
+                                decoration: InputDecoration(
+                                  labelText: "Nome",
+                                  prefixIcon: const Icon(Icons.email),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                  ),
                                 ),
                                 initialValue: usuario.nome,
                                 validator: (value) {
@@ -83,8 +89,15 @@ class PerfilPageState extends State<PerfilPage> {
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                               child: TextFormField(
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(), labelText: "Email"
+                                decoration: InputDecoration(
+                                  labelText: "Email",
+                                  prefixIcon: const Icon(Icons.email),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                  ),
                                 ),
                                 initialValue: usuario.email,
                                 validator: (value) {
@@ -105,8 +118,25 @@ class PerfilPageState extends State<PerfilPage> {
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                               child: TextFormField(
                                 obscureText: true,
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(), labelText: "Senha"
+                                decoration: InputDecoration(
+                                  labelText: "Senha",
+                                  prefixIcon: const Icon(Icons.padding_rounded),
+                                  suffixIcon: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        escondeSenha = !escondeSenha;
+                                      });
+                                    },
+                                    icon: escondeSenha
+                                        ? const Icon(Icons.visibility_outlined)
+                                        : const Icon(Icons.visibility_off_outlined)
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                  ),
                                 ),
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -123,8 +153,15 @@ class PerfilPageState extends State<PerfilPage> {
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                               child: TextFormField(
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(), labelText: "Cidade"
+                                decoration: InputDecoration(
+                                  labelText: "Cidade",
+                                  prefixIcon: const Icon(Icons.location_city),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                  ),
                                 ),
                                 initialValue: usuario.endereco.cidade,
                                 validator: (value) {
@@ -144,8 +181,15 @@ class PerfilPageState extends State<PerfilPage> {
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                               child: TextFormField(
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(), labelText: "UF"
+                                decoration: InputDecoration(
+                                  labelText: "UF",
+                                  prefixIcon: const Icon(Icons.nature_outlined),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                  ),
                                 ),
                                 initialValue: usuario.endereco.uf,
                                 validator: (value) {
@@ -163,8 +207,15 @@ class PerfilPageState extends State<PerfilPage> {
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                               child: TextFormField(
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(), labelText: "Bairro"
+                                decoration: InputDecoration(
+                                  labelText: "Bairro",
+                                  prefixIcon: const Icon(Icons.highlight),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                  ),
                                 ),
                                 initialValue: usuario.endereco.bairro,
                                 validator: (value) {
@@ -182,8 +233,15 @@ class PerfilPageState extends State<PerfilPage> {
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                               child: TextFormField(
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(), labelText: "Rua"
+                                decoration: InputDecoration(
+                                  labelText: "Rua",
+                                  prefixIcon: const Icon(Icons.rocket),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                  ),
                                 ),
                                 initialValue: usuario.endereco.rua,
                                 validator: (value) {
@@ -203,8 +261,15 @@ class PerfilPageState extends State<PerfilPage> {
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                               child: TextFormField(
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(), labelText: "Número"
+                                decoration: InputDecoration(
+                                  labelText: "Número",
+                                  prefixIcon: const Icon(Icons.numbers),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                  ),
                                 ),
                                 initialValue: usuario.endereco.numero,
                                 validator: (value) {
@@ -224,8 +289,15 @@ class PerfilPageState extends State<PerfilPage> {
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                               child: TextFormField(
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(), labelText: "Complemento"
+                                decoration: InputDecoration(
+                                  labelText: "Complemento",
+                                  prefixIcon: const Icon(Icons.house),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                  ),
                                 ),
                                 initialValue: usuario.endereco.complemento,
                                 onChanged: (value) {
@@ -239,7 +311,7 @@ class PerfilPageState extends State<PerfilPage> {
                               child: Center(
                                 child: ElevatedButton(
                                   onPressed: () async {
-                                    if (form.currentState!.validate()) {
+                                    if (form.currentState?.validate() ?? false) {
                                       /*Navigator.push(
                                         context,
                                         MaterialPageRoute(
