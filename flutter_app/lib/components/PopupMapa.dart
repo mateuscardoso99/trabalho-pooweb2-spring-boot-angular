@@ -50,7 +50,9 @@ class PopupMapaState extends State<PopupMapa> {
           future: Future.wait([estabelecimento, user]), //espera os 2 serem resolvidos
           builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
             if(snapshot.connectionState == ConnectionState.waiting){
-              return const CircularProgressIndicator();
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             }
             else if(snapshot.hasData){
               return InkWell(

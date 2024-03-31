@@ -47,7 +47,9 @@ class PerfilPageState extends State<PerfilPage> {
           future: AuthService().getUser, 
           builder: (context, snapshot) {
             if(snapshot.connectionState == ConnectionState.waiting){
-              return const CircularProgressIndicator();
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             }
             else if(snapshot.hasData){
               final Usuario usuario = Token.deserialize(snapshot.data!)!.usuario;

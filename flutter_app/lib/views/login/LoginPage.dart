@@ -168,7 +168,7 @@ class LoginState extends State<LoginPage> {
 
                       if(resp.statusCode == 200) {
                         Token token = Token.fromJson(jsonResponse);
-                        storage.write(key: "user", value: Token.serialize(token));
+                        await storage.write(key: "user", value: Token.serialize(token));
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(

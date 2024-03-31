@@ -32,7 +32,9 @@ class DrawerNavigationState extends State<DrawerNavigation>{
         future: userStorage, 
         builder: (context, snapshot){
           if(snapshot.connectionState == ConnectionState.waiting){
-            return const CircularProgressIndicator();
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
           else if(snapshot.hasData){
             final Usuario? usuario = Token.deserialize(snapshot.data!)!.usuario;

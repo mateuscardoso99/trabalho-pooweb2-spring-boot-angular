@@ -40,16 +40,16 @@ public class PublicController {
     }
 
     @GetMapping("/estabelecimentos/cidades")
-    public ResponseEntity<ResponseDTO<Collection<String>>> findCidadesEstabs(){
-        Collection<String> cidades = estabelecimentoService.findCidadesEstabs();
+    public ResponseEntity<ResponseDTO<Collection<String>>> findCidadesEstabs(@RequestParam("cidade") String cidade){
+        Collection<String> cidades = estabelecimentoService.findCidadesEstabs(cidade);
         ResponseDTO<Collection<String>> responseDTO = ResponseDTO.build(cidades, true, null, null);
         return new ResponseEntity<ResponseDTO<Collection<String>>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping("/estabelecimentos/get-by-cidade")
-    public ResponseEntity<ResponseDTO<Collection<Estabelecimento>>> findByCidade(@RequestParam("cidade") String cidade){
+    public ResponseEntity<ResponseDTO<Collection<EstabelecimentoDTO>>> findByCidade(@RequestParam("cidade") String cidade){
         Collection<Estabelecimento> estabelecimentos = estabelecimentoService.findByCidade(cidade);
-        ResponseDTO<Collection<Estabelecimento>> responseDTO = ResponseDTO.build(estabelecimentos, true, null, null);
-        return new ResponseEntity<ResponseDTO<Collection<Estabelecimento>>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
+        ResponseDTO<Collection<EstabelecimentoDTO>> responseDTO = ResponseDTO.build(EstabelecimentoDTO.convert(estabelecimentos), true, null, null);
+        return new ResponseEntity<ResponseDTO<Collection<EstabelecimentoDTO>>>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 }

@@ -7,10 +7,9 @@ import 'package:latlong2/latlong.dart';
 
 class Mapa extends StatefulWidget {
 
-  final double lat;
-  final double lng;
+  final LatLng latLng;
   final List<Estabelecimento> estabelecimentos;
-  const Mapa({super.key, required this.lat, required this.lng, required this.estabelecimentos});
+  const Mapa({super.key, required this.latLng, required this.estabelecimentos});
   
   @override
   MapaState createState() => MapaState();
@@ -43,7 +42,7 @@ class MapaState extends State<Mapa>{
     return FlutterMap(
         mapController: MapController(),
         options: MapOptions(
-          initialCenter: LatLng(widget.lat, widget.lng),
+          initialCenter: widget.latLng,
           initialZoom: 10.5,
         ),
         children: [

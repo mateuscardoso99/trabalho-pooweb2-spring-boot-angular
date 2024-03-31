@@ -167,3 +167,6 @@ Sempre que quiser trabalhar com FutureBuilder, não coloque a função diretamen
 Crie uma variável do tipo Future<Tipo> e inicie a função no InitState de seu widget;
 
 Utilize essa variável na propriedade future, dessa forma não iniciará novamente a função com um setState;
+
+# setState()
+para renderizar algo na tela novamente, usar setState(){} pra alterar a propriedade

@@ -128,7 +128,9 @@ class HomePageState extends State<HomePage>{
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               // until data is fetched, show loader
-              return const CircularProgressIndicator();
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             } else if (snapshot.hasData) {
               // once data is fetched, display it on screen (call buildPedidos())
               final pedidos = snapshot.data!;

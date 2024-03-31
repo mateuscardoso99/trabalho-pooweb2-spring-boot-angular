@@ -61,8 +61,8 @@ public class EstabelecimentoService {
         return estabelecimentoRepository.findEstabelecimentosCidade(cidade);
     }
 
-    public Collection<String> findCidadesEstabs(){
-        return estabelecimentoRepository.findCidadesEstabs();
+    public Collection<String> findCidadesEstabs(String cidade){
+        return estabelecimentoRepository.findCidadesEstabs(cidade);
     }
 
     public Estabelecimento findByIdAndEmpresaId(HttpServletRequest request, Long idEstab) throws Exception{

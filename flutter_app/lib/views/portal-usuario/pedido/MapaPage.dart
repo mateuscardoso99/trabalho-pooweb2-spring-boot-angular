@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/Mapa.dart';
 import 'package:flutter_app/models/estabelecimento.dart';
 import 'package:flutter_app/services/mapa_service.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:latlong2/latlong.dart';
 
 class MapaPage extends StatefulWidget {
   const MapaPage({super.key, required this.showTitle});
@@ -14,14 +17,47 @@ class MapaPage extends StatefulWidget {
 }
 
 class MapaPageState extends State<MapaPage> {
-  Position? currentPosition;
+  LatLng? currentPosition;
   late Future<List<Estabelecimento>> estabsFuture;
+  Timer searchOnStoppedTyping = Timer(const Duration(milliseconds: 2000), () {});
+  List<String> cidades = [];
+  bool isLoading = false;
+  bool jaPesquisouCidade = false;
 
   @override
   void initState() {//roda quando o componente é carregado
     super.initState();
-    estabsFuture = MapaService().findAll();
+    getEstabelecimentos(null);
     _determinePosition();
+  }
+
+  getCidades(String value) async{
+    setState(() {
+      isLoading = true;
+    });
+
+    var result = await MapaService().findCidades(value);
+
+    setState(() {
+      cidades = result;
+      isLoading = false;
+    });
+  }
+
+  getEstabelecimentos(String? cidade){
+    var result;
+    if(cidade == null) {
+      result = MapaService().findAll();
+    } else {
+      setState(() {
+        jaPesquisouCidade = true;
+      });
+      result = MapaService().findByCidade(cidade);
+    }
+    setState(() {
+      estabsFuture = result;
+      cidades = [];
+    });
   }
 
   @override
@@ -41,6 +77,60 @@ class MapaPageState extends State<MapaPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            TextField(
+              onChanged: (value) {
+                if(value.length > 2){
+                  const duration = Duration(milliseconds:1000);
+                  setState(() => searchOnStoppedTyping.cancel()); // clear timer
+                  setState(() => searchOnStoppedTyping = Timer(duration, () => getCidades(value)));
+                }
+              },
+              style: const TextStyle(
+                color: Color(0xff020202),
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+                letterSpacing: 0.5,
+              ),
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: const Color(0xfff1f1f1),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+                hintText: "Busque uma cidade",
+                hintStyle: const TextStyle(
+                    color: Colors.black54,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: 0.5,
+                    decorationThickness: 6),
+                prefixIcon: const Icon(Icons.search),
+                prefixIconColor: Colors.red,
+                suffixIcon: isLoading ? const CircularProgressIndicator() : null
+              )
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            
+            cidades.isNotEmpty ?
+              Expanded(
+                flex: 1,
+                child: ListView.builder(
+                  itemCount: cidades.length,
+                  itemBuilder: (context, index) {
+                    final data = cidades[index];
+                    return ListTile(
+                      onTap: () => {
+                        getEstabelecimentos(cidades[index])
+                      },
+                      leading: const Icon(Icons.place),
+                      title: Text(data)
+                    );
+                  }
+                )
+              ) : const Text("Nenhum estabelecimento encontrado nesta cidade", style: TextStyle(fontStyle: FontStyle.italic)),
             /*if (currentPosition != null)
               Text(
                   "LAT: ${currentPosition?.latitude}, LNG: ${currentPosition?.longitude}"),
@@ -53,8 +143,8 @@ class MapaPageState extends State<MapaPage> {
             Expanded(
               flex: 1,
               child: FractionallySizedBox(
-                  widthFactor: 0.9,
-                  heightFactor: 0.9,
+                  //widthFactor: 0.9,
+                  //heightFactor: 0.9,
                   child: (currentPosition != null) 
                       ?
                         FutureBuilder<List<Estabelecimento>>(
@@ -64,22 +154,28 @@ class MapaPageState extends State<MapaPage> {
 
                             if (snapshot.connectionState == ConnectionState.waiting) {
                               // until data is fetched, show loader
-                              return const CircularProgressIndicator();
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
                             } else if (snapshot.hasData) {
                               // once data is fetched, display it on screen (call buildPedidos())
                               estabs = snapshot.data!;
                               
+                              if(jaPesquisouCidade){
+                                return Mapa(
+                                  latLng: LatLng(double.parse(estabs[0].endereco.latitude), double.parse(estabs[0].endereco.longitude)),
+                                  estabelecimentos: estabs
+                                );
+                              }
                               return Mapa(
-                                      lat: currentPosition!.latitude,
-                                      lng: currentPosition!.longitude,
-                                      estabelecimentos: estabs
-                                    );
+                                latLng: currentPosition!,
+                                estabelecimentos: estabs
+                              );
                             } else {
                               return Mapa(
-                                      lat: currentPosition!.latitude,
-                                      lng: currentPosition!.longitude,
-                                      estabelecimentos: estabs
-                                    );
+                                latLng: currentPosition!,
+                                estabelecimentos: estabs
+                              );
                             }
                           },
                         )
@@ -106,7 +202,7 @@ class MapaPageState extends State<MapaPage> {
             forceAndroidLocationManager: true)
         .then((Position position) {
       setState(() {
-        currentPosition = position;
+        currentPosition = LatLng(position.latitude, position.longitude);
       });
     }).catchError((e) {
       print(e);
@@ -149,7 +245,7 @@ class MapaPageState extends State<MapaPage> {
     // continue accessing the position of the device.
     await Geolocator.getCurrentPosition().then((Position position) {
       setState(() {
-        currentPosition = position;
+        currentPosition = LatLng(position.latitude, position.longitude);
       });
     });
   }
