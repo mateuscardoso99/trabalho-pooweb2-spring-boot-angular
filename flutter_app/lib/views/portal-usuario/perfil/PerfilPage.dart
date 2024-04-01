@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/DrawerNavigation.dart';
+import 'package:flutter_app/components/HandleErrors.dart';
 import 'package:flutter_app/models/endereco.dart';
 import 'package:flutter_app/models/token.dart';
 import 'package:flutter_app/models/usuario.dart';
@@ -65,7 +68,7 @@ class PerfilPageState extends State<PerfilPage> {
                               child: TextFormField(
                                 decoration: InputDecoration(
                                   labelText: "Nome",
-                                  prefixIcon: const Icon(Icons.email),
+                                  prefixIcon: const Icon(Icons.person),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
@@ -312,6 +315,13 @@ class PerfilPageState extends State<PerfilPage> {
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
                               child: Center(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                    minimumSize: const Size.fromHeight(50),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                  ),
                                   onPressed: () async {
                                     if (form.currentState?.validate() ?? false) {
                                       /*Navigator.push(
@@ -323,27 +333,53 @@ class PerfilPageState extends State<PerfilPage> {
                                       var endereco = Endereco(cidade: cidade, uf: uf, bairro: bairro, rua: rua, numero: numero, latitude: '', longitude: '');
                                       var dados = CadastroClienteRequest(nome: nome, email: email, senha: password, endereco: endereco);
                                       var response = await ClienteService().update(dados);
+                                      final Map<String, dynamic> jsonResponse = jsonDecode(utf8.decode(response.bodyBytes));
+                                      
                                       if(response.statusCode == 200){
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) =>
-                                            const AlertDialog(
-                                              title: Text("Sucesso"),
-                                              content: Text("perfil atualizado com sucesso.")
-                                            ),
-                                        );
+                                        if (context.mounted) {
+                                            showDialog(
+                                            context: context,
+                                            builder: (context) =>
+                                              const AlertDialog(
+                                                title: Text("Sucesso"),
+                                                content: Text("perfil atualizado com sucesso.")
+                                              ),
+                                          );
+                                        }
                                       }
                                       else{
-                                        //var resp = jsonDecode(utf8.decode(response.bodyBytes));
+                                        final String msg = jsonResponse["message"] ?? "Ocorreu um erro";
+                                        final List<String> errorsMsg = HandleErrors(response: jsonResponse).errors();
 
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) =>
-                                            const AlertDialog(
-                                              title: Text("Erro"),
-                                              content: Text("Erro ao criar a conta.")
-                                            ),
-                                        );
+                                        if (context.mounted) {
+                                          showDialog(
+                                            context: context,
+                                            //barrierDismissible: false, // user must tap button!
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: Text(msg),
+                                                shape: const RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.all(Radius.circular(5))
+                                                ),
+                                                backgroundColor: Colors.white,
+                                                content: SingleChildScrollView(
+                                                  child: ListBody(
+                                                    children: [
+                                                      for(var error in errorsMsg) 
+                                                        Text(
+                                                          error.toString(),
+                                                          style: TextStyle(
+                                                            color: Colors.red[300],
+                                                            fontWeight: FontWeight.bold
+                                                          ),
+                                                        )
+                                                    ]
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                          );
+                                        }
                                       }
                                     } else {
                                       ScaffoldMessenger.of(context).showSnackBar(
@@ -352,7 +388,7 @@ class PerfilPageState extends State<PerfilPage> {
                                         );
                                     }
                                   },
-                                  child: const Text('ATUALIZAR'),
+                                  child: const Text('ATUALIZAR', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                                 ),
                               ),
                             ),

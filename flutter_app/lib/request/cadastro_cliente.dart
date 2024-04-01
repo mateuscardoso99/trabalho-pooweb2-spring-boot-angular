@@ -18,6 +18,6 @@ class CadastroClienteRequest{
     'nome': nome,
     'email': email,
     'senha': senha,
-    //'endereco': Endereco.toMap(endereco!)
+    'endereco': Endereco.toMap(endereco!)
   };
 }

@@ -23,6 +23,18 @@ class HomePageState extends State<HomePage>{
     pedidos = ClienteService().getPedidos();
   }
 
+  Color situacao(String situacao){
+    if(situacao == "PENDENTE"){
+      return Colors.red;
+    }
+    else if(situacao == "FINALIZADO"){
+      return Colors.green;
+    }
+    else{
+      return Colors.orange;
+    }
+  }
+
   Widget buildPedidos(List<Pedido> pedidos) {
     // ListView Builder to show data in a list
     return ListView.builder(
@@ -30,11 +42,12 @@ class HomePageState extends State<HomePage>{
       itemBuilder: (context, index) {
         final pedido = pedidos[index];
         return Card(
-          color: Colors.grey[300],
+          margin: const EdgeInsets.all(10),
+          color: const Color.fromARGB(255, 218, 218, 218),
           elevation: 8.0,
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-            height: 200,
+            height: 220,
             width: MediaQuery.of(context).size.width, //width 100%
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +72,12 @@ class HomePageState extends State<HomePage>{
                         //   height: 2,
                         // ),
                         const SizedBox(height: 4),
-                        Text(DateFormat("dd/MM/yyyy HH:mm").format(pedido.dataHora))
+                        Text(
+                          DateFormat("dd/MM/yyyy HH:mm").format(pedido.dataHora),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w700
+                          ),
+                        )
                       ],
                     ),
                   ],
@@ -87,15 +105,18 @@ class HomePageState extends State<HomePage>{
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(
-                          pedido.statusPedido.name,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                        Container(
+                          padding: const EdgeInsets.all(5),
+                          color: situacao(pedido.statusPedido.name),
+                          child: Text(
+                            pedido.statusPedido.name,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(pedido.nomeCliente),
+                        )
                       ],
                     )
                   ],

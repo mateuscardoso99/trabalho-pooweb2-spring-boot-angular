@@ -179,33 +179,35 @@ class LoginState extends State<LoginPage> {
                         final String msg = jsonResponse["message"] ?? "Ocorreu um erro";
                         final List<String> errorsMsg = HandleErrors(response: jsonResponse).errors();
 
-                        showDialog(
-                          context: context,
-                          //barrierDismissible: false, // user must tap button!
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text(msg),
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(5))
-                              ),
-                              backgroundColor: Colors.white,
-                              content: SingleChildScrollView(
-                                child: ListBody(
-                                  children: [
-                                    for(var error in errorsMsg) 
-                                      Text(
-                                        error.toString(),
-                                        style: TextStyle(
-                                          color: Colors.red[300],
-                                          fontWeight: FontWeight.bold
-                                        ),
-                                      )
-                                  ]
+                        if(context.mounted){
+                          showDialog(
+                            context: context,
+                            //barrierDismissible: false, // user must tap button!
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text(msg),
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(5))
                                 ),
-                              ),
-                            );
-                          }
-                        );
+                                backgroundColor: Colors.white,
+                                content: SingleChildScrollView(
+                                  child: ListBody(
+                                    children: [
+                                      for(var error in errorsMsg) 
+                                        Text(
+                                          error.toString(),
+                                          style: TextStyle(
+                                            color: Colors.red[300],
+                                            fontWeight: FontWeight.bold
+                                          ),
+                                        )
+                                    ]
+                                  ),
+                                ),
+                              );
+                            }
+                          );
+                        }
                       }
                     }
                     else{

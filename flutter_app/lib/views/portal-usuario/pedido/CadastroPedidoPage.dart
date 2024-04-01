@@ -3,6 +3,7 @@ import 'package:flutter_app/components/DrawerNavigation.dart';
 import 'package:flutter_app/models/estabelecimento.dart';
 import 'package:flutter_app/request/cadastro_pedido.dart';
 import 'package:flutter_app/services/cliente_service.dart';
+import 'package:flutter_app/views/portal-usuario/HomePage.dart';
 
 class CadastroPedidoPage extends StatefulWidget {
   const CadastroPedidoPage({super.key, required this.estabelecimento});
@@ -78,25 +79,41 @@ class CadastroPedidoPageState extends State<CadastroPedidoPage> {
                       var pedido = CadastroPedidoRequest(descricao: descricao, idEstabelecimento: widget.estabelecimento.id!);
                       var response = await ClienteService().salvarPedido(pedido);
                       if(response.statusCode == 201){
-                        showDialog(
-                          context: context,
-                          builder: (context) =>
-                          const AlertDialog(
-                            title: Text("Sucesso"),
-                            content: Text("pedido realizado com sucesso.")
-                          ),
-                        );
+
+                        if(context.mounted){
+                          showDialog(
+                            context: context,
+                            builder: (context) =>
+                            AlertDialog(
+                              title: const Text("Sucesso"),
+                              content: const Text("pedido realizado com sucesso."),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text('OK'),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => HomePage(email: "teste")),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+
                       }
                       else{
-                        //var resp = jsonDecode(response.body);
-                        showDialog(
-                          context: context,
-                          builder: (context) =>
-                            const AlertDialog(
-                              title: Text("Erro"),
-                              content: Text("Erro ao criar pedido.")
-                            ),
-                        );
+                        if(context.mounted){
+                          showDialog(
+                            context: context,
+                            builder: (context) =>
+                              const AlertDialog(
+                                title: Text("Erro"),
+                                content: Text("Erro ao criar pedido.")
+                              ),
+                          );
+                        }
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(

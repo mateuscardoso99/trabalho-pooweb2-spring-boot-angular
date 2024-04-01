@@ -23,13 +23,11 @@ class ClienteService extends BaseService{
   }
 
   Future<Response> update(CadastroClienteRequest cliente) async{
-    final response = await client.put(Uri.parse("$urlAPI/update"));
-    if (response.statusCode == 200) {
-      return response;
-    }
-    else{
-      return Future.error("error");
-    }
+    final response = await client.put(
+      Uri.parse(urlAPI),
+      body: jsonEncode(cliente)
+    );
+    return response;
   }
 
   Future<void> desativarConta() async{
