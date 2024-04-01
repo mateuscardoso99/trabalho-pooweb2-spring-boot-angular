@@ -38,6 +38,30 @@ class MapaPageState extends State<MapaPage> {
 
     var result = await MapaService().findCidades(value);
 
+    if(result.isEmpty){
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          content: Container(
+            padding: const EdgeInsets.all(15),
+            height: 50,
+            decoration: const BoxDecoration(
+              color: Color(0xFFC72C41),
+              borderRadius: BorderRadius.all(Radius.circular(15))
+            ),
+            child: const Text(
+              "Nenhum estabelecimento encontrado nesta cidade", 
+              style: TextStyle(color: Colors.white, fontSize: 12),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          )
+        ),
+      );
+    }
+
     setState(() {
       cidades = result;
       isLoading = false;
@@ -114,7 +138,7 @@ class MapaPageState extends State<MapaPage> {
               height: 20,
             ),
             
-            cidades.isNotEmpty ?
+            if(cidades.isNotEmpty)
               Expanded(
                 flex: 1,
                 child: ListView.builder(
@@ -130,7 +154,7 @@ class MapaPageState extends State<MapaPage> {
                     );
                   }
                 )
-              ) : const Text("Nenhum estabelecimento encontrado nesta cidade", style: TextStyle(fontStyle: FontStyle.italic)),
+              ),
             /*if (currentPosition != null)
               Text(
                   "LAT: ${currentPosition?.latitude}, LNG: ${currentPosition?.longitude}"),
@@ -179,14 +203,25 @@ class MapaPageState extends State<MapaPage> {
                             }
                           },
                         )
-                    : Column(
-                        children: [
-                          const Text("É preciso da permissão de localização"),
+                    : Center(
+                        child: 
+                          /*const Text(
+                            "É preciso da permissão de localização",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold
+                            ),
+                          ),*/
                           ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
                             onPressed: _determinePosition, 
-                            child: const Text("Permitir acesso a localização"),
+                            child: const Text("CARREGAR LOCALIZAÇÃO", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                           )
-                        ],
                       )
               ),
             ),
@@ -219,7 +254,18 @@ class MapaPageState extends State<MapaPage> {
       // Location services are not enabled don't continue
       // accessing the position and request users of the
       // App to enable the location services.
-      return Future.error('Location services are disabled.');
+      //return Future.error('Location services are disabled.');
+      if (context.mounted) { 
+        return showDialog(
+          context: context, 
+          builder: (context){
+            return const AlertDialog(
+                title: Text("Atenção"),
+                content: Text("Ative a localização")
+              );
+          }
+        );
+      }
     }
 
     permission = await Geolocator.checkPermission();
@@ -231,14 +277,35 @@ class MapaPageState extends State<MapaPage> {
         // Android's shouldShowRequestPermissionRationale
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
+        //return Future.error('Location permissions are denied');
+        if (context.mounted) { 
+          return showDialog(
+            context: context, 
+            builder: (context){
+              return const AlertDialog(
+                title: Text("Atenção"),
+                content: Text("Este aplicatvio precisa da permissão de localização")
+              );
+            }
+          );
+        }
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      //return Future.error('Location permissions are permanently denied, we cannot request permissions.');
+      if (context.mounted) { 
+          return showDialog(
+            context: context, 
+            builder: (context){
+              return const AlertDialog(
+                title: Text("Atenção"),
+                content: Text("Este aplicatvio precisa da permissão de localização")
+              );
+            }
+          );
+        }
     }
 
     // When we reach here, permissions are granted and we can
