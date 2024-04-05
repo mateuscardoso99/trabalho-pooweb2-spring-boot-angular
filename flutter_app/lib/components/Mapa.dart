@@ -6,16 +6,15 @@ import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:latlong2/latlong.dart';
 
 class Mapa extends StatefulWidget {
-
   final LatLng latLng;
   final List<Estabelecimento> estabelecimentos;
   const Mapa({super.key, required this.latLng, required this.estabelecimentos});
-  
+
   @override
   MapaState createState() => MapaState();
 }
 
-class MapaState extends State<Mapa>{
+class MapaState extends State<Mapa> {
   late List<Marker> markers;
 
   @override
@@ -24,42 +23,37 @@ class MapaState extends State<Mapa>{
     markers = buildMarkers();
   }
 
-  List<Marker> buildMarkers(){
-    return widget.estabelecimentos.map(
-      (est) => Marker(
-        key: ValueKey(est.id),
-        point: LatLng(double.parse(est.endereco.latitude), double.parse(est.endereco.longitude)), 
-        child: const Icon(
-          Icons.place,
-          color: Colors.red
-        )
-      )
-    ).toList();
+  List<Marker> buildMarkers() {
+    return widget.estabelecimentos
+        .map((est) => Marker(
+            key: ValueKey(est.id),
+            point: LatLng(double.parse(est.endereco.latitude ?? ''),
+                double.parse(est.endereco.longitude ?? '')),
+            child: const Icon(Icons.place, color: Colors.red)))
+        .toList();
   }
 
   @override
-   Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return FlutterMap(
-        mapController: MapController(),
-        options: MapOptions(
-          initialCenter: widget.latLng,
-          initialZoom: 10.5,
+      mapController: MapController(),
+      options: MapOptions(
+        initialCenter: LatLng(-29.695751, -53.815763),
+        initialZoom: 10.5,
+      ),
+      children: [
+        TileLayer(
+          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+          // Plenty of other options available!
         ),
-        children: [
-          TileLayer(
-            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            userAgentPackageName: 'dev.fleaflet.flutter_map.example',
-            // Plenty of other options available!
-          ),
-          PopupMarkerLayer(
+        PopupMarkerLayer(
             options: PopupMarkerLayerOptions(
-              markers: markers,
-              popupDisplayOptions: PopupDisplayOptions(
-                builder: (BuildContext context, Marker marker) => PopupMapa(marker)
-              )
-            )
-          )
-        ],
+                markers: markers,
+                popupDisplayOptions: PopupDisplayOptions(
+                    builder: (BuildContext context, Marker marker) =>
+                        PopupMapa(marker))))
+      ],
     );
   }
 }
