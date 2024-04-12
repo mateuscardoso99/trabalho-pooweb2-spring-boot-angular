@@ -33,32 +33,31 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
+        //colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
         useMaterial3: true,
       ),
       home: FutureBuilder(
-        future: AuthService().getUser,            
-        builder: (context, snapshot) {
-          if(!snapshot.hasData) return const CircularProgressIndicator();
-          if(snapshot.data != '') {
-            var userStorage = Token.deserialize(snapshot.data!);
-            //var jwt = str?.split(".");
+          future: AuthService().getUser,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) return const CircularProgressIndicator();
+            if (snapshot.data != '') {
+              var userStorage = Token.deserialize(snapshot.data!);
+              //var jwt = str?.split(".");
 
-            if(userStorage == null || userStorage.token == '') {
-              return const SplashScreen();
-            } else {
-              //var payload = json.decode(ascii.decode(base64.decode(base64.normalize(userStorage.token))));
-              //if(DateTime.fromMillisecondsSinceEpoch(payload["exp"]*1000).isAfter(DateTime.now())) {
+              if (userStorage == null || userStorage.token == '') {
+                return const SplashScreen();
+              } else {
+                //var payload = json.decode(ascii.decode(base64.decode(base64.normalize(userStorage.token))));
+                //if(DateTime.fromMillisecondsSinceEpoch(payload["exp"]*1000).isAfter(DateTime.now())) {
                 return HomePage(email: userStorage.usuario.email);
-              //} else {
-              // return BottomTabNavigator(selectedTab: 1);
-              //}
+                //} else {
+                // return BottomTabNavigator(selectedTab: 1);
+                //}
+              }
+            } else {
+              return const SplashScreen();
             }
-          } else {
-            return const SplashScreen();
-          }
-        }
-      ),
+          }),
     );
   }
 }

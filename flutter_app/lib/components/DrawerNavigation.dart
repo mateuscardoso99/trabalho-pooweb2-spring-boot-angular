@@ -15,12 +15,11 @@ class DrawerNavigation extends StatefulWidget {
   DrawerNavigationState createState() => DrawerNavigationState();
 }
 
-class DrawerNavigationState extends State<DrawerNavigation>{
-
+class DrawerNavigationState extends State<DrawerNavigation> {
   late Future<String> userStorage;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     userStorage = AuthService().getUser;
   }
@@ -28,96 +27,98 @@ class DrawerNavigationState extends State<DrawerNavigation>{
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: FutureBuilder(
-        future: userStorage, 
-        builder: (context, snapshot){
-          if(snapshot.connectionState == ConnectionState.waiting){
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          else if(snapshot.hasData){
-            final Usuario? usuario = Token.deserialize(snapshot.data!)!.usuario;
+        child: FutureBuilder(
+            future: userStorage,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.hasData) {
+                final Usuario? usuario =
+                    Token.deserialize(snapshot.data!)!.usuario;
 
-            if(usuario == null) {
-              return const Column();
-            }
+                if (usuario == null) {
+                  return const Column();
+                }
 
-            return Column(
-              //padding: EdgeInsets.zero,
-              children: <Widget>[
-                UserAccountsDrawerHeader(
-                  accountEmail: Text(usuario.email),
-                  accountName: Text(usuario.nome),
-                  currentAccountPicture: CircleAvatar(
-                    child: Text(usuario.nome),
-                  ),
-                ),
-
-                ListTile(
-                  leading: const Icon(Icons.shopping_basket),
-                  title: const Text("Pedidos"),
-                  onTap: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage(email: usuario.email)),
-                    )
-                  }
-                ),
-
-                ListTile(
-                  leading: const Icon(Icons.add_circle),
-                  title: const Text("Novo Pedido"),
-                  onTap: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const MapaPage(showTitle: true)),
-                    )
-                  }
-                ),
-
-                ListTile(
-                  leading: const Icon(Icons.person),
-                  title: const Text("Perfil"),
-                  onTap: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const PerfilPage(titulo: "Editar Perfil")),
-                    )
-                  }
-                ),
-
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: ListTile(
-                      hoverColor: Colors.blue,
-                      dense: true,
-                      visualDensity: const VisualDensity(vertical: -4),
-                      leading: const Icon(
-                        Icons.logout,
-                        color: Colors.black,
+                return Column(
+                  //padding: EdgeInsets.zero,
+                  children: <Widget>[
+                    UserAccountsDrawerHeader(
+                      accountEmail: Text(usuario.email),
+                      accountName: Text(usuario.nome),
+                      currentAccountPicture: CircleAvatar(
+                        child: Text(usuario.nome),
                       ),
-                      title: const Text('Sair'),
-                      onTap: () {
-                        storage.delete(key: 'user');
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => BottomTabNavigator(selectedTab: 1)),
-                          (route) => false //rota para voltar, no caso não é pra ter
-                        );
-                      },
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 119, 0, 0),
+                      ),
                     ),
-                  ),
-                ),
-              ],
-            );
-          }
-          else{
-            return const Column();
-          }
-        }
-      )
-    );
+                    ListTile(
+                        leading: const Icon(Icons.shopping_basket),
+                        title: const Text("Pedidos"),
+                        onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        HomePage(email: usuario.email)),
+                              )
+                            }),
+                    ListTile(
+                        leading: const Icon(Icons.add_circle),
+                        title: const Text("Novo Pedido"),
+                        onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const MapaPage(showTitle: true)),
+                              )
+                            }),
+                    ListTile(
+                        leading: const Icon(Icons.person),
+                        title: const Text("Perfil"),
+                        onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const PerfilPage(
+                                        titulo: "Editar Perfil")),
+                              )
+                            }),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: ListTile(
+                          hoverColor: Colors.blue,
+                          dense: true,
+                          visualDensity: const VisualDensity(vertical: -4),
+                          leading: const Icon(
+                            Icons.logout,
+                            color: Colors.black,
+                          ),
+                          title: const Text('Sair'),
+                          onTap: () {
+                            storage.delete(key: 'user');
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        BottomTabNavigator(selectedTab: 1)),
+                                (route) =>
+                                    false //rota para voltar, no caso não é pra ter
+                                );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                return const Column();
+              }
+            }));
   }
 }

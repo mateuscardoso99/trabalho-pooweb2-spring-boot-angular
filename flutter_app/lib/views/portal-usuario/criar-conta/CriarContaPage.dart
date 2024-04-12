@@ -418,13 +418,13 @@ class CriarContaPageState extends State<CriarContaPage> {
                                     fontSize: 17),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              BottomTabNavigator(
-                                                  selectedTab: 1)),
-                                    );
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                BottomTabNavigator(
+                                                    selectedTab: 1)),
+                                        (route) => false);
                                   },
                               )
                             ]),

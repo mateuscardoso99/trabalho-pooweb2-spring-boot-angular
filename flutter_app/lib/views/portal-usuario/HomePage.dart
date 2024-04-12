@@ -150,7 +150,8 @@ class HomePageState extends State<HomePage> {
               return buildPedidos(pedidos);
             } else {
               // if no data, show simple Text
-              return const Text("No data available");
+              return const Text("Nenhum pedido encontrado.",
+                  style: TextStyle(fontStyle: FontStyle.italic));
             }
           },
         ),
