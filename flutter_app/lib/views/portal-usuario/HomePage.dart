@@ -6,9 +6,7 @@ import 'package:intl/intl.dart';
 import '../../models/pedido.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.email});
-
-  final String email;
+  const HomePage({super.key});
 
   @override
   HomePageState createState() => HomePageState();

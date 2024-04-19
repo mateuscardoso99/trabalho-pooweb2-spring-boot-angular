@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
               } else {
                 //var payload = json.decode(ascii.decode(base64.decode(base64.normalize(userStorage.token))));
                 //if(DateTime.fromMillisecondsSinceEpoch(payload["exp"]*1000).isAfter(DateTime.now())) {
-                return HomePage(email: userStorage.usuario.email);
+                return const HomePage();
                 //} else {
                 // return BottomTabNavigator(selectedTab: 1);
                 //}

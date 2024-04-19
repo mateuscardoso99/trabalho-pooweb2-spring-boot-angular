@@ -57,6 +57,15 @@ class PerfilPageState extends State<PerfilPage> {
                   final Usuario usuario =
                       Token.deserialize(snapshot.data!)!.usuario;
 
+                  nome = usuario.nome;
+                  email = usuario.email;
+                  cidade = usuario.endereco.cidade;
+                  uf = usuario.endereco.uf;
+                  bairro = usuario.endereco.bairro;
+                  rua = usuario.endereco.rua;
+                  numero = usuario.endereco.numero;
+                  complemento = usuario.endereco.complemento ?? '';
+
                   return SingleChildScrollView(
                     //quando conteúdo da tela é maior que o tamanho dela, permite rolar
                     child: Form(
@@ -77,7 +86,7 @@ class PerfilPageState extends State<PerfilPage> {
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10)),
                               ),
-                              initialValue: usuario.nome,
+                              initialValue: nome,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'informe o nome';
@@ -104,7 +113,7 @@ class PerfilPageState extends State<PerfilPage> {
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10)),
                               ),
-                              initialValue: usuario.email,
+                              initialValue: email,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'informe o email';
@@ -167,7 +176,7 @@ class PerfilPageState extends State<PerfilPage> {
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10)),
                               ),
-                              initialValue: usuario.endereco.cidade,
+                              initialValue: cidade,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'informe a cidade';
@@ -194,7 +203,7 @@ class PerfilPageState extends State<PerfilPage> {
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10)),
                               ),
-                              initialValue: usuario.endereco.uf,
+                              initialValue: uf,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'informe a UF';
@@ -219,7 +228,7 @@ class PerfilPageState extends State<PerfilPage> {
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10)),
                               ),
-                              initialValue: usuario.endereco.bairro,
+                              initialValue: bairro,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'informe o Bairro';
@@ -244,7 +253,7 @@ class PerfilPageState extends State<PerfilPage> {
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10)),
                               ),
-                              initialValue: usuario.endereco.rua,
+                              initialValue: rua,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'informe a Rua';
@@ -271,7 +280,7 @@ class PerfilPageState extends State<PerfilPage> {
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10)),
                               ),
-                              initialValue: usuario.endereco.numero,
+                              initialValue: numero,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'informe o Número';
@@ -298,7 +307,7 @@ class PerfilPageState extends State<PerfilPage> {
                                   enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10)),
                                 ),
-                                initialValue: usuario.endereco.complemento,
+                                initialValue: complemento,
                                 onChanged: (value) {
                                   complemento = value;
                                 }),
@@ -320,7 +329,7 @@ class PerfilPageState extends State<PerfilPage> {
                                     /*Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => HomePage(email: emailController.text)
+                                          builder: (context) => HomePage()
                                         ),
                                       );*/
                                     var endereco = Endereco(
@@ -346,10 +355,32 @@ class PerfilPageState extends State<PerfilPage> {
                                       if (context.mounted) {
                                         showDialog(
                                           context: context,
-                                          builder: (context) => const AlertDialog(
-                                              title: Text("Sucesso"),
-                                              content: Text(
-                                                  "perfil atualizado com sucesso.")),
+                                          builder: (context) =>
+                                              const AlertDialog(
+                                                  title: Text("Sucesso"),
+                                                  shape:
+                                                      const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          5))),
+                                                  backgroundColor: Colors.white,
+                                                  content: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Text(
+                                                          "perfil atualizado com sucesso.",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.green,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 20))
+                                                    ],
+                                                  )),
                                         );
                                       }
                                     } else {

@@ -62,8 +62,7 @@ class DrawerNavigationState extends State<DrawerNavigation> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        HomePage(email: usuario.email)),
+                                    builder: (context) => const HomePage()),
                               )
                             }),
                     ListTile(

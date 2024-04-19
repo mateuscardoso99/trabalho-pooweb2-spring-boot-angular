@@ -45,7 +45,7 @@ class LoginState extends State<LoginPage> {
   Widget build(BuildContext context) {
     //PODE ESCREVER CONDIÇÕES AQUI
     /*if (_boxLogin.get("loginStatus") ?? false) {
-      return HomePage(email: "teste");
+      return HomePage();
     }*/
 
     // This method is rerun every time setState is called, for instance as done
@@ -176,8 +176,7 @@ class LoginState extends State<LoginPage> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    HomePage(email: emailController.text)));
+                                builder: (context) => const HomePage()));
                       } else {
                         final String msg =
                             jsonResponse["message"] ?? "Ocorreu um erro";

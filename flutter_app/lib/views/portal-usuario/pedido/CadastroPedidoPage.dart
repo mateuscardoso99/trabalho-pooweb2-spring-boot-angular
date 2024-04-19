@@ -8,7 +8,7 @@ import 'package:flutter_app/views/portal-usuario/HomePage.dart';
 class CadastroPedidoPage extends StatefulWidget {
   const CadastroPedidoPage({super.key, required this.estabelecimento});
   final Estabelecimento estabelecimento;
-  
+
   @override
   CadastroPedidoPageState createState() => CadastroPedidoPageState();
 }
@@ -23,12 +23,8 @@ class CadastroPedidoPageState extends State<CadastroPedidoPage> {
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Colors.red,
-        title: Text(
-          'Pedido para ${widget.estabelecimento.nome}',
-          style: const TextStyle(
-            color: Colors.white
-          )
-        ),
+        title: Text('Pedido para ${widget.estabelecimento.nome}',
+            style: const TextStyle(color: Colors.white)),
       ),
       drawer: const DrawerNavigation(),
       body: Form(
@@ -64,7 +60,8 @@ class CadastroPedidoPageState extends State<CadastroPedidoPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
               child: Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -76,24 +73,36 @@ class CadastroPedidoPageState extends State<CadastroPedidoPage> {
                   ),
                   onPressed: () async {
                     if (form.currentState?.validate() ?? false) {
-                      var pedido = CadastroPedidoRequest(descricao: descricao, idEstabelecimento: widget.estabelecimento.id!);
-                      var response = await ClienteService().salvarPedido(pedido);
-                      if(response.statusCode == 201){
-
-                        if(context.mounted){
+                      var pedido = CadastroPedidoRequest(
+                          descricao: descricao,
+                          idEstabelecimento: widget.estabelecimento.id!);
+                      var response =
+                          await ClienteService().salvarPedido(pedido);
+                      if (response.statusCode == 201) {
+                        if (context.mounted) {
                           showDialog(
                             context: context,
-                            builder: (context) =>
-                            AlertDialog(
+                            builder: (context) => AlertDialog(
                               title: const Text("Sucesso"),
-                              content: const Text("pedido realizado com sucesso."),
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5))),
+                              backgroundColor: Colors.white,
+                              content: const Text(
+                                  "pedido realizado com sucesso.",
+                                  style: TextStyle(
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20)),
                               actions: <Widget>[
                                 TextButton(
                                   child: const Text('OK'),
                                   onPressed: () {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => HomePage(email: "teste")),
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const HomePage()),
                                     );
                                   },
                                 ),
@@ -101,29 +110,33 @@ class CadastroPedidoPageState extends State<CadastroPedidoPage> {
                             ),
                           );
                         }
-
-                      }
-                      else{
-                        if(context.mounted){
+                      } else {
+                        if (context.mounted) {
                           showDialog(
                             context: context,
-                            builder: (context) =>
-                              const AlertDialog(
+                            builder: (context) => const AlertDialog(
                                 title: Text("Erro"),
-                                content: Text("Erro ao criar pedido.")
-                              ),
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5))),
+                                backgroundColor: Colors.white,
+                                content: Text("Erro ao criar pedido.",
+                                    style: TextStyle(
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20))),
                           );
                         }
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Preencha a descrição')
-                        ),
+                        const SnackBar(content: Text('Preencha a descrição')),
                       );
                     }
                   },
-                  child: const Text('SALVAR', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                  child: const Text('SALVAR',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
                 ),
               ),
             ),
