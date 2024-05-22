@@ -44,21 +44,21 @@ class HomePageState extends State<HomePage> {
             child: Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                height: 220,
+                height: 200,
                 width: MediaQuery.of(context).size.width, //width 100%
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Expanded(
-                            child: CircleAvatar(
-                          radius: 50, //we give the image a radius of 50
-                          backgroundImage: NetworkImage(
-                              'https://webstockreview.net/images/male-clipart-professional-man-3.jpg'),
-                        )),
+                            child: Image(
+                              image: AssetImage('assets/icon.png'),
+                              width: 80,
+                              height: 80,
+                            )),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
@@ -69,11 +69,24 @@ class HomePageState extends State<HomePage> {
                             //   height: 2,
                             // ),
                             const SizedBox(height: 4),
-                            Text(
-                              DateFormat("dd/MM/yyyy HH:mm")
-                                  .format(pedido.dataHora),
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.w700),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(right: 4),
+                                    child: const Icon(
+                                      Icons.access_time_outlined,
+                                      size: 25.0,
+                                      weight: 15,
+                                    ),
+                                  ),
+                                Text(
+                                  DateFormat("dd/MM/yyyy HH:mm")
+                                      .format(pedido.dataHora),
+                                  style:
+                                      const TextStyle(fontWeight: FontWeight.w700),
+                                )
+                              ],
                             )
                           ],
                         ),
@@ -82,20 +95,36 @@ class HomePageState extends State<HomePage> {
                     const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.5, //width 100%,
+                              child: Text(
                               pedido.descricao,
                               style: const TextStyle(
                                 fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.italic
                               ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
                             ),
                             const SizedBox(height: 4),
-                            Text(pedido.estabelecimento),
+                            Row(
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.only(right: 4),
+                                  child: const Icon(
+                                      Icons.store,
+                                      size: 25.0,
+                                      weight: 15,
+                                    ),
+                                ),
+                                Text(pedido.estabelecimento),
+                              ],
+                            )
                           ],
                         ),
                         const SizedBox(width: 32),
