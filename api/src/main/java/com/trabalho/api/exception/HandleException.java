@@ -25,7 +25,8 @@ public class HandleException {
         List<String> errors = ex.getBindingResult()
                                 .getFieldErrors()
                                 .stream()
-                                .map(FieldError::getDefaultMessage)
+                                //.map(FieldError::getDefaultMessage)
+                                .map(field -> field.getField() + ": " + field.getDefaultMessage())
                                 .collect(Collectors.toList());
         return new ResponseEntity<>(
             ResponseDTO.build(null, false, "Erro ao executar operação", Map.of("errors", errors)),
