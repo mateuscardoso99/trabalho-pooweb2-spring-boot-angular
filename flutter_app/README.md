@@ -170,3 +170,35 @@ Utilize essa variável na propriedade future, dessa forma não iniciará novamen
 
 # setState()
 para renderizar algo na tela novamente, usar setState(){} pra alterar a propriedade
+
+# components
+center: Um widget que centraliza seu filho dentro de si mesmo.
+
+column: widget que exibe seus filhos em uma matriz vertical.
+Para fazer com que um filho se expanda para preencher o espaço vertical disponível, envolva o filho em um widget Expanded.
+O widget Coluna não rola (e em geral é considerado um erro ter mais filhos em uma Coluna do que cabe na sala disponível). 
+Se você tiver uma linha de widgets e quiser que eles possam rolar se não houver espaço suficiente, considere 
+usar um ListView.
+
+row: o mesmo de column, só que na horizontal
+
+SingleChildScrollView:
+widget é útil quando você tem uma única caixa que normalmente estará totalmente visível, por exemplo, um mostrador 
+de relógio em um seletor de tempo, mas você precisa ter certeza de que ele pode ser rolado se o contêiner ficar 
+muito pequeno em um eixo (a direção de rolagem ).
+
+ListView: widget de rolagem mais comumente usado. Ele exibe seus filhos um após o outro na direção de rolagem. 
+No eixo cruzado, os filhos são obrigados a preencher o ListView.
+
+Stack: widget que posiciona seus filhos em relação às bordas de sua caixa. Esta classe é útil se você deseja 
+sobrepor vários filhos de uma forma simples, por exemplo tendo algum texto e uma imagem
+
+TextFormField: campo de texto com integração com a classe Form
+
+GlobalKey: chaves devem ser exclusivos em todo o aplicativo.
+
+LocalKey: As chaves devem ser exclusivas entre os Elements com o mesmo pai.
+
+ValueKey: chave que usa um valor de um tipo específico para se identificar
+
+# https://docs.flutter.dev/

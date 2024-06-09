@@ -203,6 +203,9 @@ class CriarContaPageState extends State<CriarContaPage> {
                             if (value == null || value.isEmpty) {
                               return 'informe a UF';
                             }
+                            if(value.length != 2){
+                              return 'tamanho deve ser 2';
+                            }
                             return null;
                           },
                         ),
@@ -281,6 +284,9 @@ class CriarContaPageState extends State<CriarContaPage> {
                             if (value == null || value.isEmpty) {
                               return 'informe o Número';
                             }
+                            if(value.length > 20){
+                              return 'limite 20 caracteres';
+                            }
                             return null;
                           },
                         ),
@@ -347,9 +353,25 @@ class CriarContaPageState extends State<CriarContaPage> {
                         if (response.statusCode == 201) {
                           showDialog(
                             context: context,
-                            builder: (context) => const AlertDialog(
-                                title: Text("Sucesso"),
-                                content: Text("Conta criada com sucesso.")),
+                            builder: (context) => AlertDialog(
+                                title: const Text("Sucesso"),
+                                content: const Text("Conta criada com sucesso.", style: TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20)
+                                ),
+                                actions: <Widget>[
+                                TextButton(
+                                  child: const Text('OK'),
+                                  onPressed: () {
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => BottomTabNavigator(selectedTab: 1)),
+                                      (route) => false
+                                    );
+                                  },
+                                ),
+                              ]),
                           );
                         } else {
                           final String msg =
