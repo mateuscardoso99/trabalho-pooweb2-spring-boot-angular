@@ -202,3 +202,13 @@ LocalKey: As chaves devem ser exclusivas entre os Elements com o mesmo pai.
 ValueKey: chave que usa um valor de um tipo específico para se identificar
 
 # https://docs.flutter.dev/
+
+
+
+
+# esse projeto flutter contém:
+-login jwt e consumo da api
+-arrastar a tela pra atualizar o contéudo
+-uso de geolocalização
+-uso de mapa com dados dinâmicos
+-armazena jwt no storage do celular

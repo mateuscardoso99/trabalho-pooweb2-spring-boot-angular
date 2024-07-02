@@ -78,14 +78,8 @@ class ClienteService extends BaseService{
     return await client.post(Uri.parse("$urlAPI/pedidos"),body: jsonEncode(pedido));
   }
 
-  Future<void> desativarPedido(int id) async{
-    final response = await client.put(Uri.parse("$urlAPI/pedidos/desativar/$id"));
-    if (response.statusCode == 200) {
-      print("sucesso");
-    }
-    else{
-      throw "Unable to delete post.";
-    }
+  Future<Response> desativarPedido(int id) async{
+    return await client.delete(Uri.parse("$urlAPI/pedidos/desativar/$id"));
   }
 
   Future<void> ativarPedido(int id) async{

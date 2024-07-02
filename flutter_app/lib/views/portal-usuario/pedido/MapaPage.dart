@@ -140,6 +140,7 @@ class MapaPageState extends State<MapaPage> {
               Expanded(
                   flex: 1,
                   child: ListView.builder(
+                      shrinkWrap: true,
                       itemCount: cidades.length,
                       itemBuilder: (context, index) {
                         final data = cidades[index];
