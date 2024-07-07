@@ -70,6 +70,10 @@
               "browserTarget": "cliente-pooweb2:build:development"
             }
           },
+          "options": {
+            "browserTarget": "cliente-pooweb2:build",
+            "proxyConfig": "src/proxy.conf.json"
+          },
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
